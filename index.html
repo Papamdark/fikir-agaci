@@ -1,0 +1,695 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Celil’in Fikir Ağacı</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,600&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-linen: #F2ECE1;
+      --text-ink: #181615;
+      --accent-seal: #8F2D1E;
+      --leaf-tint: rgba(143, 45, 30, 0.14);
+      --rule-line: rgba(24, 22, 21, 0.14);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; background: #F2ECE1; }
+    body {
+      background: #F2ECE1;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-ink);
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #bespoke-stage {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      border-radius: 0px;
+      overflow: hidden;
+      background-color: var(--bg-linen);
+      background-image:
+        radial-gradient(circle at 75% 50%, rgba(143, 45, 30, 0.045) 0%, transparent 60%),
+        repeating-linear-gradient(0deg, rgba(24, 22, 21, 0.012) 0px, rgba(24, 22, 21, 0.012) 1px, transparent 1px, transparent 3px);
+      color: var(--text-ink);
+      border: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.75rem 2.6rem;
+    }
+
+    #sapling-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+    }
+
+    /* ÜST BAŞLIK */
+    .stage-header {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--rule-line);
+      padding-bottom: 0.8rem;
+    }
+
+    .brand-title {
+      letter-spacing: 0.24em;
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--text-ink);
+    }
+
+    .leaf-nav-pills {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .leaf-pill {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-ink);
+      opacity: 0.5;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 14px;
+      font-weight: 600;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .leaf-pill:hover {
+      opacity: 0.9;
+      border-color: var(--rule-line);
+    }
+
+    .leaf-pill.active {
+      opacity: 1;
+      color: #F2ECE1;
+      background: var(--accent-seal);
+      border-color: var(--accent-seal);
+    }
+
+    /* ORTA ALAN: SÖZ VE KÖK NOTU */
+    .stage-content {
+      position: relative;
+      z-index: 3;
+      margin: auto 0;
+      max-width: 56%;
+      pointer-events: none;
+    }
+
+    .leaf-tag {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--accent-seal);
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.03em;
+    }
+
+    .quote-heading {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(2.05rem, 3.6vw, 2.95rem);
+      line-height: 1.13;
+      color: var(--text-ink);
+      margin-bottom: 0.9rem;
+      transition: opacity 0.28s ease, transform 0.28s ease;
+    }
+
+    .quote-author {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: 1.08rem;
+      color: var(--text-ink);
+      opacity: 0.78;
+      margin-bottom: 1.25rem;
+      transition: opacity 0.28s ease;
+    }
+
+    .quote-root {
+      font-size: 0.88rem;
+      line-height: 1.68;
+      color: var(--text-ink);
+      opacity: 0.82;
+      padding-left: 1.05rem;
+      border-left: 2px solid var(--accent-seal);
+      transition: opacity 0.28s ease;
+    }
+
+    /* ALT BAR */
+    .stage-footer {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--rule-line);
+      padding-top: 0.75rem;
+      font-size: 11.5px;
+    }
+
+    .footer-hint {
+      opacity: 0.68;
+      font-style: italic;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 13.5px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 0.45rem;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid var(--accent-seal);
+      color: var(--text-ink);
+      padding: 0.34rem 0.82rem;
+      border-radius: 4px;
+      font-size: 11.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-seal);
+      color: #F2ECE1;
+    }
+
+    @media (max-width: 768px) {
+      #bespoke-stage {
+        padding: 1.25rem 1.35rem;
+      }
+      .stage-content {
+        max-width: 100%;
+        margin-top: 0.5rem;
+        margin-bottom: auto;
+        background: rgba(242, 236, 225, 0.82);
+        backdrop-filter: blur(4px);
+        padding: 0.85rem;
+        border-radius: 8px;
+      }
+      .quote-heading {
+        font-size: 1.75rem;
+      }
+      .footer-hint {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main id="bespoke-stage">
+    <canvas id="sapling-canvas"></canvas>
+
+    <header class="stage-header">
+      <div class="brand-title">CELİL’İN FİKİR AĞACI</div>
+      <nav class="leaf-nav-pills" id="leaf-pills" aria-label="Yaprak Seçimi"></nav>
+    </header>
+
+    <article class="stage-content" id="stage-content">
+      <div class="leaf-tag" id="leaf-tag">Fidan · I. Yaprak</div>
+      <h1 class="quote-heading" id="quote-heading">
+        “Yanlış üslup, doğru sözün celladıdır.”
+      </h1>
+      <div class="quote-author" id="quote-author">Sadi Şirazî — Gülistan (VIII. Bab)</div>
+      <p class="quote-root" id="quote-root">
+        Doğrunun doğruluğu üsluba bağlı değildir; fakat insana ulaşabilmesi çoğu zaman üsluba bağlıdır. Söyleyen doğrunun üslubundan, dinleyen de doğrunun özünü üsluptan ayırabilmekten sorumludur.
+      </p>
+    </article>
+
+    <footer class="stage-footer">
+      <span class="footer-hint">Sağdaki fidanın yapraklarına (I – V) dokunarak dallar arasında gezinebilirsin</span>
+      <div class="nav-buttons">
+        <button class="nav-btn" id="prev-btn" type="button">← Önceki</button>
+        <button class="nav-btn" id="next-btn" type="button">Sonraki Yaprak →</button>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const LEAVES_DATA = [
+      {
+        num: "I",
+        q: "“Yanlış üslup, doğru sözün celladıdır.”",
+        a: "Sadi Şirazî — Gülistan (VIII. Bab)",
+        r: "Doğrunun doğruluğu üsluba bağlı değildir; fakat insana ulaşabilmesi çoğu zaman üsluba bağlıdır. Söyleyen doğrunun üslubundan, dinleyen de doğrunun özünü üsluptan ayırabilmekten sorumludur."
+      },
+      {
+        num: "II",
+        q: "“Güzel bir bahçen olsun; kelebekler gelir. Kelebekler gelmese bile, güzel bir bahçen olmuş olur.”",
+        a: "Mario Quintana (Atfedilen)",
+        r: "Değer üretmenin ödülü dışarıdan gelecek onay değil, inşa edilen içsel ve zihinsel bahçenin bizzat kendisidir. Kelebekler bir sonuçtur; bahçe ise senin mülkündür."
+      },
+      {
+        num: "III",
+        q: "“Bir sorunu oluşmadan çözmek.”",
+        a: "Laozi — Dao De Jing (64. Bölüm) & Mizen Boushi (未然防止)",
+        r: "Kırılgan olan kolayca dağılır, henüz küçük olan kolayca yönlendirilir. Gerçek ustalık kriz anında kahramanlık yapmak değil, krizi doğuran zinciri henüz ilk halkasında sessizce koparmaktır."
+      },
+      {
+        num: "IV",
+        q: "“You're a beautiful flower and I love to watch you grow.”",
+        a: "Adventure Time — Joshua (3. Sezon, 25. Bölüm: Dad's Dungeon)",
+        r: "İnsanın kendi gelişimine ve sevdiklerine dışarıdan bir yargıç gibi değil, toprağa düşmüş bir tohumun filizlenmesini izleyen sabırlı bir tanık gibi bakabilmesi."
+      },
+      {
+        num: "V",
+        q: "“Artık hepimizin her şeye erişimi bir an, bir fikir, bir dakikalık zihniyet değişimi kadar uzakta.”",
+        a: "Rota",
+        r: "Bilgiye erişimin eşitlendiği çağda asıl uçurum kaynak eksikliği değil, zihnin kendi kendine koyduğu eşik ve eyleme geçiş kararıdır."
+      }
+    ];
+
+    let activeLeaf = 0;
+    const pillsContainer = document.getElementById("leaf-pills");
+
+    function renderPills() {
+      pillsContainer.innerHTML = "";
+      LEAVES_DATA.forEach((item, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "leaf-pill" + (idx === activeLeaf ? " active" : "");
+        btn.textContent = item.num;
+        btn.title = item.num + ". Yaprak";
+        btn.onclick = () => selectLeaf(idx);
+        pillsContainer.appendChild(btn);
+      });
+    }
+
+    function selectLeaf(idx, rippleCoords) {
+      activeLeaf = (idx + LEAVES_DATA.length) % LEAVES_DATA.length;
+      const item = LEAVES_DATA[activeLeaf];
+
+      const qEl = document.getElementById("quote-heading");
+      const aEl = document.getElementById("quote-author");
+      const rEl = document.getElementById("quote-root");
+      const tEl = document.getElementById("leaf-tag");
+
+      qEl.style.opacity = "0";
+      qEl.style.transform = "translateY(6px)";
+      aEl.style.opacity = "0";
+      rEl.style.opacity = "0";
+
+      setTimeout(() => {
+        tEl.textContent = `Fidan · ${item.num}. Yaprak`;
+        qEl.textContent = item.q;
+        aEl.textContent = item.a;
+        rEl.textContent = item.r;
+
+        qEl.style.opacity = "1";
+        qEl.style.transform = "translateY(0)";
+        aEl.style.opacity = "0.78";
+        rEl.style.opacity = "0.82";
+      }, 150);
+
+      renderPills();
+
+      if (rippleCoords) {
+        ripples.push({ x: rippleCoords.x, y: rippleCoords.y, r: 4, alpha: 0.85 });
+      } else if (leafHitboxes[activeLeaf]) {
+        ripples.push({ x: leafHitboxes[activeLeaf].x, y: leafHitboxes[activeLeaf].y, r: 4, alpha: 0.7 });
+      }
+    }
+
+    document.getElementById("prev-btn").onclick = () => selectLeaf(activeLeaf - 1);
+    document.getElementById("next-btn").onclick = () => selectLeaf(activeLeaf + 1);
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") selectLeaf(activeLeaf + 1);
+      if (e.key === "ArrowLeft") selectLeaf(activeLeaf - 1);
+    });
+
+    // =========================================================================
+    // YAŞAYAN BOTANİK FİDAN KANVASI (KÖKLER, TOPRAK, GÖVDE, 5 YAPRAK & FİLİZ)
+    // =========================================================================
+    const canvas = document.getElementById("sapling-canvas");
+    const stageEl = document.getElementById("bespoke-stage");
+    const ctx = canvas.getContext("2d");
+
+    let mouse = { x: 0.75, y: 0.5 };
+    let time = 0;
+    let leafHitboxes = [];
+    let ripples = [];
+    let lastW = 0, lastH = 0;
+
+    stageEl.addEventListener("mousemove", (e) => {
+      const r = stageEl.getBoundingClientRect();
+      mouse.x = (e.clientX - r.left) / (r.width || 1);
+      mouse.y = (e.clientY - r.top) / (r.height || 1);
+
+      const mx = e.clientX - r.left;
+      const my = e.clientY - r.top;
+      let overLeaf = false;
+      for (const hb of leafHitboxes) {
+        if (Math.hypot(mx - hb.x, my - hb.y) < hb.r) {
+          overLeaf = true;
+          break;
+        }
+      }
+      canvas.style.cursor = overLeaf ? "pointer" : "default";
+    });
+
+    canvas.addEventListener("click", (e) => {
+      const r = stageEl.getBoundingClientRect();
+      const mx = e.clientX - r.left;
+      const my = e.clientY - r.top;
+      for (const hb of leafHitboxes) {
+        if (Math.hypot(mx - hb.x, my - hb.y) < hb.r) {
+          selectLeaf(hb.index, { x: hb.x, y: hb.y });
+          return;
+        }
+      }
+    });
+
+    function drawBotanicalLeaf(cx, cy, angle, length, width, isSelected, numeral) {
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+
+      const ACCENT = "#8F2D1E";
+      const INK = "#181615";
+      const BG = "#F2ECE1";
+
+      // 1. Yaprak sapı (Petiole)
+      ctx.strokeStyle = ACCENT;
+      ctx.globalAlpha = isSelected ? 0.95 : 0.68;
+      ctx.lineWidth = isSelected ? 2.1 : 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(length * 0.1, -2, length * 0.2, 0);
+      ctx.stroke();
+
+      const bladeStart = length * 0.18;
+      const bladeEnd = length;
+      const bladeLen = bladeEnd - bladeStart;
+
+      // 2. Yaprak ayası (Lamina)
+      ctx.beginPath();
+      ctx.moveTo(bladeStart, 0);
+      ctx.bezierCurveTo(
+        bladeStart + bladeLen * 0.28, -width * 1.15,
+        bladeStart + bladeLen * 0.72, -width * 0.85,
+        bladeEnd, 0
+      );
+      ctx.bezierCurveTo(
+        bladeStart + bladeLen * 0.72, width * 0.85,
+        bladeStart + bladeLen * 0.28, width * 1.15,
+        bladeStart, 0
+      );
+      ctx.closePath();
+
+      ctx.fillStyle = isSelected ? ACCENT : "rgba(143, 45, 30, 0.13)";
+      ctx.globalAlpha = isSelected ? 0.24 : 0.95;
+      ctx.fill();
+
+      ctx.strokeStyle = ACCENT;
+      ctx.globalAlpha = isSelected ? 1.0 : 0.68;
+      ctx.lineWidth = isSelected ? 2.0 : 1.25;
+      ctx.stroke();
+
+      // 3. Orta damar (Midrib)
+      ctx.beginPath();
+      ctx.moveTo(bladeStart, 0);
+      ctx.quadraticCurveTo(bladeStart + bladeLen * 0.5, -width * 0.05, bladeEnd - 2, 0);
+      ctx.strokeStyle = ACCENT;
+      ctx.globalAlpha = isSelected ? 0.95 : 0.55;
+      ctx.lineWidth = isSelected ? 1.4 : 0.95;
+      ctx.stroke();
+
+      // 4. Yan damarlar (Lateral veins)
+      const veinPairs = 4;
+      for (let v = 1; v <= veinPairs; v++) {
+        const frac = v / (veinPairs + 1);
+        const vx = bladeStart + bladeLen * frac;
+        const vw = width * Math.sin(frac * Math.PI) * 0.78;
+
+        ctx.beginPath();
+        ctx.moveTo(vx, 0);
+        ctx.quadraticCurveTo(vx + bladeLen * 0.08, -vw * 0.5, vx + bladeLen * 0.16, -vw * 0.85);
+        ctx.moveTo(vx, 0);
+        ctx.quadraticCurveTo(vx + bladeLen * 0.08, vw * 0.5, vx + bladeLen * 0.16, vw * 0.85);
+        ctx.strokeStyle = ACCENT;
+        ctx.globalAlpha = isSelected ? 0.65 : 0.35;
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+      }
+
+      const midX = bladeStart + bladeLen * 0.52;
+      ctx.restore();
+
+      // Dünya koordinatlarında yaprak merkezi ve Roma rakamı
+      const worldX = cx + Math.cos(angle) * midX;
+      const worldY = cy + Math.sin(angle) * midX;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(worldX, worldY, isSelected ? 13 : 10.5, 0, Math.PI * 2);
+      ctx.fillStyle = isSelected ? ACCENT : BG;
+      ctx.globalAlpha = isSelected ? 1 : 0.92;
+      ctx.fill();
+      ctx.lineWidth = 1.1;
+      ctx.strokeStyle = ACCENT;
+      ctx.stroke();
+
+      ctx.fillStyle = isSelected ? BG : INK;
+      ctx.globalAlpha = 1;
+      ctx.font = `${isSelected ? "600" : "500"} 10.5px 'Cormorant Garamond', Georgia, serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(numeral, worldX, worldY + 0.5);
+      ctx.restore();
+
+      return { x: worldX, y: worldY, r: Math.max(length * 0.55, 28) };
+    }
+
+    function animate() {
+      time += 0.015;
+      const w = stageEl.clientWidth || 750;
+      const h = stageEl.clientHeight || 485;
+
+      if (w !== lastW || h !== lastH) {
+        lastW = w;
+        lastH = h;
+        canvas.width = w;
+        canvas.height = h;
+      }
+
+      ctx.clearRect(0, 0, w, h);
+
+      const ACCENT = "#8F2D1E";
+      const INK = "#181615";
+
+      // Fidanın konumu (masaüstünde sağ %77, mobilde sağ-alt)
+      const isMobile = w < 700;
+      const baseX = isMobile ? w * 0.78 : w * 0.77;
+      const soilY = h * 0.79;
+      const wind = (mouse.x - 0.5) * 20 + Math.sin(time * 1.15) * 4.5;
+
+      leafHitboxes = [];
+
+      // 1. TOPRAK UFUK ÇİZGİSİ VE TOHUM YATAĞI
+      ctx.save();
+      ctx.strokeStyle = ACCENT;
+      ctx.globalAlpha = 0.36;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(baseX - 125, soilY);
+      ctx.quadraticCurveTo(baseX, soilY - 9, baseX + 125, soilY);
+      ctx.stroke();
+
+      ctx.globalAlpha = 0.2;
+      for (let i = -95; i <= 95; i += 12) {
+        const dotY = soilY + Math.sin(i * 0.12) * 3 + 5;
+        ctx.beginPath();
+        ctx.arc(baseX + i, dotY, 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = ACCENT;
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // 2. TOPRAK ALTI KÖK SİSTEMİ
+      const roots = [
+        { endX: -72, endY: 64, ctrlX: -20, ctrlY: 32, w: 1.7, sub: [-92, 78] },
+        { endX: -34, endY: 78, ctrlX: -12, ctrlY: 44, w: 1.4, sub: [-46, 92] },
+        { endX: 4,   endY: 88, ctrlX: 3,   ctrlY: 48, w: 2.3, sub: [-8, 100] },
+        { endX: 42,  endY: 74, ctrlX: 16,  ctrlY: 40, w: 1.5, sub: [60, 88] },
+        { endX: 78,  endY: 58, ctrlX: 28,  ctrlY: 26, w: 1.3, sub: [96, 70] }
+      ];
+
+      ctx.save();
+      ctx.strokeStyle = ACCENT;
+      roots.forEach((rt) => {
+        ctx.globalAlpha = 0.32;
+        ctx.lineWidth = rt.w;
+        ctx.beginPath();
+        ctx.moveTo(baseX, soilY);
+        ctx.quadraticCurveTo(baseX + rt.ctrlX, soilY + rt.ctrlY, baseX + rt.endX, soilY + rt.endY);
+        ctx.stroke();
+
+        ctx.globalAlpha = 0.18;
+        ctx.lineWidth = 0.85;
+        ctx.beginPath();
+        ctx.moveTo(baseX + rt.endX * 0.65, soilY + rt.endY * 0.65);
+        ctx.lineTo(baseX + rt.sub[0], soilY + rt.sub[1]);
+        ctx.stroke();
+      });
+      ctx.restore();
+
+      // 3. TOPRAKTAN ÇIKAN İLK ÇENEK YAPRAKLARI (COTYLEDONS)
+      drawBotanicalLeaf(baseX - 2, soilY - 12, Math.PI * 1.12, 30, 7, false, "·");
+      drawBotanicalLeaf(baseX + 2, soilY - 12, -Math.PI * 0.12, 30, 7, false, "·");
+
+      // 4. ANA FİDAN GÖVDESİ (YUKARI DOĞRU İNCELEN ESNEK GÖVDE)
+      const topX = baseX + wind;
+      const topY = h * 0.14;
+      const ctrl1X = baseX - 18 + wind * 0.25;
+      const ctrl1Y = soilY - (soilY - topY) * 0.35;
+      const ctrl2X = baseX + 14 + wind * 0.65;
+      const ctrl2Y = soilY - (soilY - topY) * 0.70;
+
+      function stemPoint(t) {
+        const u = 1 - t;
+        const tt = t * t, uu = u * u;
+        const uuu = uu * u, ttt = tt * t;
+        const x = uuu * baseX + 3 * uu * t * ctrl1X + 3 * u * tt * ctrl2X + ttt * topX;
+        const y = uuu * soilY + 3 * uu * t * ctrl1Y + 3 * u * tt * ctrl2Y + ttt * topY;
+        return { x, y };
+      }
+
+      ctx.save();
+      const segments = 32;
+      for (let i = 0; i < segments; i++) {
+        const t0 = i / segments;
+        const t1 = (i + 1) / segments;
+        const p0 = stemPoint(t0);
+        const p1 = stemPoint(t1);
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+        ctx.strokeStyle = ACCENT;
+        ctx.globalAlpha = 0.85;
+        ctx.lineWidth = 4.5 * (1 - t0 * 0.68);
+        ctx.lineCap = "round";
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // 5. FİDANIN 5 ANA DALI VE DAMARLI YAPRAKLARI (I - V)
+      const branchNodes = [
+        { t: 0.24, side: -1, len: 74, width: 20, baseAngle: -Math.PI * 0.76, numeral: "I" },
+        { t: 0.41, side:  1, len: 78, width: 21, baseAngle: -Math.PI * 0.20, numeral: "II" },
+        { t: 0.58, side: -1, len: 72, width: 19, baseAngle: -Math.PI * 0.74, numeral: "III" },
+        { t: 0.74, side:  1, len: 66, width: 18, baseAngle: -Math.PI * 0.22, numeral: "IV" },
+        { t: 0.89, side: -1, len: 58, width: 16, baseAngle: -Math.PI * 0.70, numeral: "V" }
+      ];
+
+      branchNodes.forEach((b, idx) => {
+        const node = stemPoint(b.t);
+        const swayAngle = b.baseAngle + Math.sin(time * 1.4 + idx) * 0.045 + (wind * 0.003);
+
+        const shootX = node.x + b.side * 19;
+        const shootY = node.y - 11;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(node.x, node.y);
+        ctx.quadraticCurveTo(node.x + b.side * 9, node.y - 8, shootX, shootY);
+        ctx.strokeStyle = ACCENT;
+        ctx.globalAlpha = 0.78;
+        ctx.lineWidth = 2.1;
+        ctx.stroke();
+        ctx.restore();
+
+        const isSel = (idx === activeLeaf);
+        const hb = drawBotanicalLeaf(shootX, shootY, swayAngle, b.len, b.width, isSel, b.numeral);
+        leafHitboxes.push({ x: hb.x, y: hb.y, r: hb.r, index: idx });
+      });
+
+      // 6. TEPE SÜRGÜNÜ (APICAL BUD / YENİ DOĞAN FİLİZ)
+      const tip = stemPoint(1.0);
+      ctx.save();
+      ctx.translate(tip.x, tip.y);
+      ctx.rotate((wind * 0.012));
+
+      ctx.strokeStyle = ACCENT;
+      ctx.fillStyle = "rgba(143, 45, 30, 0.22)";
+      ctx.lineWidth = 1.4;
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(-13, -15, -9, -32, -2, -39);
+      ctx.bezierCurveTo(3, -27, 3, -13, 0, 0);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(13, -13, 11, -28, 4, -34);
+      ctx.bezierCurveTo(-1, -23, -1, -11, 0, 0);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(1, -44, 2.6, 0, Math.PI * 2);
+      ctx.fillStyle = ACCENT;
+      ctx.globalAlpha = 0.65 + Math.sin(time * 2.5) * 0.3;
+      ctx.fill();
+      ctx.restore();
+
+      // 7. YAPRAK TIKLAMA HALKALARI
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const rp = ripples[i];
+        rp.r += 1.4;
+        rp.alpha *= 0.93;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
+        ctx.strokeStyle = ACCENT;
+        ctx.globalAlpha = rp.alpha;
+        ctx.lineWidth = 1.3;
+        ctx.stroke();
+        ctx.restore();
+        if (rp.alpha < 0.03) ripples.splice(i, 1);
+      }
+
+      // Sağ alt botanik mühür
+      ctx.save();
+      ctx.fillStyle = INK;
+      ctx.globalAlpha = 0.42;
+      ctx.font = "italic 11.5px 'Cormorant Garamond', Georgia, serif";
+      ctx.textAlign = "right";
+      ctx.fillText("Fikir Fidanı · Köklerden Filize (V Yaprak)", baseX + 115, soilY + 24);
+      ctx.restore();
+
+      requestAnimationFrame(animate);
+    }
+
+    renderPills();
+    animate();
+  </script>
+</body>
+</html>
+
