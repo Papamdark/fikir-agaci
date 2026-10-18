@@ -2,404 +2,489 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Celil’s Idea Tree — Celil’in Fikir Ağacı</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Celil’s Idea Tree</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,600&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-linen: #F2ECE1;
-      --text-ink: #181615;
-      --accent-seal: #8F2D1E;
-      --accent-gold: #B87D3B;
-      --rule-line: rgba(24, 22, 21, 0.14);
+      --bg-deep: #07070B;
+      --accent: #E5B869;
+      --accent-secondary: #C93B2B;
+      --glass-bg: rgba(16, 16, 22, 0.58);
+      --glass-border: rgba(255, 255, 255, 0.11);
+      --text-main: #F6F4F0;
+      --text-muted: rgba(246, 244, 240, 0.66);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
-      background: #F2ECE1;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      color: var(--text-ink);
+      width: 100%;
+      height: 100%;
+      background: #07070B;
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       user-select: none;
       -webkit-font-smoothing: antialiased;
+      overflow: hidden;
     }
 
-    #bespoke-stage {
+    #spatial-root {
       position: relative;
       width: 100%;
-      min-height: 100vh;
-      min-height: 100dvh;
+      height: 100vh;
+      height: 100dvh;
       overflow: hidden;
-      background-color: var(--bg-linen);
-      background-image:
-        radial-gradient(circle at 78% 50%, rgba(143, 45, 30, 0.06) 0%, transparent 60%),
-        repeating-linear-gradient(0deg, rgba(24, 22, 21, 0.012) 0px, rgba(24, 22, 21, 0.012) 1px, transparent 1px, transparent 3px);
-      color: var(--text-ink);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 1.5rem 2.4rem;
+      background: radial-gradient(circle at 72% 48%, rgba(229, 184, 105, 0.12) 0%, rgba(7, 7, 11, 0.98) 70%);
+      transition: background 0.9s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .sapling-stage-box {
+    /* FULL-BLEED 3D VOLUMETRIC TREE & PARTICLE CANVAS */
+    #tree-3d-canvas {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       z-index: 1;
-      pointer-events: auto;
-    }
-
-    #sapling-canvas {
-      width: 100%;
-      height: 100%;
       display: block;
     }
 
-    /* TOP HEADER */
-    .stage-header {
-      position: relative;
-      z-index: 3;
+    /* AMBIENT GLOW ORBS */
+    .ambient-orb {
+      position: absolute;
+      width: 48vw;
+      height: 48vw;
+      max-width: 580px;
+      max-height: 580px;
+      border-radius: 50%;
+      filter: blur(95px);
+      opacity: 0.24;
+      pointer-events: none;
+      z-index: 0;
+      transition: background 1s ease, transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #orb-1 { top: -12%; left: -8%; background: var(--accent); }
+    #orb-2 { bottom: -18%; right: 8%; background: var(--accent-secondary); }
+
+    /* FLOATING TOP GLASS BAR */
+    .spatial-topbar {
+      position: absolute;
+      top: 1.35rem;
+      left: 2rem;
+      right: 2rem;
+      z-index: 10;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--rule-line);
-      padding-bottom: 0.7rem;
-      gap: 0.6rem;
+      pointer-events: none;
     }
 
-    .brand-title {
-      letter-spacing: 0.22em;
-      font-size: 12px;
-      text-transform: uppercase;
-      font-weight: 600;
-      color: var(--text-ink);
-    }
-
-    .header-controls {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .leaf-nav-pills {
-      display: flex;
-      align-items: center;
-      gap: 0.28rem;
-    }
-
-    .leaf-pill {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-ink);
-      opacity: 0.52;
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
-      font-size: 14px;
-      font-weight: 600;
-      width: 27px;
-      height: 27px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: all 0.22s ease;
-    }
-
-    .leaf-pill:hover {
-      opacity: 0.9;
-      border-color: var(--rule-line);
-    }
-
-    .leaf-pill.active {
-      opacity: 1;
-      color: #F2ECE1;
-      background: var(--accent-seal);
-      border-color: var(--accent-seal);
-    }
-
-    .lang-switch {
+    .brand-capsule {
+      pointer-events: auto;
       display: inline-flex;
-      border: 1px solid var(--rule-line);
-      border-radius: 5px;
-      overflow: hidden;
-      background: rgba(24, 22, 21, 0.04);
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     }
 
-    .lang-btn {
+    .brand-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+      transition: background 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .brand-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-main);
+    }
+
+    .lang-capsule {
+      pointer-events: auto;
+      display: inline-flex;
+      padding: 3px;
+      border-radius: 999px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+    }
+
+    .lang-pill {
       background: transparent;
       border: none;
-      padding: 0.22rem 0.55rem;
+      color: var(--text-muted);
       font-size: 10.5px;
       font-weight: 600;
-      letter-spacing: 0.08em;
-      color: var(--text-ink);
-      opacity: 0.55;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
 
-    .lang-btn.active {
-      background: var(--accent-seal);
-      color: #F2ECE1;
-      opacity: 1;
+    .lang-pill.active {
+      background: var(--accent);
+      color: #07070B;
+      box-shadow: 0 2px 12px rgba(229, 184, 105, 0.35);
     }
 
-    /* CENTER STAGE: BESPOKE MODIFIED ARTWORK + QUOTE + ROOT NOTE */
-    .stage-content {
-      position: relative;
-      z-index: 3;
-      margin: auto 0;
-      max-width: 64%;
+    /* MAIN SPATIAL SHOWCASE (LEFT / CENTER-LEFT FLOATING INSTALLATION) */
+    .spatial-showcase {
+      position: absolute;
+      top: 50%;
+      left: 2.2rem;
+      transform: translateY(-52%);
+      z-index: 5;
+      width: min(64%, 760px);
       display: grid;
-      grid-template-columns: 310px 1fr;
-      gap: 1.5rem;
+      grid-template-columns: 270px 1fr;
+      gap: 1.75rem;
       align-items: center;
       pointer-events: none;
-      transition: opacity 0.26s ease, transform 0.26s ease;
     }
 
-    .artwork-frame {
-      position: relative;
-      width: 310px;
-      height: 208px;
-      border-radius: 10px;
-      padding: 6px;
-      background: #EAE2D3;
-      border: 1px solid rgba(143, 45, 30, 0.35);
-      box-shadow:
-        0 14px 32px rgba(24, 22, 21, 0.14),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+    /* 3D TILT HOLOGRAPHIC ARTWORK CARD */
+    .tilt-card-wrapper {
+      perspective: 1100px;
       pointer-events: auto;
-      overflow: hidden;
-      transition: transform 0.35s ease;
     }
 
-    .artwork-frame:hover {
-      transform: scale(1.02);
+    .tilt-card {
+      position: relative;
+      width: 270px;
+      height: 192px;
+      border-radius: 18px;
+      padding: 5px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.03) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow:
+        0 28px 60px rgba(0, 0, 0, 0.65),
+        0 0 38px rgba(229, 184, 105, 0.12);
+      transform-style: preserve-3d;
+      transition: transform 0.18s ease-out, box-shadow 0.5s ease;
+      overflow: hidden;
+      cursor: grab;
     }
 
     #artwork-canvas {
       width: 100%;
       height: 100%;
-      border-radius: 6px;
+      border-radius: 13px;
       display: block;
     }
 
-    .artwork-caption-badge {
+    .card-glare {
       position: absolute;
-      bottom: 11px;
-      right: 12px;
-      padding: 2px 7px;
-      border-radius: 4px;
-      background: rgba(24, 22, 21, 0.72);
-      backdrop-filter: blur(4px);
-      color: #F2ECE1;
-      font-size: 8.5px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-weight: 600;
+      inset: 0;
+      border-radius: 18px;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.22) 0%, transparent 60%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
     }
 
-    .quote-column {
+    .tilt-card:hover .card-glare {
+      opacity: 1;
+    }
+
+    .art-tag-floating {
+      position: absolute;
+      bottom: 13px;
+      left: 14px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(7, 7, 11, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* KINETIC QUOTE & GLASS ROOT CAPSULE */
+    .quote-spatial-col {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
     }
 
-    .leaf-tag {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
+    .branch-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 10.5px;
       font-weight: 600;
-      font-size: 1.04rem;
-      color: var(--accent-seal);
-      margin-bottom: 0.3rem;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.55rem;
+      transition: color 0.5s ease;
     }
 
-    .quote-heading {
+    .kinetic-quote {
       font-family: 'Instrument Serif', Georgia, serif;
       font-weight: 400;
-      font-size: clamp(1.75rem, 2.8vw, 2.5rem);
-      line-height: 1.13;
-      color: var(--text-ink);
-      margin-bottom: 0.55rem;
+      font-size: clamp(1.85rem, 3.1vw, 2.75rem);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--text-main);
+      margin-bottom: 0.65rem;
+      text-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.24em;
     }
 
-    .quote-author {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-style: italic;
-      font-size: 1.02rem;
-      color: var(--text-ink);
-      opacity: 0.78;
-      margin-bottom: 0.75rem;
+    .word-mask {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      padding-bottom: 0.06em;
     }
 
-    .quote-root {
-      font-size: 0.84rem;
-      line-height: 1.62;
-      color: var(--text-ink);
-      opacity: 0.84;
-      padding-left: 0.9rem;
-      border-left: 2px solid var(--accent-seal);
+    .word-inner {
+      display: inline-block;
+      transform: translateY(110%) rotate(3deg);
+      opacity: 0;
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.5s ease;
     }
 
-    /* FOOTER */
-    .stage-footer {
-      position: relative;
-      z-index: 3;
+    .word-inner.revealed {
+      transform: translateY(0) rotate(0deg);
+      opacity: 1;
+    }
+
+    .quote-author-line {
+      font-size: 0.92rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-bottom: 0.95rem;
+      letter-spacing: 0.02em;
+      transition: opacity 0.4s ease;
+    }
+
+    .root-glass-capsule {
+      pointer-events: auto;
+      padding: 0.85rem 1.1rem;
+      border-radius: 14px;
+      background: rgba(16, 16, 22, 0.52);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-left: 2.5px solid var(--accent);
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: rgba(246, 244, 240, 0.84);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      transition: border-color 0.5s ease, opacity 0.4s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* FLOATING BOTTOM ORBITAL DOCK */
+    .orbital-dock-bar {
+      position: absolute;
+      bottom: 1.25rem;
+      left: 2rem;
+      right: 2rem;
+      z-index: 10;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top: 1px solid var(--rule-line);
-      padding-top: 0.7rem;
-      font-size: 11.5px;
+      pointer-events: none;
     }
 
-    .footer-hint {
-      opacity: 0.7;
-      font-style: italic;
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 13.5px;
+    .dock-capsule {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.38rem 0.5rem;
+      border-radius: 999px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
     }
 
-    .nav-buttons {
-      display: flex;
-      gap: 0.45rem;
-    }
-
-    .nav-btn {
+    .dock-node-btn {
       background: transparent;
-      border: 1px solid var(--accent-seal);
-      color: var(--text-ink);
-      padding: 0.35rem 0.85rem;
-      border-radius: 4px;
-      font-size: 11.5px;
-      font-weight: 500;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .nav-btn:hover {
-      background: var(--accent-seal);
-      color: #F2ECE1;
+    .dock-node-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.07);
     }
 
-    /* MOBILE PORTRAIT LAYOUT (CLEAN STACKED ATELIER, UNOBSTRUCTED SAPLING) */
-    @media (max-width: 780px) {
-      #bespoke-stage {
-        padding: 1rem 1.1rem;
-        justify-content: flex-start;
-        gap: 0.85rem;
-        height: auto;
-        min-height: 100dvh;
+    .dock-node-btn.active {
+      background: var(--accent);
+      color: #07070B;
+      transform: scale(1.08);
+      box-shadow: 0 0 18px rgba(229, 184, 105, 0.45);
+    }
+
+    .dock-arrow-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      padding: 0.42rem 0.9rem;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .dock-arrow-btn:hover {
+      background: var(--accent);
+      color: #07070B;
+      border-color: var(--accent);
+    }
+
+    .tree-hint-pill {
+      pointer-events: auto;
+      padding: 0.45rem 0.95rem;
+      border-radius: 999px;
+      background: rgba(16, 16, 22, 0.42);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* MOBILE RESPONSIVE SPATIAL STACK */
+    @media (max-width: 820px) {
+      .spatial-topbar {
+        top: 0.85rem;
+        left: 1rem;
+        right: 1rem;
       }
 
-      .stage-header {
-        flex-wrap: wrap;
-        row-gap: 0.5rem;
-        padding-bottom: 0.55rem;
-      }
-
-      .brand-title {
-        font-size: 11px;
-        letter-spacing: 0.18em;
-      }
-
-      .header-controls {
-        width: 100%;
-        justify-content: space-between;
-      }
-
-      .stage-content {
-        max-width: 100%;
+      .spatial-showcase {
+        top: 4.1rem;
+        left: 1rem;
+        right: 1rem;
+        width: auto;
+        transform: none;
         grid-template-columns: 1fr;
         gap: 0.75rem;
-        margin: 0;
       }
 
-      .artwork-frame {
+      .tilt-card {
         width: 100%;
-        height: 176px;
+        height: 148px;
       }
 
-      .quote-heading {
-        font-size: 1.55rem;
+      .kinetic-quote {
+        font-size: 1.45rem;
         margin-bottom: 0.35rem;
       }
 
-      .quote-author {
-        font-size: 0.94rem;
+      .quote-author-line {
+        font-size: 0.82rem;
         margin-bottom: 0.5rem;
       }
 
-      .quote-root {
-        font-size: 0.8rem;
-        line-height: 1.52;
+      .root-glass-capsule {
+        padding: 0.65rem 0.85rem;
+        font-size: 0.76rem;
+        line-height: 1.48;
       }
 
-      /* Dedicated interactive Sapling terrace on mobile so text never covers it */
-      .sapling-stage-box {
-        position: relative;
-        width: 100%;
-        height: 225px;
-        order: 3;
-        border-top: 1px dashed rgba(143, 45, 30, 0.18);
-        margin-top: 0.15rem;
+      .orbital-dock-bar {
+        bottom: 0.85rem;
+        left: 1rem;
+        right: 1rem;
+        justify-content: center;
       }
 
-      .stage-footer {
-        order: 4;
-        margin-top: auto;
-        padding-top: 0.55rem;
-      }
-
-      .footer-hint {
-        font-size: 11.5px;
-        max-width: 48%;
-        line-height: 1.25;
+      .tree-hint-pill {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
 
-  <main id="bespoke-stage">
-    <header class="stage-header">
-      <div class="brand-title" id="brand-title">CELIL’S IDEA TREE</div>
+  <main id="spatial-root">
+    <div class="ambient-orb" id="orb-1"></div>
+    <div class="ambient-orb" id="orb-2"></div>
 
-      <div class="header-controls">
-        <nav class="leaf-nav-pills" id="leaf-pills" aria-label="Leaf Selection"></nav>
-        <div class="lang-switch" role="group" aria-label="Language Switch">
-          <button type="button" class="lang-btn active" id="lang-en">EN</button>
-          <button type="button" class="lang-btn" id="lang-tr">TR</button>
-        </div>
+    <!-- 3D VOLUMETRIC BIOLUMINESCENT SAPLING & PARTICLE CANVAS -->
+    <canvas id="tree-3d-canvas"></canvas>
+
+    <!-- FLOATING TOP GLASS HUD -->
+    <header class="spatial-topbar">
+      <div class="brand-capsule">
+        <span class="brand-pulse" id="brand-pulse"></span>
+        <span class="brand-name" id="brand-title">CELIL’S IDEA TREE</span>
+      </div>
+
+      <div class="lang-capsule" role="group" aria-label="Language Switch">
+        <button type="button" class="lang-pill active" id="lang-en">EN</button>
+        <button type="button" class="lang-pill" id="lang-tr">TR</button>
       </div>
     </header>
 
-    <article class="stage-content" id="stage-content">
-      <div class="artwork-frame" title="Living Scene">
-        <canvas id="artwork-canvas" width="490" height="336"></canvas>
-        <span class="artwork-caption-badge" id="artwork-badge">GULISTAN · 16TH C. MINIATURE</span>
+    <!-- MAIN SPATIAL INSTALLATION -->
+    <section class="spatial-showcase">
+      <div class="tilt-card-wrapper">
+        <div class="tilt-card" id="tilt-card">
+          <canvas id="artwork-canvas" width="540" height="384"></canvas>
+          <div class="card-glare" id="card-glare"></div>
+          <span class="art-tag-floating" id="artwork-badge">GULISTAN · 16TH C.</span>
+        </div>
       </div>
 
-      <div class="quote-column">
-        <div class="leaf-tag" id="leaf-tag">Sapling · Leaf I</div>
-        <h1 class="quote-heading" id="quote-heading"></h1>
-        <div class="quote-author" id="quote-author"></div>
-        <p class="quote-root" id="quote-root"></p>
+      <div class="quote-spatial-col">
+        <div class="branch-eyebrow" id="leaf-tag">BRANCH I · SAPLING NODE</div>
+        <h1 class="kinetic-quote" id="quote-heading"></h1>
+        <div class="quote-author-line" id="quote-author"></div>
+        <div class="root-glass-capsule" id="quote-root"></div>
       </div>
-    </article>
+    </section>
 
-    <div class="sapling-stage-box" id="sapling-box">
-      <canvas id="sapling-canvas"></canvas>
-    </div>
+    <!-- FLOATING BOTTOM ORBITAL DOCK -->
+    <footer class="orbital-dock-bar">
+      <div class="dock-capsule">
+        <button type="button" class="dock-arrow-btn" id="prev-btn">←</button>
+        <div id="dock-nodes" style="display:flex; gap:0.25rem;"></div>
+        <button type="button" class="dock-arrow-btn" id="next-btn">→</button>
+      </div>
 
-    <footer class="stage-footer">
-      <span class="footer-hint" id="footer-hint">Tap the leaves (I – V) on the sapling</span>
-      <div class="nav-buttons">
-        <button class="nav-btn" id="prev-btn" type="button">← Prev</button>
-        <button class="nav-btn" id="next-btn" type="button">Next Leaf →</button>
+      <div class="tree-hint-pill" id="footer-hint">
+        Click any glowing leaf (I – V) on the 3D sapling or scroll to fly between branches
       </div>
     </footer>
   </main>
@@ -424,19 +509,13 @@
     const UI_TEXT = {
       en: {
         brand: "CELIL’S IDEA TREE",
-        leafPrefix: "Sapling · Leaf",
-        hint: "Tap the leaves (I – V) on the living sapling to explore",
-        prev: "← Prev",
-        next: "Next Leaf →",
-        sealCaption: "Living Sapling · V Leaves"
+        leafPrefix: "BRANCH",
+        hint: "Click any glowing leaf (I – V) on the 3D sapling or scroll to fly between branches"
       },
       tr: {
         brand: "CELİL’İN FİKİR AĞACI",
-        leafPrefix: "Fidan · Yaprak",
-        hint: "Fidanın yapraklarına (I – V) dokunarak gezinebilirsin",
-        prev: "← Önceki",
-        next: "Sonraki Yaprak →",
-        sealCaption: "Fikir Fidanı · V Yaprak"
+        leafPrefix: "DAL",
+        hint: "Dallar arasında uçmak için sağdaki 3B fidanın yapraklarına (I – V) dokun veya kaydır"
       }
     };
 
@@ -444,7 +523,9 @@
       {
         num: "I",
         imgKey: "saadi",
-        badge: { en: "GULISTAN · ROSE GARDEN MINIATURE", tr: "GÜLİSTAN · GÜL BAHÇESİ MİNYATÜRÜ" },
+        accent: "#E5B869",
+        secondary: "#9E3328",
+        badge: { en: "GULISTAN · ROSE MINIATURE", tr: "GÜLİSTAN · GÜL MİNYATÜRÜ" },
         en: {
           q: "“Wrong delivery is the executioner of a true word.”",
           a: "Saadi Shirazi — Gulistan (Chapter VIII)",
@@ -459,7 +540,9 @@
       {
         num: "II",
         imgKey: "monet",
-        badge: { en: "MONET · GARDEN & BUTTERFLIES", tr: "MONET · BAHÇE VE KELEBEKLER" },
+        accent: "#B892FF",
+        secondary: "#3A9E7E",
+        badge: { en: "GIVERNY · LIVING GARDEN", tr: "GIVERNY · YAŞAYAN BAHÇE" },
         en: {
           q: "“Cultivate a beautiful garden; the butterflies will come. And even if they don't, you will still have a beautiful garden.”",
           a: "Mario Quintana (Attributed)",
@@ -474,7 +557,9 @@
       {
         num: "III",
         imgKey: "mizen",
-        badge: { en: "MIZEN BOUSHI · THE FIRST DOMINO", tr: "MIZEN BOUSHI · İLK TAŞTA DURDURMAK" },
+        accent: "#F0C475",
+        secondary: "#B83A2A",
+        badge: { en: "MIZEN BOUSHI · FIRST STONE", tr: "MIZEN BOUSHI · İLK TAŞ" },
         en: {
           q: "“Deal with a problem before it arises.”",
           a: "Laozi — Tao Te Ching (Ch. 64) & Mizen Boushi (未然防止)",
@@ -489,22 +574,26 @@
       {
         num: "IV",
         imgKey: "finn",
+        accent: "#FFD15C",
+        secondary: "#38BDF8",
         badge: { en: "ADVENTURE TIME · DAD'S DUNGEON", tr: "ADVENTURE TIME · BÜYÜYEN ÇİÇEK" },
         en: {
           q: "“You're a beautiful flower and I love to watch you grow.”",
-          a: "Adventure Time — Joshua (Season 3, Ep. 25: Dad's Dungeon)",
+          a: "Adventure Time — Joshua (Season 3, Ep. 25)",
           r: "Looking at your own growth—and at those you care about—not as an impatient judge, but as a patient witness watching a seed unfold in its own season."
         },
         tr: {
           q: "“You're a beautiful flower and I love to watch you grow.”",
-          a: "Adventure Time — Joshua (3. Sezon, 25. Bölüm: Dad's Dungeon)",
+          a: "Adventure Time — Joshua (3. Sezon, 25. Bölüm)",
           r: "İnsanın kendi gelişimine ve sevdiklerine dışarıdan bir yargıç gibi değil, toprağa düşmüş bir tohumun filizlenmesini izleyen sabırlı bir tanık gibi bakabilmesi."
         }
       },
       {
         num: "V",
         imgKey: "happiness",
-        badge: { en: "MINDSET SHIFT · BREAK THE LOOP", tr: "ZİHNİYET DEĞİŞİMİ · DÖNGÜDEN ÇIKIŞ" },
+        accent: "#F59E0B",
+        secondary: "#10B981",
+        badge: { en: "MINDSET SHIFT · BREAK THE LOOP", tr: "ZİHNİYET DEĞİŞİMİ · ÇIKIŞ" },
         en: {
           q: "“Today, our access to everything is just one moment, one idea, one minute of mindset shift away.”",
           a: "Rota",
@@ -521,55 +610,101 @@
     let currentLang = "en";
     let activeLeaf = 0;
 
-    const pillsContainer = document.getElementById("leaf-pills");
-    const contentEl = document.getElementById("stage-content");
+    // 3D Tilt Card interactive physics
+    const tiltCard = document.getElementById("tilt-card");
+    const cardGlare = document.getElementById("card-glare");
 
-    function renderPills() {
-      pillsContainer.innerHTML = "";
+    tiltCard.addEventListener("mousemove", (e) => {
+      const r = tiltCard.getBoundingClientRect();
+      const nx = (e.clientX - r.left) / r.width;
+      const ny = (e.clientY - r.top) / r.height;
+      const rotY = (nx - 0.5) * 20;
+      const rotX = (0.5 - ny) * 18;
+      tiltCard.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.03, 1.03, 1.03)`;
+      cardGlare.style.background = `radial-gradient(circle at ${nx * 100}% ${ny * 100}%, rgba(255,255,255,0.28) 0%, transparent 60%)`;
+    });
+
+    tiltCard.addEventListener("mouseleave", () => {
+      tiltCard.style.transform = "rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+    });
+
+    const dockNodesEl = document.getElementById("dock-nodes");
+
+    function renderDock() {
+      dockNodesEl.innerHTML = "";
       LEAVES_DATA.forEach((item, idx) => {
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "leaf-pill" + (idx === activeLeaf ? " active" : "");
+        btn.className = "dock-node-btn" + (idx === activeLeaf ? " active" : "");
         btn.textContent = item.num;
         btn.onclick = () => selectLeaf(idx);
-        pillsContainer.appendChild(btn);
+        dockNodesEl.appendChild(btn);
       });
     }
 
-    function applyTextContent() {
+    function animateKineticQuote(text) {
+      const qEl = document.getElementById("quote-heading");
+      qEl.innerHTML = "";
+      const words = text.split(" ");
+      words.forEach((w, i) => {
+        const mask = document.createElement("span");
+        mask.className = "word-mask";
+        const inner = document.createElement("span");
+        inner.className = "word-inner";
+        inner.textContent = w;
+        inner.style.transitionDelay = `${i * 26}ms`;
+        mask.appendChild(inner);
+        qEl.appendChild(mask);
+      });
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          qEl.querySelectorAll(".word-inner").forEach((el) => el.classList.add("revealed"));
+        });
+      });
+    }
+
+    function applyThemeAndText() {
       const ui = UI_TEXT[currentLang];
       const item = LEAVES_DATA[activeLeaf];
       const loc = item[currentLang];
 
+      document.documentElement.style.setProperty("--accent", item.accent);
+      document.documentElement.style.setProperty("--accent-secondary", item.secondary);
+
       document.getElementById("brand-title").textContent = ui.brand;
-      document.getElementById("leaf-tag").textContent = `${ui.leafPrefix} ${item.num}`;
+      document.getElementById("leaf-tag").textContent = `${ui.leafPrefix} ${item.num} · ${item.badge[currentLang]}`;
       document.getElementById("artwork-badge").textContent = item.badge[currentLang];
-      document.getElementById("quote-heading").textContent = loc.q;
-      document.getElementById("quote-author").textContent = loc.a;
-      document.getElementById("quote-root").textContent = loc.r;
       document.getElementById("footer-hint").textContent = ui.hint;
-      document.getElementById("prev-btn").textContent = ui.prev;
-      document.getElementById("next-btn").textContent = ui.next;
+
+      animateKineticQuote(loc.q);
+
+      const aEl = document.getElementById("quote-author");
+      const rEl = document.getElementById("quote-root");
+      aEl.style.opacity = "0";
+      rEl.style.opacity = "0";
+      rEl.style.transform = "translateY(8px)";
+
+      setTimeout(() => {
+        aEl.textContent = loc.a;
+        rEl.textContent = loc.r;
+        aEl.style.opacity = "1";
+        rEl.style.opacity = "1";
+        rEl.style.transform = "translateY(0)";
+      }, 140);
     }
 
     function selectLeaf(idx, rippleCoords) {
       activeLeaf = (idx + LEAVES_DATA.length) % LEAVES_DATA.length;
+      cameraTarget.branchIndex = activeLeaf;
+      cameraTarget.burst = 1.0;
 
-      contentEl.style.opacity = "0";
-      contentEl.style.transform = "translateY(5px)";
-
-      setTimeout(() => {
-        applyTextContent();
-        contentEl.style.opacity = "1";
-        contentEl.style.transform = "translateY(0)";
-      }, 130);
-
-      renderPills();
+      applyThemeAndText();
+      renderDock();
 
       if (rippleCoords) {
-        ripples.push({ x: rippleCoords.x, y: rippleCoords.y, r: 4, alpha: 0.85 });
+        ripples.push({ x: rippleCoords.x, y: rippleCoords.y, r: 6, alpha: 0.95 });
       } else if (leafHitboxes[activeLeaf]) {
-        ripples.push({ x: leafHitboxes[activeLeaf].x, y: leafHitboxes[activeLeaf].y, r: 4, alpha: 0.7 });
+        ripples.push({ x: leafHitboxes[activeLeaf].x, y: leafHitboxes[activeLeaf].y, r: 6, alpha: 0.85 });
       }
     }
 
@@ -579,12 +714,7 @@
       document.documentElement.lang = lang;
       document.getElementById("lang-en").classList.toggle("active", lang === "en");
       document.getElementById("lang-tr").classList.toggle("active", lang === "tr");
-
-      contentEl.style.opacity = "0";
-      setTimeout(() => {
-        applyTextContent();
-        contentEl.style.opacity = "1";
-      }, 120);
+      applyThemeAndText();
     }
 
     document.getElementById("lang-en").onclick = () => setLanguage("en");
@@ -597,8 +727,20 @@
       if (e.key === "ArrowLeft") selectLeaf(activeLeaf - 1);
     });
 
+    // Smooth wheel navigation with cooldown
+    let lastWheelTime = 0;
+    window.addEventListener("wheel", (e) => {
+      const now = performance.now();
+      if (now - lastWheelTime < 750) return;
+      if (Math.abs(e.deltaY) > 28) {
+        lastWheelTime = now;
+        if (e.deltaY > 0) selectLeaf(activeLeaf + 1);
+        else selectLeaf(activeLeaf - 1);
+      }
+    }, { passive: true });
+
     // =========================================================================
-    // MODIFIED & ANIMATED ARTWORK CANVAS
+    // HOLOGRAPHIC ARTWORK CANVAS (WITH LIVE SCENE ANIMATIONS)
     // =========================================================================
     const artCanvas = document.getElementById("artwork-canvas");
     const actx = artCanvas.getContext("2d");
@@ -623,8 +765,8 @@
       ctx2d.rotate(angle);
       ctx2d.scale(scale, scale);
 
-      ctx2d.fillStyle = colorFill || "rgba(242, 210, 140, 0.78)";
-      ctx2d.strokeStyle = colorStroke || "#8F2D1E";
+      ctx2d.fillStyle = colorFill;
+      ctx2d.strokeStyle = colorStroke;
       ctx2d.lineWidth = 1.6;
 
       [-1, 1].forEach((dir) => {
@@ -640,13 +782,6 @@
         ctx2d.fill();
         ctx2d.stroke();
       });
-
-      ctx2d.strokeStyle = "#181615";
-      ctx2d.lineWidth = 1.5;
-      ctx2d.beginPath();
-      ctx2d.moveTo(0, -4);
-      ctx2d.lineTo(0, 11);
-      ctx2d.stroke();
       ctx2d.restore();
     }
 
@@ -655,36 +790,30 @@
       const ch = artCanvas.height;
       actx.clearRect(0, 0, cw, ch);
 
-      const key = LEAVES_DATA[activeLeaf].imgKey;
+      const item = LEAVES_DATA[activeLeaf];
+      const key = item.imgKey;
       const img = loadedImgs[key];
 
       actx.save();
 
       if (key === "saadi") {
-        actx.fillStyle = "#D8C398";
+        actx.fillStyle = "#181410";
         actx.fillRect(0, 0, cw, ch);
         if (img && img.complete && img.naturalWidth) {
           actx.save();
-          actx.filter = "blur(14px) brightness(0.85) saturate(1.15)";
+          actx.filter = "blur(16px) brightness(0.65) saturate(1.25)";
           drawCoverImage(actx, img, cw, ch, 0, 0, 1.15, 0.5);
           actx.restore();
 
           const panY = Math.sin(t * 0.45) * 8;
-          actx.filter = "contrast(1.06) saturate(1.08)";
+          actx.filter = "contrast(1.08) saturate(1.12)";
           drawCoverImage(actx, img, cw, ch, 0, panY, 0.92, 0.54);
           actx.filter = "none";
         }
 
-        const goldGlow = 0.14 + Math.sin(t * 1.6) * 0.06;
-        const gGrad = actx.createRadialGradient(cw * 0.28, ch * 0.22, 10, cw * 0.28, ch * 0.22, 160);
-        gGrad.addColorStop(0, `rgba(255, 226, 140, ${goldGlow})`);
-        gGrad.addColorStop(1, "rgba(24, 22, 21, 0.18)");
-        actx.fillStyle = gGrad;
-        actx.fillRect(0, 0, cw, ch);
-
-        for (let p = 0; p < 14; p++) {
-          const prog = (t * 0.16 + p * 0.071) % 1;
-          const px = cw * (0.15 + ((p * 0.17) % 0.7)) + Math.sin(t * 1.5 + p) * 18;
+        for (let p = 0; p < 16; p++) {
+          const prog = (t * 0.16 + p * 0.062) % 1;
+          const px = cw * (0.12 + ((p * 0.19) % 0.76)) + Math.sin(t * 1.5 + p) * 18;
           const py = prog * (ch + 20) - 10;
           const rot = t * 1.8 + p;
 
@@ -692,130 +821,123 @@
           actx.translate(px, py);
           actx.rotate(rot);
           actx.beginPath();
-          actx.ellipse(0, 0, 4.2, 2.4, 0, 0, Math.PI * 2);
-          actx.fillStyle = p % 2 === 0 ? "rgba(255, 245, 238, 0.88)" : "rgba(235, 165, 160, 0.85)";
+          actx.ellipse(0, 0, 4.5, 2.5, 0, 0, Math.PI * 2);
+          actx.fillStyle = p % 2 === 0 ? "rgba(255, 240, 225, 0.9)" : "rgba(240, 150, 145, 0.88)";
           actx.fill();
           actx.restore();
         }
-
       } else if (key === "monet") {
-        const panX = Math.sin(t * 0.55) * 6;
-        const panY = Math.cos(t * 0.45) * 4;
-        actx.filter = "contrast(1.08) saturate(1.12) sepia(0.12)";
+        const panX = Math.sin(t * 0.55) * 7;
+        const panY = Math.cos(t * 0.45) * 5;
+        actx.filter = "contrast(1.1) saturate(1.18)";
         drawCoverImage(actx, img, cw, ch, panX, panY, 1.06);
         actx.filter = "none";
 
-        const sunGrad = actx.createLinearGradient(0, 0, cw * 0.85, ch);
-        const sunPulse = 0.16 + Math.sin(t * 1.3) * 0.06;
-        sunGrad.addColorStop(0, `rgba(255, 224, 150, ${sunPulse})`);
-        sunGrad.addColorStop(0.5, "rgba(255, 210, 130, 0.05)");
-        sunGrad.addColorStop(1, "rgba(24, 22, 21, 0.22)");
-        actx.fillStyle = sunGrad;
-        actx.fillRect(0, 0, cw, ch);
-
         const gardenButterflies = [
-          { x: cw * 0.28 + Math.sin(t * 1.1) * 48, y: ch * 0.62 + Math.cos(t * 1.6) * 24, s: 1.1, wp: t * 8.5, ang: -0.2 + Math.cos(t * 1.1) * 0.25 },
-          { x: cw * 0.68 + Math.cos(t * 0.9) * 52, y: ch * 0.48 + Math.sin(t * 1.4) * 28, s: 0.95, wp: t * 9.2 + 1.4, ang: 0.18 + Math.sin(t * 0.9) * 0.2 },
-          { x: cw * 0.48 + Math.sin(t * 1.4 + 2) * 60, y: ch * 0.34 + Math.cos(t * 1.1 + 1) * 20, s: 0.8, wp: t * 8.0 + 2.6, ang: -0.15 }
+          { x: cw * 0.28 + Math.sin(t * 1.1) * 54, y: ch * 0.62 + Math.cos(t * 1.6) * 26, s: 1.15, wp: t * 8.5, ang: -0.2 + Math.cos(t * 1.1) * 0.25 },
+          { x: cw * 0.68 + Math.cos(t * 0.9) * 56, y: ch * 0.48 + Math.sin(t * 1.4) * 30, s: 0.98, wp: t * 9.2 + 1.4, ang: 0.18 + Math.sin(t * 0.9) * 0.2 },
+          { x: cw * 0.48 + Math.sin(t * 1.4 + 2) * 64, y: ch * 0.34 + Math.cos(t * 1.1 + 1) * 22, s: 0.82, wp: t * 8.0 + 2.6, ang: -0.15 }
         ];
         gardenButterflies.forEach((b) => {
-          drawButterflyOverlay(actx, b.x, b.y, b.s, b.wp, b.ang, "rgba(255, 226, 155, 0.85)", "#8F2D1E");
+          drawButterflyOverlay(actx, b.x, b.y, b.s, b.wp, b.ang, "rgba(255, 230, 160, 0.88)", "#8F2D1E");
         });
-
       } else if (key === "mizen") {
-        const panX = Math.sin(t * 0.4) * 4;
-        actx.filter = "contrast(1.05) sepia(0.08)";
-        drawCoverImage(actx, img, cw, ch, panX, 0, 1.03);
+        const panX = Math.sin(t * 0.4) * 5;
+        actx.filter = "contrast(1.06)";
+        drawCoverImage(actx, img, cw, ch, panX, 0, 1.04);
         actx.filter = "none";
 
-        const wedgePulse = 0.24 + Math.sin(t * 2.6) * 0.12;
-        const wedgeGrad = actx.createRadialGradient(cw * 0.34, ch * 0.86, 6, cw * 0.34, ch * 0.86, 85);
-        wedgeGrad.addColorStop(0, `rgba(218, 155, 65, ${wedgePulse})`);
-        wedgeGrad.addColorStop(0.5, `rgba(143, 45, 30, ${wedgePulse * 0.45})`);
+        const wedgePulse = 0.28 + Math.sin(t * 2.8) * 0.14;
+        const wedgeGrad = actx.createRadialGradient(cw * 0.34, ch * 0.86, 6, cw * 0.34, ch * 0.86, 95);
+        wedgeGrad.addColorStop(0, `rgba(240, 196, 117, ${wedgePulse})`);
+        wedgeGrad.addColorStop(0.5, `rgba(184, 58, 42, ${wedgePulse * 0.5})`);
         wedgeGrad.addColorStop(1, "rgba(255, 215, 110, 0)");
         actx.fillStyle = wedgeGrad;
         actx.fillRect(0, 0, cw, ch);
 
-        for (let k = 0; k < 9; k++) {
-          const prog = (t * 0.25 + k * 0.11) % 1;
-          const kx = cw * (0.38 + k * 0.055);
-          const ky = ch * (0.85 - prog * 0.65);
+        for (let k = 0; k < 12; k++) {
+          const prog = (t * 0.26 + k * 0.083) % 1;
+          const kx = cw * (0.38 + (k % 9) * 0.058);
+          const ky = ch * (0.85 - prog * 0.68);
           actx.beginPath();
-          actx.arc(kx, ky, 2.0, 0, Math.PI * 2);
-          actx.fillStyle = `rgba(235, 190, 95, ${(1 - prog) * 0.75})`;
+          actx.arc(kx, ky, 2.2, 0, Math.PI * 2);
+          actx.fillStyle = `rgba(240, 196, 117, ${(1 - prog) * 0.85})`;
           actx.fill();
         }
-
       } else if (key === "finn") {
         const zoom = 1.04 + Math.sin(t * 1.1) * 0.02;
-        actx.filter = "contrast(1.06) saturate(1.08) sepia(0.10)";
-        drawCoverImage(actx, img, cw, ch, Math.sin(t * 0.7) * 4, 0, zoom);
+        actx.filter = "contrast(1.08) saturate(1.12)";
+        drawCoverImage(actx, img, cw, ch, Math.sin(t * 0.7) * 5, 0, zoom);
         actx.filter = "none";
 
-        const warmGrad = actx.createRadialGradient(cw * 0.5, ch * 0.45, 40, cw * 0.5, ch * 0.5, cw * 0.65);
-        warmGrad.addColorStop(0, "rgba(255, 235, 180, 0.08)");
-        warmGrad.addColorStop(1, "rgba(143, 45, 30, 0.22)");
-        actx.fillStyle = warmGrad;
-        actx.fillRect(0, 0, cw, ch);
-
-        for (let i = 0; i < 12; i++) {
-          const prog = (t * 0.22 + i * 0.083) % 1;
+        for (let i = 0; i < 15; i++) {
+          const prog = (t * 0.22 + i * 0.066) % 1;
           const px = (cw * ((i * 0.19 + Math.sin(t + i) * 0.06) % 1));
           const py = ch * (1.05 - prog * 1.1);
-          const pr = 2.5 + (i % 3) * 1.4;
+          const pr = 2.6 + (i % 3) * 1.5;
           actx.beginPath();
           actx.arc(px, py, pr, 0, Math.PI * 2);
-          actx.fillStyle = i % 2 === 0 ? "rgba(255, 225, 130, 0.82)" : "rgba(215, 75, 55, 0.72)";
+          actx.fillStyle = i % 2 === 0 ? "rgba(255, 225, 110, 0.88)" : "rgba(56, 189, 248, 0.78)";
           actx.fill();
         }
-
       } else if (key === "happiness") {
-        actx.filter = "contrast(1.14) saturate(0.95) sepia(0.14)";
-        drawCoverImage(actx, img, cw, ch, Math.sin(t * 0.5) * 3, 0, 1.04);
+        actx.filter = "contrast(1.15) saturate(1.05)";
+        drawCoverImage(actx, img, cw, ch, Math.sin(t * 0.5) * 4, 0, 1.04);
         actx.filter = "none";
 
-        const flicker = (Math.sin(t * 14) > -0.65 ? 0.22 : 0.04) + Math.sin(t * 3) * 0.06;
-        const marqueeGrad = actx.createRadialGradient(cw * 0.48, ch * 0.2, 10, cw * 0.48, ch * 0.2, 150);
-        marqueeGrad.addColorStop(0, `rgba(255, 240, 185, ${flicker})`);
-        marqueeGrad.addColorStop(1, "rgba(18, 16, 15, 0.28)");
+        const flicker = (Math.sin(t * 15) > -0.6 ? 0.26 : 0.04) + Math.sin(t * 3) * 0.06;
+        const marqueeGrad = actx.createRadialGradient(cw * 0.48, ch * 0.2, 10, cw * 0.48, ch * 0.2, 165);
+        marqueeGrad.addColorStop(0, `rgba(255, 235, 160, ${flicker})`);
+        marqueeGrad.addColorStop(1, "rgba(7, 7, 11, 0.32)");
         actx.fillStyle = marqueeGrad;
         actx.fillRect(0, 0, cw, ch);
 
-        actx.strokeStyle = "rgba(242, 236, 225, 0.32)";
-        actx.lineWidth = 1.15;
-        for (let r = 0; r < 22; r++) {
-          const rx = ((r * 37 + t * 140) % (cw + 60)) - 30;
-          const ry = ((r * 53 + t * 260) % (ch + 40)) - 20;
+        actx.strokeStyle = "rgba(246, 244, 240, 0.34)";
+        actx.lineWidth = 1.25;
+        for (let r = 0; r < 24; r++) {
+          const rx = ((r * 37 + t * 150) % (cw + 60)) - 30;
+          const ry = ((r * 53 + t * 280) % (ch + 40)) - 20;
           actx.beginPath();
           actx.moveTo(rx, ry);
-          actx.lineTo(rx - 7, ry + 16);
+          actx.lineTo(rx - 8, ry + 18);
           actx.stroke();
         }
       }
 
-      actx.strokeStyle = "rgba(143, 45, 30, 0.28)";
-      actx.lineWidth = 2;
-      actx.strokeRect(1, 1, cw - 2, ch - 2);
       actx.restore();
     }
 
     // =========================================================================
-    // LIVING BOTANICAL SAPLING CANVAS (ADAPTS AUTOMATICALLY TO DESKTOP OR MOBILE)
+    // 3D BIOLUMINESCENT VOLUMETRIC SAPLING & FLOWING SAP PARTICLE ENGINE
     // =========================================================================
-    const canvas = document.getElementById("sapling-canvas");
-    const saplingBox = document.getElementById("sapling-box");
+    const canvas = document.getElementById("tree-3d-canvas");
+    const rootEl = document.getElementById("spatial-root");
     const ctx = canvas.getContext("2d");
 
-    let mouse = { x: 0.5, y: 0.5 };
+    let mouse = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
     let time = 0;
     let leafHitboxes = [];
     let ripples = [];
     let lastW = 0, lastH = 0;
 
-    saplingBox.addEventListener("mousemove", (e) => {
-      const r = saplingBox.getBoundingClientRect();
-      mouse.x = (e.clientX - r.left) / (r.width || 1);
-      mouse.y = (e.clientY - r.top) / (r.height || 1);
+    // 3D Camera state that smoothly glides toward the active branch
+    const cameraState = { panX: 0, panY: 0, zoom: 1.0, rotY: 0 };
+    const cameraTarget = { branchIndex: 0, burst: 0 };
+
+    // 260 Bioluminescent Sap & Spore Particles flowing from roots through stem to leaves
+    const sapParticles = Array.from({ length: 220 }, (_, i) => ({
+      progress: Math.random(),
+      speed: 0.0022 + Math.random() * 0.0035,
+      spread: (Math.random() - 0.5) * 26,
+      branchTarget: i % 5,
+      size: 1.1 + Math.random() * 1.9,
+      phase: Math.random() * Math.PI * 2
+    }));
+
+    rootEl.addEventListener("mousemove", (e) => {
+      const r = rootEl.getBoundingClientRect();
+      mouse.tx = (e.clientX - r.left) / (r.width || 1);
+      mouse.ty = (e.clientY - r.top) / (r.height || 1);
 
       const mx = e.clientX - r.left;
       const my = e.clientY - r.top;
@@ -829,8 +951,8 @@
       canvas.style.cursor = overLeaf ? "pointer" : "default";
     });
 
-    function handleSaplingTap(clientX, clientY) {
-      const r = saplingBox.getBoundingClientRect();
+    function handleTreeClick(clientX, clientY) {
+      const r = rootEl.getBoundingClientRect();
       const mx = clientX - r.left;
       const my = clientY - r.top;
       for (const hb of leafHitboxes) {
@@ -842,85 +964,88 @@
       return false;
     }
 
-    canvas.addEventListener("click", (e) => {
-      handleSaplingTap(e.clientX, e.clientY);
-    });
-
+    canvas.addEventListener("click", (e) => handleTreeClick(e.clientX, e.clientY));
     canvas.addEventListener("touchstart", (e) => {
       if (e.touches && e.touches.length > 0) {
-        const t = e.touches[0];
-        if (handleSaplingTap(t.clientX, t.clientY)) {
+        if (handleTreeClick(e.touches[0].clientX, e.touches[0].clientY)) {
           e.preventDefault();
         }
       }
     }, { passive: false });
 
-    function drawBotanicalLeaf(cx, cy, angle, length, width, isSelected, numeral) {
+    function drawVolumetricLeaf(cx, cy, angle, length, width, isSelected, numeral, accentColor, secColor) {
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(angle);
 
-      const ACCENT = "#8F2D1E";
-      const INK = "#181615";
-      const BG = "#F2ECE1";
+      // Outer Bioluminescent Halo when selected
+      if (isSelected) {
+        ctx.shadowColor = accentColor;
+        ctx.shadowBlur = 22;
+      }
 
-      ctx.strokeStyle = ACCENT;
-      ctx.globalAlpha = isSelected ? 0.95 : 0.68;
-      ctx.lineWidth = isSelected ? 2.1 : 1.5;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.quadraticCurveTo(length * 0.1, -2, length * 0.2, 0);
-      ctx.stroke();
-
-      const bladeStart = length * 0.18;
+      const bladeStart = length * 0.16;
       const bladeEnd = length;
       const bladeLen = bladeEnd - bladeStart;
+
+      // Petiole
+      ctx.strokeStyle = accentColor;
+      ctx.globalAlpha = isSelected ? 1.0 : 0.62;
+      ctx.lineWidth = isSelected ? 2.2 : 1.4;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(length * 0.09, -2, bladeStart, 0);
+      ctx.stroke();
+
+      // Translucent Glass-Silk Lamina
+      const grad = ctx.createLinearGradient(bladeStart, 0, bladeEnd, 0);
+      grad.addColorStop(0, isSelected ? accentColor : secColor);
+      grad.addColorStop(1, "rgba(255,255,255,0.04)");
 
       ctx.beginPath();
       ctx.moveTo(bladeStart, 0);
       ctx.bezierCurveTo(
-        bladeStart + bladeLen * 0.28, -width * 1.15,
+        bladeStart + bladeLen * 0.28, -width * 1.18,
         bladeStart + bladeLen * 0.72, -width * 0.85,
         bladeEnd, 0
       );
       ctx.bezierCurveTo(
         bladeStart + bladeLen * 0.72, width * 0.85,
-        bladeStart + bladeLen * 0.28, width * 1.15,
+        bladeStart + bladeLen * 0.28, width * 1.18,
         bladeStart, 0
       );
       ctx.closePath();
 
-      ctx.fillStyle = isSelected ? ACCENT : "rgba(143, 45, 30, 0.13)";
-      ctx.globalAlpha = isSelected ? 0.24 : 0.95;
+      ctx.fillStyle = grad;
+      ctx.globalAlpha = isSelected ? 0.42 : 0.18;
       ctx.fill();
 
-      ctx.strokeStyle = ACCENT;
-      ctx.globalAlpha = isSelected ? 1.0 : 0.68;
-      ctx.lineWidth = isSelected ? 2.0 : 1.25;
+      ctx.strokeStyle = accentColor;
+      ctx.globalAlpha = isSelected ? 1.0 : 0.58;
+      ctx.lineWidth = isSelected ? 1.9 : 1.15;
       ctx.stroke();
 
+      // Luminous Midrib & Veins
       ctx.beginPath();
       ctx.moveTo(bladeStart, 0);
       ctx.quadraticCurveTo(bladeStart + bladeLen * 0.5, -width * 0.05, bladeEnd - 2, 0);
-      ctx.strokeStyle = ACCENT;
-      ctx.globalAlpha = isSelected ? 0.95 : 0.55;
-      ctx.lineWidth = isSelected ? 1.4 : 0.95;
+      ctx.strokeStyle = "#FFFFFF";
+      ctx.globalAlpha = isSelected ? 0.85 : 0.35;
+      ctx.lineWidth = isSelected ? 1.3 : 0.8;
       ctx.stroke();
 
-      const veinPairs = 4;
-      for (let v = 1; v <= veinPairs; v++) {
-        const frac = v / (veinPairs + 1);
+      for (let v = 1; v <= 4; v++) {
+        const frac = v / 5;
         const vx = bladeStart + bladeLen * frac;
         const vw = width * Math.sin(frac * Math.PI) * 0.78;
-
         ctx.beginPath();
         ctx.moveTo(vx, 0);
         ctx.quadraticCurveTo(vx + bladeLen * 0.08, -vw * 0.5, vx + bladeLen * 0.16, -vw * 0.85);
         ctx.moveTo(vx, 0);
         ctx.quadraticCurveTo(vx + bladeLen * 0.08, vw * 0.5, vx + bladeLen * 0.16, vw * 0.85);
-        ctx.strokeStyle = ACCENT;
-        ctx.globalAlpha = isSelected ? 0.65 : 0.35;
-        ctx.lineWidth = 0.8;
+        ctx.strokeStyle = accentColor;
+        ctx.globalAlpha = isSelected ? 0.65 : 0.28;
+        ctx.lineWidth = 0.75;
         ctx.stroke();
       }
 
@@ -930,34 +1055,45 @@
       const worldX = cx + Math.cos(angle) * midX;
       const worldY = cy + Math.sin(angle) * midX;
 
+      // Floating Spatial Node Badge on the Leaf
       ctx.save();
+      if (isSelected) {
+        ctx.beginPath();
+        ctx.arc(worldX, worldY, 18 + Math.sin(time * 3.5) * 3, 0, Math.PI * 2);
+        ctx.strokeStyle = accentColor;
+        ctx.globalAlpha = 0.38;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+
       ctx.beginPath();
-      ctx.arc(worldX, worldY, isSelected ? 12.5 : 10, 0, Math.PI * 2);
-      ctx.fillStyle = isSelected ? ACCENT : BG;
-      ctx.globalAlpha = isSelected ? 1 : 0.92;
+      ctx.arc(worldX, worldY, isSelected ? 13 : 10.5, 0, Math.PI * 2);
+      ctx.fillStyle = isSelected ? accentColor : "rgba(16, 16, 22, 0.85)";
       ctx.fill();
-      ctx.lineWidth = 1.1;
-      ctx.strokeStyle = ACCENT;
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = accentColor;
       ctx.stroke();
 
-      ctx.fillStyle = isSelected ? BG : INK;
-      ctx.globalAlpha = 1;
-      ctx.font = `${isSelected ? "600" : "500"} 10px 'Cormorant Garamond', Georgia, serif`;
+      ctx.fillStyle = isSelected ? "#07070B" : "#F6F4F0";
+      ctx.font = `700 10px 'Syne', sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(numeral, worldX, worldY + 0.5);
       ctx.restore();
 
-      return { x: worldX, y: worldY, r: Math.max(length * 0.55, 28) };
+      return { x: worldX, y: worldY, r: Math.max(length * 0.55, 30) };
     }
 
     function animate() {
       time += 0.016;
+      mouse.x += (mouse.tx - mouse.x) * 0.08;
+      mouse.y += (mouse.ty - mouse.y) * 0.08;
+      cameraTarget.burst *= 0.92;
 
       renderModifiedArtwork(time);
 
-      const w = saplingBox.clientWidth || 350;
-      const h = saplingBox.clientHeight || 225;
+      const w = rootEl.clientWidth || 750;
+      const h = rootEl.clientHeight || 485;
 
       if (w !== lastW || h !== lastH) {
         lastW = w;
@@ -968,52 +1104,58 @@
 
       ctx.clearRect(0, 0, w, h);
 
-      const ACCENT = "#8F2D1E";
-      const INK = "#181615";
+      const item = LEAVES_DATA[activeLeaf];
+      const ACCENT = item.accent;
+      const SEC = item.secondary;
 
-      const isMobileBox = window.innerWidth <= 780 || h < 280;
-      const scaleFactor = isMobileBox ? 0.72 : 1.0;
-      const baseX = isMobileBox ? w * 0.5 : w * 0.81;
-      const soilY = isMobileBox ? h * 0.82 : h * 0.79;
-      const topY = isMobileBox ? h * 0.14 : h * 0.15;
-      const wind = (mouse.x - 0.5) * (isMobileBox ? 10 : 18) + Math.sin(time * 1.15) * (isMobileBox ? 3 : 4.2);
+      const isMobile = w < 780;
+      // Smooth 3D camera shift based on active branch & mouse parallax
+      const targetPanY = (2 - activeLeaf) * (isMobile ? 4 : 11);
+      const targetPanX = (mouse.x - 0.5) * -22;
+      cameraState.panX += (targetPanX - cameraState.panX) * 0.06;
+      cameraState.panY += (targetPanY - cameraState.panY) * 0.06;
+
+      const baseX = (isMobile ? w * 0.82 : w * 0.80) + cameraState.panX;
+      const soilY = (isMobile ? h * 0.82 : h * 0.80) + cameraState.panY;
+      const topY  = (isMobile ? h * 0.16 : h * 0.13) + cameraState.panY;
+      const scaleFactor = isMobile ? 0.68 : 1.0;
+      const wind = (mouse.x - 0.5) * 26 + Math.sin(time * 1.2) * 5.5;
 
       leafHitboxes = [];
 
-      // 1. SOIL HORIZON
+      // 1. VOLUMETRIC HORIZON ELLIPSE & GLOWING SOIL GRID
       ctx.save();
+      const soilGrad = ctx.createRadialGradient(baseX, soilY, 4, baseX, soilY, 155 * scaleFactor);
+      soilGrad.addColorStop(0, ACCENT);
+      soilGrad.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = soilGrad;
+      ctx.globalAlpha = 0.16;
+      ctx.beginPath();
+      ctx.ellipse(baseX, soilY, 150 * scaleFactor, 24 * scaleFactor, 0, 0, Math.PI * 2);
+      ctx.fill();
+
       ctx.strokeStyle = ACCENT;
-      ctx.globalAlpha = 0.36;
+      ctx.globalAlpha = 0.38;
       ctx.lineWidth = 1.2;
       ctx.beginPath();
-      ctx.moveTo(baseX - 110 * scaleFactor, soilY);
-      ctx.quadraticCurveTo(baseX, soilY - 8 * scaleFactor, baseX + 110 * scaleFactor, soilY);
+      ctx.ellipse(baseX, soilY, 112 * scaleFactor, 14 * scaleFactor, 0, 0, Math.PI * 2);
       ctx.stroke();
-
-      ctx.globalAlpha = 0.2;
-      for (let i = -80; i <= 80; i += 14) {
-        const dotY = soilY + Math.sin(i * 0.12) * 2.5 + 4;
-        ctx.beginPath();
-        ctx.arc(baseX + i * scaleFactor, dotY, 1.1, 0, Math.PI * 2);
-        ctx.fillStyle = ACCENT;
-        ctx.fill();
-      }
       ctx.restore();
 
-      // 2. UNDERGROUND ROOTS
+      // 2. BIOLUMINESCENT UNDERGROUND ROOT NETWORK
       const roots = [
-        { endX: -64, endY: 36, ctrlX: -18, ctrlY: 18, w: 1.5, sub: [-80, 44] },
-        { endX: -28, endY: 44, ctrlX: -10, ctrlY: 25, w: 1.3, sub: [-38, 52] },
-        { endX: 4,   endY: 48, ctrlX: 3,   ctrlY: 28, w: 2.0, sub: [-6, 56] },
-        { endX: 36,  endY: 42, ctrlX: 14,  ctrlY: 22, w: 1.4, sub: [50, 50] },
-        { endX: 68,  endY: 34, ctrlX: 24,  ctrlY: 16, w: 1.2, sub: [82, 42] }
+        { endX: -76, endY: 66, ctrlX: -22, ctrlY: 32, w: 1.8, sub: [-98, 82] },
+        { endX: -36, endY: 82, ctrlX: -14, ctrlY: 46, w: 1.5, sub: [-48, 96] },
+        { endX: 4,   endY: 92, ctrlX: 3,   ctrlY: 50, w: 2.4, sub: [-8, 105] },
+        { endX: 44,  endY: 78, ctrlX: 18,  ctrlY: 42, w: 1.6, sub: [64, 92] },
+        { endX: 82,  endY: 60, ctrlX: 30,  ctrlY: 28, w: 1.4, sub: [102, 74] }
       ];
 
       ctx.save();
-      ctx.strokeStyle = ACCENT;
       roots.forEach((rt) => {
-        ctx.globalAlpha = 0.32;
-        ctx.lineWidth = rt.w;
+        ctx.strokeStyle = ACCENT;
+        ctx.globalAlpha = 0.34;
+        ctx.lineWidth = rt.w * scaleFactor;
         ctx.beginPath();
         ctx.moveTo(baseX, soilY);
         ctx.quadraticCurveTo(
@@ -1023,18 +1165,25 @@
           soilY + rt.endY * scaleFactor
         );
         ctx.stroke();
+
+        ctx.globalAlpha = 0.18;
+        ctx.lineWidth = 0.9 * scaleFactor;
+        ctx.beginPath();
+        ctx.moveTo(baseX + rt.endX * 0.65 * scaleFactor, soilY + rt.endY * 0.65 * scaleFactor);
+        ctx.lineTo(baseX + rt.sub[0] * scaleFactor, soilY + rt.sub[1] * scaleFactor);
+        ctx.stroke();
       });
       ctx.restore();
 
-      // 3. COTYLEDONS
-      drawBotanicalLeaf(baseX - 2, soilY - 10 * scaleFactor, Math.PI * 1.12, 26 * scaleFactor, 6 * scaleFactor, false, "·");
-      drawBotanicalLeaf(baseX + 2, soilY - 10 * scaleFactor, -Math.PI * 0.12, 26 * scaleFactor, 6 * scaleFactor, false, "·");
+      // 3. COTYLEDON BASAL SHOOTS
+      drawVolumetricLeaf(baseX - 3, soilY - 12 * scaleFactor, Math.PI * 1.12, 30 * scaleFactor, 7 * scaleFactor, false, "·", ACCENT, SEC);
+      drawVolumetricLeaf(baseX + 3, soilY - 12 * scaleFactor, -Math.PI * 0.12, 30 * scaleFactor, 7 * scaleFactor, false, "·", ACCENT, SEC);
 
-      // 4. MAIN TAPERING SAPLING STEM
+      // 4. MULTI-FIBER 3D VOLUMETRIC STEM
       const topX = baseX + wind;
-      const ctrl1X = baseX - 14 * scaleFactor + wind * 0.25;
+      const ctrl1X = baseX - 18 * scaleFactor + wind * 0.25;
       const ctrl1Y = soilY - (soilY - topY) * 0.35;
-      const ctrl2X = baseX + 12 * scaleFactor + wind * 0.65;
+      const ctrl2X = baseX + 15 * scaleFactor + wind * 0.65;
       const ctrl2Y = soilY - (soilY - topY) * 0.70;
 
       function stemPoint(t) {
@@ -1046,55 +1195,56 @@
         return { x, y };
       }
 
+      // Draw 5 intertwined silk-light fibers forming the living trunk
       ctx.save();
-      const segments = 28;
-      for (let i = 0; i < segments; i++) {
-        const t0 = i / segments;
-        const t1 = (i + 1) / segments;
-        const p0 = stemPoint(t0);
-        const p1 = stemPoint(t1);
+      for (let f = -2; f <= 2; f++) {
         ctx.beginPath();
-        ctx.moveTo(p0.x, p0.y);
-        ctx.lineTo(p1.x, p1.y);
-        ctx.strokeStyle = ACCENT;
-        ctx.globalAlpha = 0.85;
-        ctx.lineWidth = (4.2 * scaleFactor) * (1 - t0 * 0.65);
-        ctx.lineCap = "round";
+        const segments = 32;
+        for (let i = 0; i <= segments; i++) {
+          const t0 = i / segments;
+          const pt = stemPoint(t0);
+          const waveOffset = Math.sin(t0 * 8 - time * 2.2 + f) * (f * 1.8 * (1 - t0 * 0.6)) * scaleFactor;
+          if (i === 0) ctx.moveTo(pt.x + waveOffset, pt.y);
+          else ctx.lineTo(pt.x + waveOffset, pt.y);
+        }
+        ctx.strokeStyle = f === 0 ? "#FFFFFF" : ACCENT;
+        ctx.globalAlpha = f === 0 ? 0.75 : 0.42;
+        ctx.lineWidth = (f === 0 ? 2.6 : 1.4) * scaleFactor;
         ctx.stroke();
       }
       ctx.restore();
 
-      // 5. FIVE VEINED LEAVES (I - V)
+      // 5. FIVE SPATIAL BRANCHES & VOLUMETRIC LEAVES (I - V)
       const branchNodes = [
-        { t: 0.23, side: -1, len: 68 * scaleFactor, width: 18 * scaleFactor, baseAngle: -Math.PI * 0.78, numeral: "I" },
-        { t: 0.40, side:  1, len: 72 * scaleFactor, width: 19 * scaleFactor, baseAngle: -Math.PI * 0.18, numeral: "II" },
-        { t: 0.57, side: -1, len: 66 * scaleFactor, width: 18 * scaleFactor, baseAngle: -Math.PI * 0.76, numeral: "III" },
-        { t: 0.73, side:  1, len: 62 * scaleFactor, width: 17 * scaleFactor, baseAngle: -Math.PI * 0.20, numeral: "IV" },
-        { t: 0.88, side: -1, len: 54 * scaleFactor, width: 15 * scaleFactor, baseAngle: -Math.PI * 0.72, numeral: "V" }
+        { t: 0.23, side: -1, len: 76 * scaleFactor, width: 20 * scaleFactor, baseAngle: -Math.PI * 0.76, numeral: "I" },
+        { t: 0.40, side:  1, len: 80 * scaleFactor, width: 21 * scaleFactor, baseAngle: -Math.PI * 0.20, numeral: "II" },
+        { t: 0.57, side: -1, len: 74 * scaleFactor, width: 19 * scaleFactor, baseAngle: -Math.PI * 0.74, numeral: "III" },
+        { t: 0.73, side:  1, len: 68 * scaleFactor, width: 18 * scaleFactor, baseAngle: -Math.PI * 0.22, numeral: "IV" },
+        { t: 0.88, side: -1, len: 60 * scaleFactor, width: 16 * scaleFactor, baseAngle: -Math.PI * 0.70, numeral: "V" }
       ];
 
       branchNodes.forEach((b, idx) => {
         const node = stemPoint(b.t);
-        const swayAngle = b.baseAngle + Math.sin(time * 1.4 + idx) * 0.045 + (wind * 0.003);
+        const swayAngle = b.baseAngle + Math.sin(time * 1.4 + idx) * 0.05 + (wind * 0.003);
 
-        const shootX = node.x + b.side * 15 * scaleFactor;
-        const shootY = node.y - 8 * scaleFactor;
+        const shootX = node.x + b.side * 19 * scaleFactor;
+        const shootY = node.y - 11 * scaleFactor;
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(node.x, node.y);
-        ctx.quadraticCurveTo(node.x + b.side * 7 * scaleFactor, node.y - 6 * scaleFactor, shootX, shootY);
+        ctx.quadraticCurveTo(node.x + b.side * 9 * scaleFactor, node.y - 8 * scaleFactor, shootX, shootY);
         ctx.strokeStyle = ACCENT;
-        ctx.globalAlpha = 0.78;
-        ctx.lineWidth = 1.9 * scaleFactor;
+        ctx.globalAlpha = idx === activeLeaf ? 0.95 : 0.65;
+        ctx.lineWidth = (idx === activeLeaf ? 2.4 : 1.7) * scaleFactor;
         ctx.stroke();
         ctx.restore();
 
         const isSel = (idx === activeLeaf);
-        const hb = drawBotanicalLeaf(shootX, shootY, swayAngle, b.len, b.width, isSel, b.numeral);
+        const hb = drawVolumetricLeaf(shootX, shootY, swayAngle, b.len, b.width, isSel, b.numeral, ACCENT, SEC);
         leafHitboxes.push({ x: hb.x, y: hb.y, r: hb.r, index: idx });
       });
 
-      // 6. APICAL BUD
+      // 6. APICAL CROWN SHOOT (GLOWING NEW BUD)
       const tip = stemPoint(1.0);
       ctx.save();
       ctx.translate(tip.x, tip.y);
@@ -1102,41 +1252,63 @@
       ctx.scale(scaleFactor, scaleFactor);
 
       ctx.strokeStyle = ACCENT;
-      ctx.fillStyle = "rgba(143, 45, 30, 0.22)";
-      ctx.lineWidth = 1.4;
-
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.bezierCurveTo(-12, -14, -8, -28, -2, -34);
-      ctx.bezierCurveTo(3, -24, 3, -12, 0, 0);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.bezierCurveTo(12, -12, 10, -25, 4, -30);
-      ctx.bezierCurveTo(-1, -20, -1, -10, 0, 0);
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(1, -39, 2.4, 0, Math.PI * 2);
       ctx.fillStyle = ACCENT;
-      ctx.globalAlpha = 0.65 + Math.sin(time * 2.5) * 0.3;
+      ctx.globalAlpha = 0.32;
+      ctx.lineWidth = 1.5;
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(-13, -15, -9, -32, -2, -39);
+      ctx.bezierCurveTo(3, -27, 3, -13, 0, 0);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(13, -13, 11, -28, 4, -34);
+      ctx.bezierCurveTo(-1, -23, -1, -11, 0, 0);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(1, -44, 3.2, 0, Math.PI * 2);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.globalAlpha = 0.85 + Math.sin(time * 3) * 0.15;
+      ctx.shadowColor = ACCENT;
+      ctx.shadowBlur = 14;
       ctx.fill();
       ctx.restore();
 
-      // 7. CLICK RIPPLES
+      // 7. FLOWING BIOLUMINESCENT SAP PARTICLES (ROOTS -> STEM -> LEAVES & ATMOSPHERE)
+      ctx.save();
+      sapParticles.forEach((sp) => {
+        sp.progress += sp.speed + cameraTarget.burst * 0.008;
+        if (sp.progress > 1) sp.progress -= 1;
+
+        const pt = stemPoint(sp.progress);
+        const radialSpread = sp.spread * scaleFactor * (0.25 + sp.progress * 0.9);
+        const px = pt.x + Math.sin(time * 2 + sp.phase) * radialSpread;
+        const py = pt.y + Math.cos(time * 1.5 + sp.phase) * 6;
+
+        ctx.beginPath();
+        ctx.arc(px, py, sp.size * scaleFactor, 0, Math.PI * 2);
+        ctx.fillStyle = sp.branchTarget === activeLeaf ? "#FFFFFF" : ACCENT;
+        ctx.globalAlpha = Math.sin(sp.progress * Math.PI) * 0.72;
+        ctx.fill();
+      });
+      ctx.restore();
+
+      // 8. CLICK RIPPLES
       for (let i = ripples.length - 1; i >= 0; i--) {
         const rp = ripples[i];
-        rp.r += 1.4;
-        rp.alpha *= 0.93;
+        rp.r += 1.8;
+        rp.alpha *= 0.92;
         ctx.save();
         ctx.beginPath();
         ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
         ctx.strokeStyle = ACCENT;
         ctx.globalAlpha = rp.alpha;
-        ctx.lineWidth = 1.3;
+        ctx.lineWidth = 1.5;
         ctx.stroke();
         ctx.restore();
         if (rp.alpha < 0.03) ripples.splice(i, 1);
@@ -1145,8 +1317,8 @@
       requestAnimationFrame(animate);
     }
 
-    renderPills();
-    applyTextContent();
+    renderDock();
+    applyThemeAndText();
     animate();
   </script>
 </body>
