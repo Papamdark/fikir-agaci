@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Celil’in Fikir Ağacı</title>
+  <title>Celil’s Idea Tree — Celil’in Fikir Ağacı</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,600&family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -12,6 +12,7 @@
       --bg-linen: #F2ECE1;
       --text-ink: #181615;
       --accent-seal: #8F2D1E;
+      --accent-gold: #B87D3B;
       --leaf-tint: rgba(143, 45, 30, 0.14);
       --rule-line: rgba(24, 22, 21, 0.14);
     }
@@ -35,14 +36,14 @@
       overflow: hidden;
       background-color: var(--bg-linen);
       background-image:
-        radial-gradient(circle at 75% 50%, rgba(143, 45, 30, 0.045) 0%, transparent 60%),
+        radial-gradient(circle at 76% 48%, rgba(143, 45, 30, 0.055) 0%, transparent 62%),
         repeating-linear-gradient(0deg, rgba(24, 22, 21, 0.012) 0px, rgba(24, 22, 21, 0.012) 1px, transparent 1px, transparent 3px);
       color: var(--text-ink);
       border: none;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 1.75rem 2.6rem;
+      padding: 1.65rem 2.5rem;
     }
 
     #sapling-canvas {
@@ -55,7 +56,7 @@
       display: block;
     }
 
-    /* ÜST BAŞLIK */
+    /* TOP HEADER */
     .stage-header {
       position: relative;
       z-index: 3;
@@ -63,7 +64,7 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--rule-line);
-      padding-bottom: 0.8rem;
+      padding-bottom: 0.75rem;
     }
 
     .brand-title {
@@ -74,10 +75,16 @@
       color: var(--text-ink);
     }
 
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
     .leaf-nav-pills {
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.3rem;
     }
 
     .leaf-pill {
@@ -89,8 +96,8 @@
       font-style: italic;
       font-size: 14px;
       font-weight: 600;
-      width: 28px;
-      height: 28px;
+      width: 27px;
+      height: 27px;
       border-radius: 50%;
       cursor: pointer;
       transition: all 0.25s ease;
@@ -108,56 +115,119 @@
       border-color: var(--accent-seal);
     }
 
-    /* ORTA ALAN: SÖZ VE KÖK NOTU */
+    .lang-switch {
+      display: inline-flex;
+      border: 1px solid var(--rule-line);
+      border-radius: 5px;
+      overflow: hidden;
+      background: rgba(24, 22, 21, 0.03);
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      padding: 0.22rem 0.52rem;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text-ink);
+      opacity: 0.55;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn.active {
+      background: var(--accent-seal);
+      color: #F2ECE1;
+      opacity: 1;
+    }
+
+    /* CENTER CONTENT: QUOTE, ROOT NOTE & MINIATURE ANIMATION CARD */
     .stage-content {
       position: relative;
       z-index: 3;
       margin: auto 0;
       max-width: 56%;
       pointer-events: none;
+      transition: opacity 0.26s ease, transform 0.26s ease;
+    }
+
+    .emblem-row {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .mini-vignette-frame {
+      width: 74px;
+      height: 46px;
+      border-radius: 8px;
+      border: 1px solid rgba(143, 45, 30, 0.32);
+      background: rgba(242, 236, 225, 0.85);
+      box-shadow: 0 4px 14px rgba(24, 22, 21, 0.05);
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    #mini-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .leaf-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
     }
 
     .leaf-tag {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-style: italic;
       font-weight: 600;
-      font-size: 1.05rem;
+      font-size: 1.04rem;
       color: var(--accent-seal);
-      margin-bottom: 0.5rem;
       letter-spacing: 0.03em;
+    }
+
+    .leaf-mood {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      font-weight: 500;
     }
 
     .quote-heading {
       font-family: 'Instrument Serif', Georgia, serif;
       font-weight: 400;
-      font-size: clamp(2.05rem, 3.6vw, 2.95rem);
+      font-size: clamp(1.95rem, 3.4vw, 2.8rem);
       line-height: 1.13;
       color: var(--text-ink);
-      margin-bottom: 0.9rem;
-      transition: opacity 0.28s ease, transform 0.28s ease;
+      margin-bottom: 0.75rem;
     }
 
     .quote-author {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-style: italic;
-      font-size: 1.08rem;
+      font-size: 1.05rem;
       color: var(--text-ink);
       opacity: 0.78;
-      margin-bottom: 1.25rem;
-      transition: opacity 0.28s ease;
+      margin-bottom: 1.05rem;
     }
 
     .quote-root {
-      font-size: 0.88rem;
-      line-height: 1.68;
+      font-size: 0.86rem;
+      line-height: 1.65;
       color: var(--text-ink);
-      opacity: 0.82;
-      padding-left: 1.05rem;
+      opacity: 0.84;
+      padding-left: 1rem;
       border-left: 2px solid var(--accent-seal);
-      transition: opacity 0.28s ease;
     }
 
-    /* ALT BAR */
+    /* FOOTER */
     .stage-footer {
       position: relative;
       z-index: 3;
@@ -165,7 +235,7 @@
       justify-content: space-between;
       align-items: center;
       border-top: 1px solid var(--rule-line);
-      padding-top: 0.75rem;
+      padding-top: 0.7rem;
       font-size: 11.5px;
     }
 
@@ -185,7 +255,7 @@
       background: transparent;
       border: 1px solid var(--accent-seal);
       color: var(--text-ink);
-      padding: 0.34rem 0.82rem;
+      padding: 0.32rem 0.8rem;
       border-radius: 4px;
       font-size: 11.5px;
       font-weight: 500;
@@ -200,19 +270,19 @@
 
     @media (max-width: 768px) {
       #bespoke-stage {
-        padding: 1.25rem 1.35rem;
+        padding: 1.2rem 1.25rem;
       }
       .stage-content {
         max-width: 100%;
-        margin-top: 0.5rem;
+        margin-top: 0.4rem;
         margin-bottom: auto;
-        background: rgba(242, 236, 225, 0.82);
+        background: rgba(242, 236, 225, 0.84);
         backdrop-filter: blur(4px);
         padding: 0.85rem;
         border-radius: 8px;
       }
       .quote-heading {
-        font-size: 1.75rem;
+        font-size: 1.7rem;
       }
       .footer-hint {
         display: none;
@@ -226,66 +296,155 @@
     <canvas id="sapling-canvas"></canvas>
 
     <header class="stage-header">
-      <div class="brand-title">CELİL’İN FİKİR AĞACI</div>
-      <nav class="leaf-nav-pills" id="leaf-pills" aria-label="Yaprak Seçimi"></nav>
+      <div class="brand-title" id="brand-title">CELIL’S IDEA TREE</div>
+
+      <div class="header-controls">
+        <nav class="leaf-nav-pills" id="leaf-pills" aria-label="Leaf Selection"></nav>
+        <div class="lang-switch" role="group" aria-label="Language Switch">
+          <button type="button" class="lang-btn active" id="lang-en">EN</button>
+          <button type="button" class="lang-btn" id="lang-tr">TR</button>
+        </div>
+      </div>
     </header>
 
     <article class="stage-content" id="stage-content">
-      <div class="leaf-tag" id="leaf-tag">Fidan · I. Yaprak</div>
+      <div class="emblem-row">
+        <div class="mini-vignette-frame">
+          <canvas id="mini-canvas" width="148" height="92"></canvas>
+        </div>
+        <div class="leaf-meta">
+          <div class="leaf-tag" id="leaf-tag">Sapling · Leaf I</div>
+          <div class="leaf-mood" id="leaf-mood">Ink & Blade Equilibrium</div>
+        </div>
+      </div>
+
       <h1 class="quote-heading" id="quote-heading">
-        “Yanlış üslup, doğru sözün celladıdır.”
+        “Wrong delivery is the executioner of a true word.”
       </h1>
-      <div class="quote-author" id="quote-author">Sadi Şirazî — Gülistan (VIII. Bab)</div>
+      <div class="quote-author" id="quote-author">Saadi Shirazi — Gulistan (Chapter VIII)</div>
       <p class="quote-root" id="quote-root">
-        Doğrunun doğruluğu üsluba bağlı değildir; fakat insana ulaşabilmesi çoğu zaman üsluba bağlıdır. Söyleyen doğrunun üslubundan, dinleyen de doğrunun özünü üsluptan ayırabilmekten sorumludur.
+        The truth of a statement does not depend on its tone; yet its ability to reach another human mind almost always does. The speaker is responsible for the grace of the delivery, and the listener for separating the essence from the vessel.
       </p>
     </article>
 
     <footer class="stage-footer">
-      <span class="footer-hint">Sağdaki fidanın yapraklarına (I – V) dokunarak dallar arasında gezinebilirsin</span>
+      <span class="footer-hint" id="footer-hint">Touch the leaves (I – V) on the living sapling to explore each branch</span>
       <div class="nav-buttons">
-        <button class="nav-btn" id="prev-btn" type="button">← Önceki</button>
-        <button class="nav-btn" id="next-btn" type="button">Sonraki Yaprak →</button>
+        <button class="nav-btn" id="prev-btn" type="button">← Prev</button>
+        <button class="nav-btn" id="next-btn" type="button">Next Leaf →</button>
       </div>
     </footer>
   </main>
 
   <script>
+    const UI_TEXT = {
+      en: {
+        brand: "CELIL’S IDEA TREE",
+        leafPrefix: "Sapling · Leaf",
+        hint: "Touch the leaves (I – V) on the living sapling to explore each branch",
+        prev: "← Prev",
+        next: "Next Leaf →",
+        sealCaption: "Living Sapling · From Root to Shoot (V Leaves)"
+      },
+      tr: {
+        brand: "CELİL’İN FİKİR AĞACI",
+        leafPrefix: "Fidan · Yaprak",
+        hint: "Dallar arasında gezinmek için sağdaki fidanın yapraklarına (I – V) dokunabilirsin",
+        prev: "← Önceki",
+        next: "Sonraki Yaprak →",
+        sealCaption: "Fikir Fidanı · Köklerden Filize (V Yaprak)"
+      }
+    };
+
     const LEAVES_DATA = [
       {
         num: "I",
-        q: "“Yanlış üslup, doğru sözün celladıdır.”",
-        a: "Sadi Şirazî — Gülistan (VIII. Bab)",
-        r: "Doğrunun doğruluğu üsluba bağlı değildir; fakat insana ulaşabilmesi çoğu zaman üsluba bağlıdır. Söyleyen doğrunun üslubundan, dinleyen de doğrunun özünü üsluptan ayırabilmekten sorumludur."
+        animType: "ink",
+        en: {
+          mood: "Ink & Blade Equilibrium",
+          q: "“Wrong delivery is the executioner of a true word.”",
+          a: "Saadi Shirazi — Gulistan (Chapter VIII)",
+          r: "The truth of a statement does not depend on its tone; yet its ability to reach another human mind almost always does. The speaker is responsible for the grace of the delivery, and the listener for separating the essence from the vessel."
+        },
+        tr: {
+          mood: "Mürekkep ve Üslup Dengesi",
+          q: "“Yanlış üslup, doğru sözün celladıdır.”",
+          a: "Sadi Şirazî — Gülistan (VIII. Bab)",
+          r: "Doğrunun doğruluğu üsluba bağlı değildir; fakat insana ulaşabilmesi çoğu zaman üsluba bağlıdır. Söyleyen doğrunun üslubundan, dinleyen de doğrunun özünü üsluptan ayırabilmekten sorumludur."
+        }
       },
       {
         num: "II",
-        q: "“Güzel bir bahçen olsun; kelebekler gelir. Kelebekler gelmese bile, güzel bir bahçen olmuş olur.”",
-        a: "Mario Quintana (Atfedilen)",
-        r: "Değer üretmenin ödülü dışarıdan gelecek onay değil, inşa edilen içsel ve zihinsel bahçenin bizzat kendisidir. Kelebekler bir sonuçtur; bahçe ise senin mülkündür."
+        animType: "butterflies",
+        en: {
+          mood: "Living Garden & Butterflies",
+          q: "“Cultivate a beautiful garden; the butterflies will come. And even if they don't, you will still have a beautiful garden.”",
+          a: "Mario Quintana (Attributed)",
+          r: "The reward of building value is not external applause, but the inner sanctuary you construct along the way. Butterflies are a pleasant consequence; the garden itself is your sovereign estate."
+        },
+        tr: {
+          mood: "Yaşayan Bahçe ve Kelebekler",
+          q: "“Güzel bir bahçen olsun; kelebekler gelir. Kelebekler gelmese bile, güzel bir bahçen olmuş olur.”",
+          a: "Mario Quintana (Atfedilen)",
+          r: "Değer üretmenin ödülü dışarıdan gelecek onay değil, inşa edilen içsel ve zihinsel bahçenin bizzat kendisidir. Kelebekler bir sonuçtur; bahçe ise senin mülkündür."
+        }
       },
       {
         num: "III",
-        q: "“Bir sorunu oluşmadan çözmek.”",
-        a: "Laozi — Dao De Jing (64. Bölüm) & Mizen Boushi (未然防止)",
-        r: "Kırılgan olan kolayca dağılır, henüz küçük olan kolayca yönlendirilir. Gerçek ustalık kriz anında kahramanlık yapmak değil, krizi doğuran zinciri henüz ilk halkasında sessizce koparmaktır."
+        animType: "dewdrop",
+        en: {
+          mood: "Mizen Boushi · Pre-emptive Stillness",
+          q: "“Deal with a problem before it arises.”",
+          a: "Laozi — Tao Te Ching (Ch. 64) & Mizen Boushi (未然防止)",
+          r: "What is brittle is easily broken; what is still small is easily guided. True mastery is not heroic firefighting in the middle of a crisis, but quietly breaking the causal chain at its very first link."
+        },
+        tr: {
+          mood: "Mizen Boushi · Kriz Öncesi Sükûnet",
+          q: "“Bir sorunu oluşmadan çözmek.”",
+          a: "Laozi — Dao De Jing (64. Bölüm) & Mizen Boushi (未然防止)",
+          r: "Kırılgan olan kolayca dağılır, henüz küçük olan kolayca yönlendirilir. Gerçek ustalık kriz anında kahramanlık yapmak değil, krizi doğuran zinciri henüz ilk halkasında sessizce koparmaktır."
+        }
       },
       {
         num: "IV",
-        q: "“You're a beautiful flower and I love to watch you grow.”",
-        a: "Adventure Time — Joshua (3. Sezon, 25. Bölüm: Dad's Dungeon)",
-        r: "İnsanın kendi gelişimine ve sevdiklerine dışarıdan bir yargıç gibi değil, toprağa düşmüş bir tohumun filizlenmesini izleyen sabırlı bir tanık gibi bakabilmesi."
+        animType: "flower",
+        en: {
+          mood: "Patient Witness & Blooming Flower",
+          q: "“You're a beautiful flower and I love to watch you grow.”",
+          a: "Adventure Time — Joshua (Season 3, Ep. 25: Dad's Dungeon)",
+          r: "Looking at your own growth—and at those you care about—not as an impatient judge, but as a patient witness watching a seed unfold in its own season."
+        },
+        tr: {
+          mood: "Sabırlı Tanıklık ve Açan Çiçek",
+          q: "“You're a beautiful flower and I love to watch you grow.”",
+          a: "Adventure Time — Joshua (3. Sezon, 25. Bölüm: Dad's Dungeon)",
+          r: "İnsanın kendi gelişimine ve sevdiklerine dışarıdan bir yargıç gibi değil, toprağa düşmüş bir tohumun filizlenmesini izleyen sabırlı bir tanık gibi bakabilmesi."
+        }
       },
       {
         num: "V",
-        q: "“Artık hepimizin her şeye erişimi bir an, bir fikir, bir dakikalık zihniyet değişimi kadar uzakta.”",
-        a: "Rota",
-        r: "Bilgiye erişimin eşitlendiği çağda asıl uçurum kaynak eksikliği değil, zihnin kendi kendine koyduğu eşik ve eyleme geçiş kararıdır."
+        animType: "spark",
+        en: {
+          mood: "One-Minute Mindset Shift",
+          q: "“Today, our access to everything is just one moment, one idea, one minute of mindset shift away.”",
+          a: "Rota",
+          r: "In an era where access to knowledge is equalized, the real divide is no longer a lack of resources—it is the threshold the mind sets for itself and the decision to cross into action."
+        },
+        tr: {
+          mood: "Bir Dakikalık Zihniyet Kıvılcımı",
+          q: "“Artık hepimizin her şeye erişimi bir an, bir fikir, bir dakikalık zihniyet değişimi kadar uzakta.”",
+          a: "Rota",
+          r: "Bilgiye erişimin eşitlendiği çağda asıl uçurum kaynak eksikliği değil, zihnin kendi kendine koyduğu eşik ve eyleme geçiş kararıdır."
+        }
       }
     ];
 
+    let currentLang = "en"; // Default EN for StudyStream international visitors
     let activeLeaf = 0;
+    let leafTransitionTime = 0;
+
     const pillsContainer = document.getElementById("leaf-pills");
+    const contentEl = document.getElementById("stage-content");
 
     function renderPills() {
       pillsContainer.innerHTML = "";
@@ -294,37 +453,39 @@
         btn.type = "button";
         btn.className = "leaf-pill" + (idx === activeLeaf ? " active" : "");
         btn.textContent = item.num;
-        btn.title = item.num + ". Yaprak";
         btn.onclick = () => selectLeaf(idx);
         pillsContainer.appendChild(btn);
       });
     }
 
+    function applyTextContent() {
+      const ui = UI_TEXT[currentLang];
+      const item = LEAVES_DATA[activeLeaf];
+      const loc = item[currentLang];
+
+      document.getElementById("brand-title").textContent = ui.brand;
+      document.getElementById("leaf-tag").textContent = `${ui.leafPrefix} ${item.num}`;
+      document.getElementById("leaf-mood").textContent = loc.mood;
+      document.getElementById("quote-heading").textContent = loc.q;
+      document.getElementById("quote-author").textContent = loc.a;
+      document.getElementById("quote-root").textContent = loc.r;
+      document.getElementById("footer-hint").textContent = ui.hint;
+      document.getElementById("prev-btn").textContent = ui.prev;
+      document.getElementById("next-btn").textContent = ui.next;
+    }
+
     function selectLeaf(idx, rippleCoords) {
       activeLeaf = (idx + LEAVES_DATA.length) % LEAVES_DATA.length;
-      const item = LEAVES_DATA[activeLeaf];
+      leafTransitionTime = 0;
 
-      const qEl = document.getElementById("quote-heading");
-      const aEl = document.getElementById("quote-author");
-      const rEl = document.getElementById("quote-root");
-      const tEl = document.getElementById("leaf-tag");
-
-      qEl.style.opacity = "0";
-      qEl.style.transform = "translateY(6px)";
-      aEl.style.opacity = "0";
-      rEl.style.opacity = "0";
+      contentEl.style.opacity = "0";
+      contentEl.style.transform = "translateY(5px)";
 
       setTimeout(() => {
-        tEl.textContent = `Fidan · ${item.num}. Yaprak`;
-        qEl.textContent = item.q;
-        aEl.textContent = item.a;
-        rEl.textContent = item.r;
-
-        qEl.style.opacity = "1";
-        qEl.style.transform = "translateY(0)";
-        aEl.style.opacity = "0.78";
-        rEl.style.opacity = "0.82";
-      }, 150);
+        applyTextContent();
+        contentEl.style.opacity = "1";
+        contentEl.style.transform = "translateY(0)";
+      }, 140);
 
       renderPills();
 
@@ -335,6 +496,22 @@
       }
     }
 
+    function setLanguage(lang) {
+      if (lang === currentLang) return;
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.getElementById("lang-en").classList.toggle("active", lang === "en");
+      document.getElementById("lang-tr").classList.toggle("active", lang === "tr");
+
+      contentEl.style.opacity = "0";
+      setTimeout(() => {
+        applyTextContent();
+        contentEl.style.opacity = "1";
+      }, 120);
+    }
+
+    document.getElementById("lang-en").onclick = () => setLanguage("en");
+    document.getElementById("lang-tr").onclick = () => setLanguage("tr");
     document.getElementById("prev-btn").onclick = () => selectLeaf(activeLeaf - 1);
     document.getElementById("next-btn").onclick = () => selectLeaf(activeLeaf + 1);
 
@@ -344,7 +521,187 @@
     });
 
     // =========================================================================
-    // YAŞAYAN BOTANİK FİDAN KANVASI (KÖKLER, TOPRAK, GÖVDE, 5 YAPRAK & FİLİZ)
+    // MINIATURE KINETIC EMBLEM CANVAS (BESPOKE LOOPING ANIMATION PER QUOTE)
+    // =========================================================================
+    const miniCanvas = document.getElementById("mini-canvas");
+    const mctx = miniCanvas.getContext("2d");
+
+    function drawMiniEmblem(t) {
+      const mw = miniCanvas.width;
+      const mh = miniCanvas.height;
+      mctx.clearRect(0, 0, mw, mh);
+
+      const ACCENT = "#8F2D1E";
+      const INK = "#181615";
+      const GOLD = "#B87D3B";
+      const type = LEAVES_DATA[activeLeaf].animType;
+
+      mctx.save();
+      if (type === "ink") {
+        // I. Saadi: Calligraphy Nib & Blooming Ink Drop ripples
+        const dropCycle = (t * 0.8) % 1;
+        const cx = mw * 0.52;
+        const cy = mh * 0.66;
+
+        // Nib at top-right
+        const nibBob = Math.sin(t * 2.5) * 3;
+        mctx.strokeStyle = INK;
+        mctx.lineWidth = 1.6;
+        mctx.beginPath();
+        mctx.moveTo(cx + 26, 8 + nibBob);
+        mctx.lineTo(cx + 4, 34 + nibBob);
+        mctx.lineTo(cx + 14, 38 + nibBob);
+        mctx.closePath();
+        mctx.stroke();
+
+        // Falling drop
+        if (dropCycle < 0.35) {
+          const dy = (dropCycle / 0.35) * (cy - 34);
+          mctx.fillStyle = ACCENT;
+          mctx.beginPath();
+          mctx.arc(cx + 4, 34 + dy, 3, 0, Math.PI * 2);
+          mctx.fill();
+        } else {
+          // Concentric silk ink ripples
+          const prog = (dropCycle - 0.35) / 0.65;
+          for (let r = 0; r < 2; r++) {
+            const rad = (prog * 32) + r * 10;
+            mctx.strokeStyle = r === 0 ? ACCENT : GOLD;
+            mctx.globalAlpha = Math.max(0, 1 - prog);
+            mctx.lineWidth = 1.5;
+            mctx.beginPath();
+            mctx.ellipse(cx, cy, rad, rad * 0.42, 0, 0, Math.PI * 2);
+            mctx.stroke();
+          }
+        }
+      } else if (type === "butterflies") {
+        // II. Quintana: Two sweet fluttering butterflies over garden stems
+        const bList = [
+          { x: mw * 0.36 + Math.sin(t * 1.7) * 12, y: mh * 0.5 + Math.cos(t * 2.3) * 8, s: 1.0, phase: 0 },
+          { x: mw * 0.68 + Math.cos(t * 1.4) * 10, y: mh * 0.42 + Math.sin(t * 2.0) * 7, s: 0.78, phase: 1.8 }
+        ];
+        bList.forEach((b) => {
+          const flap = Math.abs(Math.sin(t * 7.5 + b.phase));
+          mctx.save();
+          mctx.translate(b.x, b.y);
+          mctx.rotate(-0.2 + Math.sin(t * 2 + b.phase) * 0.12);
+          mctx.scale(b.s, b.s);
+
+          // Wings
+          mctx.fillStyle = "rgba(143, 45, 30, 0.25)";
+          mctx.strokeStyle = ACCENT;
+          mctx.lineWidth = 1.4;
+
+          // Left & Right upper wing
+          [-1, 1].forEach((dir) => {
+            mctx.beginPath();
+            mctx.moveTo(0, 0);
+            mctx.bezierCurveTo(dir * 16 * flap, -15, dir * 20 * flap, 2, 0, 5);
+            mctx.fill();
+            mctx.stroke();
+
+            mctx.beginPath();
+            mctx.moveTo(0, 3);
+            mctx.bezierCurveTo(dir * 12 * flap, 5, dir * 10 * flap, 15, 0, 10);
+            mctx.fill();
+            mctx.stroke();
+          });
+          mctx.restore();
+        });
+      } else if (type === "dewdrop") {
+        // III. Laozi / Mizen Boushi: Enso circle & calm suspended dewdrop
+        const cx = mw * 0.5;
+        const cy = mh * 0.5;
+
+        // Enso brush circle
+        mctx.strokeStyle = ACCENT;
+        mctx.lineWidth = 2.4;
+        mctx.globalAlpha = 0.75;
+        mctx.beginPath();
+        mctx.arc(cx, cy, 26, 0.25 + Math.sin(t) * 0.15, Math.PI * 1.95);
+        mctx.stroke();
+
+        // Levitating balanced dewdrop inside
+        const floatY = cy + Math.sin(t * 2.2) * 3.5;
+        mctx.fillStyle = ACCENT;
+        mctx.globalAlpha = 0.9;
+        mctx.beginPath();
+        mctx.moveTo(cx, floatY - 9);
+        mctx.quadraticCurveTo(cx + 8, floatY + 2, cx, floatY + 8);
+        mctx.quadraticCurveTo(cx - 8, floatY + 2, cx, floatY - 9);
+        mctx.fill();
+
+        // Calm horizontal water line
+        mctx.strokeStyle = INK;
+        mctx.globalAlpha = 0.35;
+        mctx.lineWidth = 1.1;
+        mctx.beginPath();
+        mctx.moveTo(cx - 16, cy + 16);
+        mctx.lineTo(cx + 16, cy + 16);
+        mctx.stroke();
+      } else if (type === "flower") {
+        // IV. Adventure Time: Blooming multi-petal botanical flower + warm sparks
+        const cx = mw * 0.5;
+        const cy = mh * 0.58;
+        const bloom = 0.65 + Math.sin(t * 1.6) * 0.35; // gentle breathing bloom
+        const petals = 6;
+
+        for (let p = 0; p < petals; p++) {
+          const ang = (p / petals) * Math.PI * 2 + t * 0.25;
+          mctx.save();
+          mctx.translate(cx, cy);
+          mctx.rotate(ang);
+          mctx.beginPath();
+          const len = 14 + bloom * 10;
+          mctx.moveTo(0, 0);
+          mctx.quadraticCurveTo(-8 * bloom, -len * 0.55, 0, -len);
+          mctx.quadraticCurveTo(8 * bloom, -len * 0.55, 0, 0);
+          mctx.fillStyle = "rgba(143, 45, 30, 0.22)";
+          mctx.fill();
+          mctx.strokeStyle = ACCENT;
+          mctx.lineWidth = 1.3;
+          mctx.stroke();
+          mctx.restore();
+        }
+        // Flower heart
+        mctx.beginPath();
+        mctx.arc(cx, cy, 4.5, 0, Math.PI * 2);
+        mctx.fillStyle = GOLD;
+        mctx.fill();
+      } else if (type === "spark") {
+        // V. Rota: 1-Minute Mindset Shift Prism & Synaptic Spark
+        const cx = mw * 0.5;
+        const cy = mh * 0.5;
+
+        // Rotating compass/prism diamond
+        mctx.save();
+        mctx.translate(cx, cy);
+        mctx.rotate(t * 0.9);
+        mctx.strokeStyle = ACCENT;
+        mctx.lineWidth = 1.6;
+        mctx.strokeRect(-14, -14, 28, 28);
+        mctx.restore();
+
+        // Orbiting spark
+        const sx = cx + Math.cos(t * 3.2) * 28;
+        const sy = cy + Math.sin(t * 3.2) * 16;
+        mctx.fillStyle = ACCENT;
+        mctx.beginPath();
+        mctx.arc(sx, sy, 3.5, 0, Math.PI * 2);
+        mctx.fill();
+
+        mctx.strokeStyle = GOLD;
+        mctx.globalAlpha = 0.55;
+        mctx.beginPath();
+        mctx.moveTo(cx, cy);
+        mctx.lineTo(sx, sy);
+        mctx.stroke();
+      }
+      mctx.restore();
+    }
+
+    // =========================================================================
+    // LIVING BOTANICAL SAPLING CANVAS + QUOTE-SPECIFIC AMBIENT ANIMATIONS
     // =========================================================================
     const canvas = document.getElementById("sapling-canvas");
     const stageEl = document.getElementById("bespoke-stage");
@@ -355,6 +712,14 @@
     let leafHitboxes = [];
     let ripples = [];
     let lastW = 0, lastH = 0;
+
+    // Ambient particles for quote-specific effects around the sapling
+    const ambientSeeds = Array.from({ length: 14 }, (_, i) => ({
+      phase: i * 1.37,
+      radius: 35 + (i % 5) * 26,
+      speed: 0.6 + (i % 4) * 0.25,
+      size: 2 + (i % 3) * 1.2
+    }));
 
     stageEl.addEventListener("mousemove", (e) => {
       const r = stageEl.getBoundingClientRect();
@@ -385,6 +750,41 @@
       }
     });
 
+    function drawButterflyOnStage(x, y, scale, wingPhase, angle) {
+      const flap = 0.25 + Math.abs(Math.sin(wingPhase)) * 0.85;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.scale(scale, scale);
+
+      ctx.fillStyle = "rgba(143, 45, 30, 0.22)";
+      ctx.strokeStyle = "#8F2D1E";
+      ctx.lineWidth = 1.25;
+
+      [-1, 1].forEach((dir) => {
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(dir * 14 * flap, -13, dir * 17 * flap, 1, 0, 4);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0, 3);
+        ctx.bezierCurveTo(dir * 10 * flap, 5, dir * 9 * flap, 12, 0, 9);
+        ctx.fill();
+        ctx.stroke();
+      });
+
+      // Body
+      ctx.strokeStyle = "#181615";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(0, -3);
+      ctx.lineTo(0, 10);
+      ctx.stroke();
+      ctx.restore();
+    }
+
     function drawBotanicalLeaf(cx, cy, angle, length, width, isSelected, numeral) {
       ctx.save();
       ctx.translate(cx, cy);
@@ -394,7 +794,7 @@
       const INK = "#181615";
       const BG = "#F2ECE1";
 
-      // 1. Yaprak sapı (Petiole)
+      // 1. Petiole
       ctx.strokeStyle = ACCENT;
       ctx.globalAlpha = isSelected ? 0.95 : 0.68;
       ctx.lineWidth = isSelected ? 2.1 : 1.5;
@@ -407,7 +807,7 @@
       const bladeEnd = length;
       const bladeLen = bladeEnd - bladeStart;
 
-      // 2. Yaprak ayası (Lamina)
+      // 2. Lamina
       ctx.beginPath();
       ctx.moveTo(bladeStart, 0);
       ctx.bezierCurveTo(
@@ -431,7 +831,7 @@
       ctx.lineWidth = isSelected ? 2.0 : 1.25;
       ctx.stroke();
 
-      // 3. Orta damar (Midrib)
+      // 3. Midrib
       ctx.beginPath();
       ctx.moveTo(bladeStart, 0);
       ctx.quadraticCurveTo(bladeStart + bladeLen * 0.5, -width * 0.05, bladeEnd - 2, 0);
@@ -440,7 +840,7 @@
       ctx.lineWidth = isSelected ? 1.4 : 0.95;
       ctx.stroke();
 
-      // 4. Yan damarlar (Lateral veins)
+      // 4. Lateral veins
       const veinPairs = 4;
       for (let v = 1; v <= veinPairs; v++) {
         const frac = v / (veinPairs + 1);
@@ -461,7 +861,6 @@
       const midX = bladeStart + bladeLen * 0.52;
       ctx.restore();
 
-      // Dünya koordinatlarında yaprak merkezi ve Roma rakamı
       const worldX = cx + Math.cos(angle) * midX;
       const worldY = cy + Math.sin(angle) * midX;
 
@@ -486,8 +885,157 @@
       return { x: worldX, y: worldY, r: Math.max(length * 0.55, 28) };
     }
 
+    function drawQuoteSpecificStageAnimation(baseX, soilY, tip, activeHb) {
+      const ACCENT = "#8F2D1E";
+      const GOLD = "#B87D3B";
+      const INK = "#181615";
+      const type = LEAVES_DATA[activeLeaf].animType;
+
+      ctx.save();
+      if (type === "ink" && activeHb) {
+        // I. Saadi: Floating calligraphic ink strokes & gentle ink rings around Leaf I
+        for (let i = 0; i < 3; i++) {
+          const r = ((time * 24 + i * 28) % 85);
+          const alpha = Math.max(0, (1 - r / 85) * 0.38);
+          ctx.strokeStyle = ACCENT;
+          ctx.globalAlpha = alpha;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(activeHb.x, activeHb.y, r, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      } else if (type === "butterflies") {
+        // II. Quintana: 3 sweet butterflies flying around the sapling branches!
+        const bCoords = [
+          {
+            x: baseX - 85 + Math.sin(time * 0.95) * 45,
+            y: soilY - 195 + Math.cos(time * 1.3) * 35,
+            s: 0.92,
+            wp: time * 7.8,
+            ang: -0.25 + Math.cos(time * 0.95) * 0.25
+          },
+          {
+            x: baseX + 75 + Math.cos(time * 0.8) * 38,
+            y: soilY - 140 + Math.sin(time * 1.15) * 30,
+            s: 0.76,
+            wp: time * 8.4 + 1.2,
+            ang: 0.2 + Math.sin(time * 0.8) * 0.2
+          },
+          {
+            x: baseX - 20 + Math.sin(time * 1.2 + 2) * 55,
+            y: soilY - 260 + Math.cos(time * 0.9 + 1) * 22,
+            s: 0.65,
+            wp: time * 9.0 + 2.5,
+            ang: -0.15 + Math.sin(time * 1.2) * 0.2
+          }
+        ];
+        bCoords.forEach((b) => drawButterflyOnStage(b.x, b.y, b.s, b.wp, b.ang));
+      } else if (type === "dewdrop" && activeHb) {
+        // III. Laozi / Mizen Boushi: Zen Enso halo & calm dewdrop falling from Leaf III to soil
+        ctx.strokeStyle = ACCENT;
+        ctx.globalAlpha = 0.22;
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.arc(baseX, soilY - 155, 118, time * 0.3, time * 0.3 + Math.PI * 1.65);
+        ctx.stroke();
+
+        // Falling dewdrop cycle
+        const cycle = (time * 0.55) % 1;
+        const dropY = activeHb.y + cycle * (soilY - activeHb.y);
+        if (cycle < 0.92) {
+          ctx.fillStyle = ACCENT;
+          ctx.globalAlpha = 0.75;
+          ctx.beginPath();
+          ctx.arc(activeHb.x, dropY, 3.2, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          const waveR = ((cycle - 0.92) / 0.08) * 36;
+          ctx.strokeStyle = ACCENT;
+          ctx.globalAlpha = 0.5 * (1 - (cycle - 0.92) / 0.08);
+          ctx.beginPath();
+          ctx.ellipse(activeHb.x, soilY, waveR, waveR * 0.25, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      } else if (type === "flower") {
+        // IV. Adventure Time: A blooming crimson flower right on the apical shoot + warm floating pollen spores!
+        const bloom = Math.min(1, 0.72 + Math.sin(time * 1.5) * 0.22);
+        const petals = 8;
+        ctx.save();
+        ctx.translate(tip.x, tip.y - 38);
+        for (let p = 0; p < petals; p++) {
+          const a = (p / petals) * Math.PI * 2 + time * 0.25;
+          ctx.save();
+          ctx.rotate(a);
+          ctx.beginPath();
+          const plen = 18 * bloom;
+          ctx.moveTo(0, 0);
+          ctx.quadraticCurveTo(-7 * bloom, -plen * 0.55, 0, -plen);
+          ctx.quadraticCurveTo(7 * bloom, -plen * 0.55, 0, 0);
+          ctx.fillStyle = "rgba(143, 45, 30, 0.26)";
+          ctx.fill();
+          ctx.strokeStyle = ACCENT;
+          ctx.globalAlpha = 0.85;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+          ctx.restore();
+        }
+        ctx.beginPath();
+        ctx.arc(0, 0, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = GOLD;
+        ctx.globalAlpha = 0.95;
+        ctx.fill();
+        ctx.restore();
+
+        // Warm rising pollen spores
+        ambientSeeds.forEach((s) => {
+          const py = soilY - ((time * 22 * s.speed + s.phase * 40) % 280);
+          const px = baseX + Math.sin(time * 1.2 + s.phase) * s.radius * 0.85;
+          ctx.beginPath();
+          ctx.arc(px, py, s.size, 0, Math.PI * 2);
+          ctx.fillStyle = s.phase % 2 > 1 ? GOLD : ACCENT;
+          ctx.globalAlpha = 0.45 + Math.sin(time * 3 + s.phase) * 0.25;
+          ctx.fill();
+        });
+      } else if (type === "spark") {
+        // V. Rota: Constellation nodes connecting all 5 leaves with synaptic sparks
+        ctx.strokeStyle = GOLD;
+        ctx.lineWidth = 1.0;
+        ctx.setLineDash([3, 4]);
+        ctx.globalAlpha = 0.45;
+        ctx.beginPath();
+        leafHitboxes.forEach((hb, i) => {
+          if (i === 0) ctx.moveTo(hb.x, hb.y);
+          else ctx.lineTo(hb.x, hb.y);
+        });
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Travelling spark along the 5 leaves
+        if (leafHitboxes.length >= 2) {
+          const segFloat = (time * 1.4) % (leafHitboxes.length - 1);
+          const idx0 = Math.floor(segFloat);
+          const frac = segFloat - idx0;
+          const p0 = leafHitboxes[idx0];
+          const p1 = leafHitboxes[idx0 + 1];
+          const sx = p0.x + (p1.x - p0.x) * frac;
+          const sy = p0.y + (p1.y - p0.y) * frac;
+
+          ctx.beginPath();
+          ctx.arc(sx, sy, 4.2, 0, Math.PI * 2);
+          ctx.fillStyle = ACCENT;
+          ctx.globalAlpha = 0.9;
+          ctx.fill();
+        }
+      }
+      ctx.restore();
+    }
+
     function animate() {
-      time += 0.015;
+      time += 0.016;
+      leafTransitionTime += 0.016;
+
+      drawMiniEmblem(time);
+
       const w = stageEl.clientWidth || 750;
       const h = stageEl.clientHeight || 485;
 
@@ -503,7 +1051,6 @@
       const ACCENT = "#8F2D1E";
       const INK = "#181615";
 
-      // Fidanın konumu (masaüstünde sağ %77, mobilde sağ-alt)
       const isMobile = w < 700;
       const baseX = isMobile ? w * 0.78 : w * 0.77;
       const soilY = h * 0.79;
@@ -511,7 +1058,7 @@
 
       leafHitboxes = [];
 
-      // 1. TOPRAK UFUK ÇİZGİSİ VE TOHUM YATAĞI
+      // 1. SOIL HORIZON
       ctx.save();
       ctx.strokeStyle = ACCENT;
       ctx.globalAlpha = 0.36;
@@ -531,7 +1078,7 @@
       }
       ctx.restore();
 
-      // 2. TOPRAK ALTI KÖK SİSTEMİ
+      // 2. UNDERGROUND ROOTS
       const roots = [
         { endX: -72, endY: 64, ctrlX: -20, ctrlY: 32, w: 1.7, sub: [-92, 78] },
         { endX: -34, endY: 78, ctrlX: -12, ctrlY: 44, w: 1.4, sub: [-46, 92] },
@@ -559,13 +1106,13 @@
       });
       ctx.restore();
 
-      // 3. TOPRAKTAN ÇIKAN İLK ÇENEK YAPRAKLARI (COTYLEDONS)
+      // 3. COTYLEDONS
       drawBotanicalLeaf(baseX - 2, soilY - 12, Math.PI * 1.12, 30, 7, false, "·");
       drawBotanicalLeaf(baseX + 2, soilY - 12, -Math.PI * 0.12, 30, 7, false, "·");
 
-      // 4. ANA FİDAN GÖVDESİ (YUKARI DOĞRU İNCELEN ESNEK GÖVDE)
+      // 4. MAIN TAPERING SAPLING STEM
       const topX = baseX + wind;
-      const topY = h * 0.14;
+      const topY = h * 0.15;
       const ctrl1X = baseX - 18 + wind * 0.25;
       const ctrl1Y = soilY - (soilY - topY) * 0.35;
       const ctrl2X = baseX + 14 + wind * 0.65;
@@ -598,7 +1145,7 @@
       }
       ctx.restore();
 
-      // 5. FİDANIN 5 ANA DALI VE DAMARLI YAPRAKLARI (I - V)
+      // 5. FIVE VEINED LEAVES (I - V)
       const branchNodes = [
         { t: 0.24, side: -1, len: 74, width: 20, baseAngle: -Math.PI * 0.76, numeral: "I" },
         { t: 0.41, side:  1, len: 78, width: 21, baseAngle: -Math.PI * 0.20, numeral: "II" },
@@ -628,7 +1175,7 @@
         leafHitboxes.push({ x: hb.x, y: hb.y, r: hb.r, index: idx });
       });
 
-      // 6. TEPE SÜRGÜNÜ (APICAL BUD / YENİ DOĞAN FİLİZ)
+      // 6. APICAL BUD
       const tip = stemPoint(1.0);
       ctx.save();
       ctx.translate(tip.x, tip.y);
@@ -659,7 +1206,10 @@
       ctx.fill();
       ctx.restore();
 
-      // 7. YAPRAK TIKLAMA HALKALARI
+      // 7. QUOTE-SPECIFIC STAGE ANIMATION AROUND THE SAPLING
+      drawQuoteSpecificStageAnimation(baseX, soilY, tip, leafHitboxes[activeLeaf]);
+
+      // 8. CLICK RIPPLES
       for (let i = ripples.length - 1; i >= 0; i--) {
         const rp = ripples[i];
         rp.r += 1.4;
@@ -675,19 +1225,20 @@
         if (rp.alpha < 0.03) ripples.splice(i, 1);
       }
 
-      // Sağ alt botanik mühür
+      // Bottom-right botanical caption
       ctx.save();
       ctx.fillStyle = INK;
       ctx.globalAlpha = 0.42;
       ctx.font = "italic 11.5px 'Cormorant Garamond', Georgia, serif";
       ctx.textAlign = "right";
-      ctx.fillText("Fikir Fidanı · Köklerden Filize (V Yaprak)", baseX + 115, soilY + 24);
+      ctx.fillText(UI_TEXT[currentLang].sealCaption, baseX + 115, soilY + 24);
       ctx.restore();
 
       requestAnimationFrame(animate);
     }
 
     renderPills();
+    applyTextContent();
     animate();
   </script>
 </body>
