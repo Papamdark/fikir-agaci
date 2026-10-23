@@ -86,15 +86,31 @@
     container-type: inline-size; position: fixed; inset: 0; width: 100vw; height: 100vh; height: 100dvh;
     overflow: hidden; isolation: isolate; color: #f4effd; cursor: default;
     background: radial-gradient(70% 90% at 28% 50%, #2b0e5c 0%, #140630 42%, #0a0418 75%);
+    transition: background 1.1s cubic-bezier(.22,1,.36,1);
   }
-  .pv canvas.fx { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; }
-  .grain { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 20; pointer-events: none; opacity: .08; mix-blend-mode: overlay; image-rendering: pixelated; }
+  .pv:fullscreen { aspect-ratio: auto; width: 100vw; height: 100vh; border-radius: 0; }
+  .pv.full { position: fixed; inset: 0; z-index: 50; aspect-ratio: auto; border-radius: 0; }
+  .pv canvas.fx { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; transition: filter 1.1s cubic-bezier(.22,1,.36,1); }
+  .pv.noted canvas.fx { filter: blur(3px) saturate(.88); }
+  .grain { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 20; pointer-events: none; opacity: .075; mix-blend-mode: overlay; image-rendering: pixelated; }
   .abs { position: absolute; z-index: 10; pointer-events: none; }
   .ease { transition-timing-function: cubic-bezier(.16,.84,.24,1); }
 
+  /* ---- Okuma Odak Perdesi (Derin Okuma Modunda Kenar Gürültüsünü Sakinleştirir) ---- */
+  .focus-veil {
+    position: absolute; inset: 0; z-index: 6; pointer-events: none; opacity: 0;
+    background: radial-gradient(58% 82% at 68% 50%, rgba(12, 5, 28, .88) 0%, rgba(8, 3, 20, .68) 60%, rgba(6, 2, 15, .42) 100%);
+    transition: opacity .95s cubic-bezier(.22,1,.36,1);
+  }
+  .pv.noted .focus-veil { opacity: 1; }
+
   /* ---- Afiş (Beş Yaprak Dinamik Ölçekli F1 Fraunces + Inter Tight) ---- */
-  .poster { right: 8cqi; top: 50%; transform: translateY(-50%); text-align: right; margin: 0; line-height: .94; max-width: 54cqi;
-    transition: opacity .75s cubic-bezier(.22,1,.36,1), transform 1s cubic-bezier(.22,1,.36,1), filter .75s cubic-bezier(.22,1,.36,1); }
+  .poster-wrap {
+    right: 8cqi; top: 50%; transform: translateY(-50%); text-align: right; max-width: 54cqi;
+    pointer-events: auto; cursor: pointer;
+    transition: opacity .75s cubic-bezier(.22,1,.36,1), transform 1s cubic-bezier(.22,1,.36,1), filter .75s cubic-bezier(.22,1,.36,1);
+  }
+  .poster { margin: 0; line-height: .94; }
   .poster span { display: block; opacity: 0; transform: translate3d(0, 1.1cqi, 0); filter: blur(9px); will-change: opacity, transform, filter;
     transition: opacity 1.35s cubic-bezier(.22,1,.36,1), transform 1.6s cubic-bezier(.22,1,.36,1), filter 1.35s cubic-bezier(.22,1,.36,1); }
   .pv.in:not(.switching) .poster span { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0px); }
@@ -123,18 +139,108 @@
   .poster[data-size="sm"] .p2 { font-size: 3.35cqi; margin-right: 2.4cqi; margin-top: .45cqi; }
   .poster[data-size="sm"] .p3 { font-size: 4.55cqi; letter-spacing: -.028em; margin-right: 0; margin-top: .35cqi; line-height: 1.06; }
 
-  .pv.noted .poster { opacity: 0; transform: translateY(-58%); filter: blur(8px); }
+  /* ---- Sahnede Kaynakça & Sorgulama Mührü (Tıklanabilir Cam Kapsül) ---- */
+  .inq-pill {
+    margin-top: 2.4cqi; display: inline-flex; align-items: center; gap: .75cqi;
+    padding: .62cqi 1.35cqi .62cqi 1.05cqi; border-radius: 99px;
+    border: 1px solid rgba(231, 201, 255, .22);
+    background: rgba(24, 10, 48, .48); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    font-family: var(--sans); font-size: max(10px, .92cqi); letter-spacing: .2em; text-transform: uppercase;
+    color: rgba(244, 239, 253, .72); cursor: pointer;
+    opacity: 0; transform: translate3d(0, .8cqi, 0); filter: blur(6px);
+    transition: opacity 1.2s cubic-bezier(.22,1,.36,1) 1.15s, transform 1.2s cubic-bezier(.22,1,.36,1) 1.15s, filter 1.2s cubic-bezier(.22,1,.36,1) 1.15s, border-color .35s, color .35s, background .35s, box-shadow .45s;
+  }
+  .pv.in:not(.switching) .inq-pill { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0px); }
+  .pv.switching .inq-pill { transition-duration: .3s; transition-delay: 0s !important; opacity: 0; filter: blur(6px); }
+  .poster-wrap:hover .inq-pill, .inq-pill:hover {
+    color: #fff; border-color: rgba(231, 201, 255, .62);
+    background: rgba(190, 110, 255, .14); box-shadow: 0 0 2.6cqi -.4cqi rgba(190, 110, 255, .45);
+  }
+  .inq-dot {
+    width: .52cqi; height: .52cqi; min-width: 6px; min-height: 6px; border-radius: 50%;
+    background: #e7c9ff; box-shadow: 0 0 8px #e7c9ff;
+    animation: pulseDot 2.6s ease-in-out infinite;
+  }
+  @keyframes pulseDot { 0%, 100% { opacity: .45; transform: scale(.88); } 50% { opacity: 1; transform: scale(1.18); } }
 
-  /* ---- Not (↓) ---- */
-  .note { right: 8cqi; top: 50%; width: 33cqi; transform: translateY(-42%); opacity: 0; filter: blur(8px);
-    transition: opacity .9s ease, transform 1.2s cubic-bezier(.16,.84,.24,1), filter .9s ease; }
-  .pv.noted .note { opacity: 1; transform: translateY(-50%); filter: none; transition-delay: .22s; }
-  .note .src { font-family: var(--sans); font-size: max(9px, 1cqi); letter-spacing: .24em; text-transform: uppercase; color: rgba(244,239,253,.55); }
-  .note .txt { margin-top: 1.8cqi; font-family: var(--serif); font-size: 1.95cqi; line-height: 1.55; color: rgba(244,239,253,.86); text-wrap: pretty; }
+  .pv.noted .poster-wrap { opacity: 0; transform: translateY(-58%); filter: blur(8px); pointer-events: none; }
+
+  /* ---- Köken & Sorgulama Dosyası (Derin Okuma Kartı) ---- */
+  .dossier {
+    right: 6.5cqi; top: 48%; width: min(88vw, 46cqi); max-height: 76vh;
+    transform: translateY(-44%) scale(.985); opacity: 0; filter: blur(10px);
+    pointer-events: none; overflow-y: auto; scrollbar-width: thin;
+    padding: 2.2cqi 2.5cqi; border-radius: 1.4cqi;
+    background: rgba(16, 7, 36, .74);
+    border: 1px solid rgba(231, 201, 255, .18);
+    box-shadow: 0 28px 80px -20px rgba(0, 0, 0, .75), inset 0 1px 0 rgba(255, 255, 255, .08);
+    backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+    transition: opacity .85s cubic-bezier(.22,1,.36,1), transform 1.05s cubic-bezier(.22,1,.36,1), filter .85s cubic-bezier(.22,1,.36,1);
+  }
+  .pv.noted .dossier {
+    opacity: 1; transform: translateY(-50%) scale(1); filter: blur(0px);
+    pointer-events: auto; transition-delay: .16s;
+  }
+  .dos-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 1cqi;
+    padding-bottom: 1.1cqi; margin-bottom: 1.35cqi;
+    border-bottom: 1px solid rgba(244, 239, 253, .11);
+  }
+  .dos-src {
+    font-family: var(--sans); font-size: max(10px, .96cqi); letter-spacing: .22em;
+    text-transform: uppercase; color: #e7c9ff; font-weight: 400;
+  }
+  .dos-date {
+    font-family: var(--sans); font-size: max(9px, .82cqi); letter-spacing: .18em;
+    text-transform: uppercase; color: rgba(244, 239, 253, .45); white-space: nowrap;
+  }
+  .dos-close {
+    font-family: var(--sans); font-size: max(9px, .82cqi); letter-spacing: .2em;
+    text-transform: uppercase; color: rgba(244, 239, 253, .55); background: rgba(255,255,255,.04);
+    border: 1px solid rgba(244,239,253,.14); border-radius: 99px; padding: .35cqi .9cqi;
+    cursor: pointer; transition: color .3s, border-color .3s, background .3s;
+  }
+  .dos-close:hover { color: #fff; border-color: rgba(231,201,255,.5); background: rgba(190,110,255,.12); }
+
+  /* Odak Blokları (Üzerine gelinen paragraf parlar, diğerleri gözü yormamak için sakinleşir) */
+  .dos-steps { display: flex; flex-direction: column; gap: 1.25cqi; }
+  .dos-step {
+    padding-left: 1.15cqi; border-left: 2px solid rgba(231, 201, 255, .22);
+    transition: border-color .4s ease, opacity .4s ease, transform .4s ease;
+  }
+  .dos-steps:hover .dos-step { opacity: .62; }
+  .dos-steps .dos-step:hover { opacity: 1; border-left-color: #e7c9ff; transform: translateX(.18cqi); }
+  .dos-kicker {
+    font-family: var(--sans); font-size: max(9px, .8cqi); letter-spacing: .22em;
+    text-transform: uppercase; color: rgba(231, 201, 255, .68); margin-bottom: .38cqi;
+  }
+  .dos-q {
+    font-family: var(--serif); font-style: italic; font-size: max(13px, 1.32cqi);
+    line-height: 1.52; color: #f6f1ff; text-wrap: pretty;
+  }
+  .dos-body {
+    font-family: var(--serif); font-size: max(13px, 1.28cqi);
+    line-height: 1.62; color: rgba(244, 239, 253, .86); text-wrap: pretty;
+  }
+  .dos-body em, .dos-q em { color: #e7c9ff; font-style: italic; }
+  .dos-orig {
+    margin-top: .55cqi; padding: .55cqi .9cqi; border-radius: .6cqi;
+    background: rgba(255, 255, 255, .03); border: 1px solid rgba(244, 239, 253, .08);
+    font-family: var(--serif); font-size: max(12px, 1.18cqi); line-height: 1.5;
+    color: rgba(231, 201, 255, .92);
+  }
+  .dos-link {
+    display: inline-flex; align-items: center; gap: .4cqi; margin-top: .55cqi;
+    font-family: var(--sans); font-size: max(9px, .82cqi); letter-spacing: .18em;
+    text-transform: uppercase; color: #e7c9ff; text-decoration: none;
+    border-bottom: 1px solid rgba(231, 201, 255, .35); padding-bottom: 2px;
+    transition: color .3s, border-color .3s;
+  }
+  .dos-link:hover { color: #fff; border-color: #fff; }
 
   /* ---- Zarif Sahne İçi Kontroller (Yalnızca Sahnedeyken Görünür) ---- */
   .hud-bar {
-    position: absolute; left: 4.5cqi; right: 4.5cqi; bottom: 3.4cqi; z-index: 12;
+    position: absolute; left: 4.5cqi; right: 4.5cqi; bottom: 3.2cqi; z-index: 12;
     display: flex; align-items: center; justify-content: space-between;
     opacity: 0; pointer-events: none; transform: translate3d(0, .4cqi, 0);
     transition: opacity 1.1s cubic-bezier(.22,1,.36,1) .8s, transform 1.1s cubic-bezier(.22,1,.36,1) .8s;
@@ -142,16 +248,16 @@
   .pv.in .hud-bar { opacity: 1; pointer-events: auto; transform: translate3d(0, 0, 0); }
   .hud-grp { display: flex; align-items: center; gap: .65cqi; }
   .hud-btn {
-    font-family: var(--sans); font-size: max(10px, .88cqi); letter-spacing: .22em; text-transform: uppercase;
-    color: rgba(244,239,253,.52); background: rgba(255,255,255,.025);
+    font-family: var(--sans); font-size: max(10px, .86cqi); letter-spacing: .2em; text-transform: uppercase;
+    color: rgba(244,239,253,.56); background: rgba(255,255,255,.025);
     border: 1px solid rgba(244,239,253,.13); border-radius: 99px;
     padding: .55cqi 1.25cqi; cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     transition: color .35s, border-color .35s, background .35s, box-shadow .45s;
   }
-  .hud-btn:hover { color: #fff; border-color: rgba(231,201,255,.48); background: rgba(190,110,255,.08); box-shadow: 0 0 2cqi -.3cqi rgba(190,110,255,.38); }
+  .hud-btn:hover, .hud-btn.active { color: #fff; border-color: rgba(231,201,255,.52); background: rgba(190,110,255,.11); box-shadow: 0 0 2cqi -.3cqi rgba(190,110,255,.38); }
   .hud-lbl {
-    font-family: var(--sans); font-size: max(10px, .88cqi); letter-spacing: .22em; text-transform: uppercase;
-    color: rgba(244,239,253,.42); padding: 0 .6cqi;
+    font-family: var(--sans); font-size: max(10px, .86cqi); letter-spacing: .22em; text-transform: uppercase;
+    color: rgba(244,239,253,.42); padding: 0 .5cqi;
   }
 
   /* ---- Giriş ---- */
@@ -216,20 +322,40 @@
 
 <template id="tpl-t3">
   <canvas class="fx"></canvas>
-  <h2 class="abs poster" data-size="lg"><span class="p1"></span><span class="p2"></span><span class="p3"></span></h2>
-  <div class="abs note"><div class="src"></div><p class="txt"></p></div>
+  <div class="focus-veil"></div>
+
+  <div class="abs poster-wrap" id="poster-card" title="Köken ve sorgulama kaydını görmek için dokun">
+    <h2 class="poster" data-size="lg"><span class="p1"></span><span class="p2"></span><span class="p3"></span></h2>
+    <button type="button" class="inq-pill" id="inq-pill">
+      <span class="inq-dot"></span>
+      <span id="inq-pill-txt">Köken &amp; Sorgulama Kaydı · ↓</span>
+    </button>
+  </div>
+
+  <aside class="abs dossier" id="dossier" aria-label="Köken ve Sorgulama Kaydı">
+    <div class="dos-head">
+      <div>
+        <div class="dos-src" id="dos-src"></div>
+        <div class="dos-date" id="dos-date"></div>
+      </div>
+      <button type="button" class="dos-close" id="dos-close">↑ Söze Dön</button>
+    </div>
+    <div class="dos-steps" id="dos-steps"></div>
+  </aside>
+
   <div class="hud-bar">
     <div class="hud-grp">
       <button type="button" class="hud-btn" id="btn-prev" title="Önceki Yaprak (←)">←</button>
       <span class="hud-lbl" id="leaf-indicator">I / V · Cam Gül</span>
       <button type="button" class="hud-btn" id="btn-next" title="Sonraki Yaprak (→)">→</button>
-      <button type="button" class="hud-btn" id="btn-note" title="Kök Notu (↓ / ↑)">↓ Not</button>
+      <button type="button" class="hud-btn" id="btn-note" title="Köken & Sorgulama Kaydı (↓ / ↑)">✦ Köken &amp; Sorgu</button>
     </div>
     <div class="hud-grp">
       <button type="button" class="hud-btn" id="btn-lang">TR / EN</button>
-      <button type="button" class="hud-btn" id="btn-mute">Ses: Açık</button>
+      <button type="button" class="hud-btn" id="btn-mute">Odak Sesi: Açık</button>
     </div>
   </div>
+
   <div class="intro">
     <div>
       <h1 class="name reveal r1">Fikir Ağacı <span class="sl">/</span> <em>The Idea Tree</em></h1>
@@ -260,107 +386,320 @@ const LEAVES = [
   {
     labelTr: "I / V · Cam Gül",
     labelEn: "I / V · Glass Rose",
+    dateTr: "6 Eylül 2026 · 21:12",
+    dateEn: "September 6, 2026 · 21:12",
+    pillTr: "Köken & Sorgulama · Instagram → Gülistan",
+    pillEn: "Provenance & Inquiry · Instagram → Gulistan",
     size: "lg",
     tr: {
       p: ["Yanlış üslup,", "doğru sözün", "celladıdır."],
-      src: "Sadi Şirazî — Gülistan, VIII. Bab",
-      r: "Instagram'da Sadi Şirazî atfıyla görüldü. Gülistan'daki 'Sözünü dinleyenin mizacına göre söyle' hikmetiyle akrabadır; doğru bir fikrin veya gerçeğin, yanlış aktarım biçimi yüzünden karşı tarafta etkisini yitirmesini tanımlar."
+      src: "Sadi Şirazî Atfı — Gülistan, VIII. Bab (Hikmet 80)",
+      steps: [
+        {
+          k: "01 · NEREDE BULUNDU & NASIL SORGULANDI?",
+          q: "“‘Yanlış üslup doğru sözün katilidir’ diye bir yorum gördüm Instagram’da, bayıldım; bunun kökenlerini ve nerede geçtiğini merak ettim, derin bir araştırma yapmanı istiyorum.”"
+        },
+        {
+          k: "02 · KÖKEN KAZISI & BİRİNCİL KAYNAK",
+          b: "Söz internette ve çeşitli kaynaklarda <em>Sadi Şirazî</em>’ye atfedilse de birincil Farsça yazmalarda birebir bu cümleyle geçmez; modern Türkçede kristalleşmiş bir vecizedir. Ancak Sadi’nin 1258 tarihli <em>Gülistan</em> eserinin 8. Babında (<em>Âdâb-ı Sohbet</em>, Hikmet 80) bu düşüncenin gerçek atası yer alır:",
+          orig: "حکایت بر مزاج مستمع گوی / اگر خواهی که دارد با تو میلی — «Sözünü dinleyenin mizacına göre söyle; onun sana kulak vermesini istiyorsan.»"
+        },
+        {
+          k: "03 · KÖK KAYDI",
+          b: "Doğrunun doğruluğu üsluba bağlı değildir; fakat insana ulaşabilmesi çoğu zaman üsluba bağlıdır. Söyleyen doğrunun üslubundan, dinleyen de doğrunun özünü üsluptan ayırabilmekten sorumludur."
+        }
+      ]
     },
     en: {
       p: ["Wrong delivery is", "the executioner of", "a true word."],
-      src: "Saadi Shirazi — Gulistan, Chapter VIII",
-      r: "Encountered with attribution to Saadi Shirazi; kin to The Gulistan maxim 'Temper your speech to the temperament of the listener.' Defines how a true thought loses its effect when delivered in the wrong manner."
+      src: "Attributed to Saadi Shirazi — Gulistan, Ch. VIII (Maxim 80)",
+      steps: [
+        {
+          k: "01 · HOW IT WAS FOUND & QUESTIONED",
+          q: "“I saw a comment on Instagram saying ‘Wrong delivery is the killer of a true word’ and loved it—I want to know its real roots and where it actually comes from.”"
+        },
+        {
+          k: "02 · SOURCE EXCAVATION & PRIMARY TEXT",
+          b: "Although widely attributed online to <em>Saadi Shirazi</em>, the exact sentence is a modern aphorism rather than a verbatim quote. Yet its direct intellectual ancestor lives in Chapter VIII (<em>On the Rules of Conduct</em>, Maxim 80) of Saadi’s 13th-century <em>Gulistan</em>:",
+          orig: "حکایت بر مزاج مستمع گوی / اگر خواهی که دارد با تو میلی — “Temper your speech to the temperament of the listener, if you wish them to incline toward you.”"
+        },
+        {
+          k: "03 · ROOT RECORD",
+          b: "The truth of a statement does not depend on its delivery; yet its ability to reach another mind almost always does. The speaker answers for the grace of the vessel, the listener for separating the essence from the tone."
+        }
+      ]
     }
   },
   {
     labelTr: "II / V · Cam Kelebek",
     labelEn: "II / V · Glass Butterfly",
+    dateTr: "3–4 Ekim 2026 · 01:24",
+    dateEn: "October 3–4, 2026 · 01:24",
+    pillTr: "Köken & Sorgulama · Portekizce Vecize",
+    pillEn: "Provenance & Inquiry · Portuguese Aphorism",
     size: "sm",
     tr: {
       p: ["Güzel bir bahçen olsun; kelebekler gelir.", "Kelebekler gelmese bile,", "güzel bir bahçen olmuş olur."],
       src: "Mário Quintana Atfı — Portekizce Vecize",
-      r: "Dışsal bir sonuca veya karşılığa bağımlı kalmadan, kişinin kendi yaşam alanını ve iç dünyasını güzelleştirmesinin başlı başına yeterli bir kazanç olduğunu anlatan söz."
+      steps: [
+        {
+          k: "01 · NEREDE BULUNDU & NASIL SORGULANDI?",
+          q: "“‘Güzel bir bahçen olsun, kelebekler gelir; kelebekler gelmese bile güzel bir bahçen olmuş olur.’ Bu alıntıyı çok sevdim; orijinali bu değil tabii ki, Portekizce bir şeymiş ama bunu kendi cümlemle kaydedelim.”"
+        },
+        {
+          k: "02 · KÖKEN KAZISI & DİL İZİ",
+          b: "Sosyal medyada önce <em>‘Zamanını kelebekleri kovalamakla geçirirsen onlar senden kaçar...’</em> varyantıyla karşılaşıldı. Kökeni araştırıldığında Brezilya Portekizcesinde şair <em>Mário Quintana</em>’ya (çoğu kez <em>O Segredo</em> şiiriyle harmanlanarak) atfedilen çağdaş bir özdeyiş olduğu doğrulandı:",
+          orig: "«Cuide do seu jardim que as borboletas vêm até você; e se elas não vierem, você ainda terá um belo jardim.»"
+        },
+        {
+          k: "03 · KÖK KAYDI",
+          b: "Dışsal bir sonuca, alkışa veya karşılığa bağımlı kalmadan; kişinin kendi yaşam alanını ve iç dünyasını inşa etmesinin başlı başına tamamlanmış bir kazanç olduğunu tutan yaprak."
+        }
+      ]
     },
     en: {
       p: ["Cultivate a beautiful garden; the butterflies will come.", "And even if they don't,", "you will still have a beautiful garden."],
-      src: "Mário Quintana — Attributed Aphorism",
-      r: "Expresses that cultivating one's own living space and inner sanctuary is a complete reward in itself, independent of external applause or reciprocation."
+      src: "Attributed to Mário Quintana — Portuguese Aphorism",
+      steps: [
+        {
+          k: "01 · HOW IT WAS FOUND & QUESTIONED",
+          q: "“‘Have a beautiful garden and the butterflies will come; even if they don't, you still have a beautiful garden.’ I loved this quote—the original isn't Turkish of course, it turns out to be Portuguese, let's trace and save it.”"
+        },
+        {
+          k: "02 · SOURCE EXCAVATION & LINGUISTIC TRACE",
+          b: "First encountered in its longer variant (<em>‘If you spend your time chasing butterflies, they fly away...’</em>). Tracing its provenance leads to a contemporary Brazilian Portuguese aphorism widely attributed to poet <em>Mário Quintana</em>:",
+          orig: "«Cuide do seu jardim que as borboletas vêm até você; e se elas não vierem, você ainda terá um belo jardim.»"
+        },
+        {
+          k: "03 · ROOT RECORD",
+          b: "Captures the principle that cultivating one's own living space and inner sanctuary is a complete reward in itself, independent of external applause or reciprocation."
+        }
+      ]
     }
   },
   {
     labelTr: "III / V · Cam Dalga",
     labelEn: "III / V · Glass Wave",
+    dateTr: "6 Eylül 2026 · 20:53",
+    dateEn: "September 6, 2026 · 20:53",
+    pillTr: "Köken & Sorgulama · Kaizen → Mizen Boushi → Laozi",
+    pillEn: "Provenance & Inquiry · Kaizen → Mizen Boushi → Laozi",
     size: "lg",
     tr: {
       p: ["Bir sorunu,", "daha oluşmadan", "çözmek."],
-      src: "Laozi — Dao De Jing 64 & Mizen Boushi (未然防止)",
-      r: "Celil'in 'Kaizen felsefesi' olarak duyduğu ilk yaprak. Birebir karşılığı Japon mühendisliğinde Mizen Boushi (未然防止 — bir sorunu henüz meydana gelmeden önlemek), Huangdi Neijing ('治未病') ve Dao De Jing 64. Bab ('Henüz ortaya çıkmamışken ilgilen') metinleridir."
+      src: "Mizen Boushi (未然防止) · Huangdi Neijing (治未病) · Dao De Jing 64",
+      steps: [
+        {
+          k: "01 · ÜÇ AŞAMALI SORGULAMA ZİNCİRİ",
+          q: "1) «Kaizen felsefesi bir sorunu oluşmadan çözmektir diye bir laf duydum, bu doğru mu? Teyit eder misin?» → 2) «O zaman benim dediğim söz nereden geliyor, iyice araştırmanı istiyorum.» → 3) «Toyota ve Japonya’yı unut, bu daha felsefik bir şey değil mi? Daha derine inmeni istiyorum.»"
+        },
+        {
+          k: "02 · KÖKEN KAZISI (MÜHENDİSLİKTEN ANTİK FELSEFEYE)",
+          b: "İlk katmanda sözün <em>Kaizen</em> (sürekli iyileştirme) değil, Toyota mühendisi Tatsuhiko Yoshimura’nın (2002) sistemleştirdiği <em>Mizen Boushi</em> (未然防止 — sorunu meydana gelmeden önlemek) olduğu ayrıştırıldı. Japonya katmanı kaldırılıp felsefi köke inildiğinde ise MÖ 2–4. yüzyıl <em>Huangdi Neijing</em> ve <em>Laozi — Dao De Jing (64. Bab)</em> metinlerine ulaşıldı:",
+          orig: "聖人不治已病，治未病 (Huangdi Neijing: «Bilge, oluşmuş hastalığı değil, henüz oluşmamış hastalığı tedavi eder; hastalık çıktıktan sonra ilaç vermek susadıktan sonra kuyu kazmaya benzer.») · 為之於未有，治之於未亂 (Laozi 64: «Henüz var olmadan ilgilen; henüz karışıklık çıkmadan düzenle.»)"
+        },
+        {
+          k: "03 · KÖK KAYDI",
+          b: "Henüz olmayanı görebilmek — Laozi’nin ‘未有 / henüz var olmayan’ düşüncesiyle akraba. Problem ortaya çıktığında yalnız sonucu görüyoruz; bilgelik, sonucun doğduğu küçük başlangıcı fark etmek olabilir."
+        }
+      ]
     },
     en: {
       p: ["Deal with", "a problem before", "it arises."],
-      src: "Laozi — Dao De Jing 64 & Mizen Boushi (未然防止)",
-      r: "Celil's first leaf heard under Kaizen philosophy. Exact historical roots: Japanese engineering's Mizen Boushi (preventing a defect before it occurs), Huangdi Neijing ('treating illness before it manifests'), and Laozi's Dao De Jing Ch. 64."
+      src: "Mizen Boushi (未然防止) · Huangdi Neijing (治未病) · Dao De Jing 64",
+      steps: [
+        {
+          k: "01 · THREE-STAGE INQUIRY CHAIN",
+          q: "1) “I heard that Kaizen philosophy means solving a problem before it occurs—is that true? Can you verify?” → 2) “Then where does the saying I heard actually come from? Dig deeper.” → 3) “Forget Toyota and Japan—isn't this something much more philosophical? Go deeper into its roots.”"
+        },
+        {
+          k: "02 · SOURCE EXCAVATION (FROM ENGINEERING TO ANCIENT PHILOSOPHY)",
+          b: "First separated from <em>Kaizen</em> (continuous improvement) and traced to Toyota engineer Tatsuhiko Yoshimura’s 2002 discipline <em>Mizen Boushi</em> (未然防止 — preventing a defect before it occurs). Stripping away the industrial layer revealed its ancient philosophical core in the <em>Huangdi Neijing</em> and <em>Laozi’s Dao De Jing (Ch. 64)</em>:",
+          orig: "聖人不治已病，治未病 (Huangdi Neijing: “The sage treats not the illness that has already formed, but the illness not yet formed [治未病]; giving medicine after illness strikes is like digging a well after becoming thirsty.”) · 為之於未有，治之於未亂 (Laozi 64: “Act upon it before it exists; govern it before disorder arises.”)"
+        },
+        {
+          k: "03 · ROOT RECORD",
+          b: "Seeing what is not yet there—kin to Laozi’s ‘未有 / the not-yet-existent.’ When a problem erupts we only see the outcome; wisdom lies in noticing the quiet threshold where the outcome begins."
+        }
+      ]
     }
   },
   {
     labelTr: "IV / V · Cam Çiçek",
     labelEn: "IV / V · Glass Flower",
+    dateTr: "13 Ekim 2026 · GoodNotes Günlüğü",
+    dateEn: "October 13, 2026 · GoodNotes Journal",
+    pillTr: "Köken & Günlük Kaydı · Adventure Time (S3B25)",
+    pillEn: "Provenance & Journal Entry · Adventure Time (S3E25)",
     size: "md",
     tr: {
       p: ["You're a beautiful flower", "and I love to", "watch you grow."],
-      src: "Adventure Time — Joshua’nın Jake’e Sözü",
-      r: "Celil’in 13 Ekim 2026 tarihli GoodNotes günlüğüne “Ne zaman böyle cümleler duysam kendimden geçiyorum, bayılıyorum resmen. Cebime atıyorum, kullanmayı beklemek için” notuyla kaydettiği alıntı."
+      src: "Adventure Time — Joshua’nın Jake’e Sözü (3. Sezon, 25. Bölüm)",
+      steps: [
+        {
+          k: "01 · NEREDE BULUNDU & EL YAZISI GÜNLÜK KAYDI",
+          q: "“Ne zaman böyle cümleler duysam kendimden geçiyorum, bayılıyorum resmen. Cebime atıyorum, kullanmayı beklemek için.” — 13 Ekim 2026, GoodNotes Günlüğü"
+        },
+        {
+          k: "02 · SAHNE BAĞLAMI & BİRİNCİL KAYNAK",
+          b: "<em>Adventure Time</em> 3. Sezon 25. Bölüm (<em>Dad’s Dungeon</em>): Finn ve Jake’in babaları Joshua’nın zindan boyunca onları sert sınavlardan geçirdikten sonra, son hologram mesajında beklenmedik bir şefkatle bıraktığı kapanış cümlesi.",
+          orig: "«You're a beautiful flower, and I love to watch you grow.» — Joshua (Dad's Dungeon)"
+        },
+        {
+          k: "03 · KÖK KAYDI",
+          b: "Dili değiştirilmeden, duyulduğu ilk andaki çarpıcılığıyla Fikir Ağacı’na ve el yazısı günlüğe olduğu gibi mühürlenen yaprak."
+        }
+      ]
     },
     en: {
       p: ["You're a beautiful flower", "and I love to", "watch you grow."],
-      src: "Adventure Time — Joshua to Jake",
-      r: "Saved in Celil's GoodNotes journal on October 13, 2026: 'Whenever I hear sentences like this I lose myself, I absolutely love them. I put it in my pocket, waiting to use it.'"
+      src: "Adventure Time — Joshua to Jake (Season 3, Episode 25)",
+      steps: [
+        {
+          k: "01 · HOW IT WAS FOUND & HANDWRITTEN JOURNAL ENTRY",
+          q: "“Whenever I hear sentences like this I lose myself, I absolutely love them. I put it in my pocket, waiting for the right moment to use it.” — October 13, 2026, GoodNotes Journal"
+        },
+        {
+          k: "02 · SCENE CONTEXT & PRIMARY SOURCE",
+          b: "From <em>Adventure Time</em> Season 3, Episode 25 (<em>Dad’s Dungeon</em>): after putting Finn and Jake through grueling trials across the dungeon, their father Joshua ends his final holographic message with this sudden, disarming tenderness.",
+          orig: "«You're a beautiful flower, and I love to watch you grow.» — Joshua (Dad's Dungeon)"
+        },
+        {
+          k: "03 · ROOT RECORD",
+          b: "Preserved untranslated in the exact English phrasing in which it struck home and was written into the October 13 journal."
+        }
+      ]
     }
   },
   {
     labelTr: "V / V · Cam Pusula",
     labelEn: "V / V · Glass Compass",
+    dateTr: "10 Eylül 2026 · 08:45",
+    dateEn: "September 10, 2026 · 08:45",
+    pillTr: "Köken & Sorgulama · Rota YouTube (10:42)",
+    pillEn: "Provenance & Inquiry · Rota YouTube (10:42)",
     size: "sm",
     tr: {
       p: ["Artık hepimizin her şeye erişimi", "bir an, bir fikir, bir dakikalık", "zihniyet değişimi kadar uzakta."],
       src: "Rota — YouTube (10:42)",
-      r: "Kaynak: Rota — YouTube videosu (youtube.com/watch?v=0htz6KZUBLg, 10:42). İnsanın aradığı kırılmanın uzakta değil, tek bir algı ve zihniyet eşiğinin arkasında durduğunu hatırlatan yaprak."
+      steps: [
+        {
+          k: "01 · NEREDE BULUNDU & NASIL KAYDA GEÇTİ?",
+          q: "“10:42’de Rota şöyle bir şey diyor: Artık hepimizin her şeye erişiminin bir an olduğunu, bir fikir olduğunu, bir dakikalık bir zihniyet değişimi olduğunu söylüyor; bu çok etkiledi beni.”"
+        },
+        {
+          k: "02 · BİRİNCİL KAYNAK & ZAMAN DAMGASI",
+          b: "Videoyu izlerken tam <em>10:42</em> saniyesinde durdurularak doğrudan konuşma akışından çıkarıldı ve saniyesiyle arşivlendi.",
+          linkUrl: "https://www.youtube.com/watch?v=0htz6KZUBLg&t=642s",
+          linkLabel: "YouTube Kaynağını Aç (10:42) ↗"
+        },
+        {
+          k: "03 · KÖK KAYDI",
+          b: "İmkânın fiziksel uzaklığı ile zihinsel uzaklık aynı şey değildir. Dış dünyada hiçbir şey değişmediği hâlde, tek bir fikir ve algı eşiğiyle insanın erişilebilir gördüğü hayatların kümesi değişir."
+        }
+      ]
     },
     en: {
       p: ["Today, our access to everything is", "one moment, one idea, one minute", "of mindset shift away."],
       src: "Rota — YouTube (10:42)",
-      r: "Source: Rota — YouTube video (youtube.com/watch?v=0htz6KZUBLg, 10:42). A reminder that access to transformation stands just behind a single threshold of perception."
+      steps: [
+        {
+          k: "01 · HOW IT WAS FOUND & RECORDED",
+          q: "“At 10:42 Rota says something that really hit me: that today our access to everything is just one moment, one idea, one minute of mindset shift away.”"
+        },
+        {
+          k: "02 · PRIMARY SOURCE & EXACT TIMESTAMP",
+          b: "Paused at the exact <em>10:42</em> mark while watching the video, transcribed directly from the spoken passage, and archived with its timestamp.",
+          linkUrl: "https://www.youtube.com/watch?v=0htz6KZUBLg&t=642s",
+          linkLabel: "Open YouTube Source (10:42) ↗"
+        },
+        {
+          k: "03 · ROOT RECORD",
+          b: "Physical distance to a possibility is not the same as mental distance. Even when nothing in the outer world changes, a single shift in perception changes the set of lives you recognize as reachable."
+        }
+      ]
     }
   }
 ];
 
-/* ---- A1 Gece Camı Sabitlenmiş Amb Zone Motoru (01:00 Motif Başlangıçlı) ---- */
+/* ---- Çift Katmanlı Ses Mimarisi:
+   1) Giriş & Manifesto'da: Hitman: Blood Money — Amb Zone (01:00 Melodisi, A1 Gece Camı)
+   2) İçeride (Yapraklarda): Melodi yumuşakça susar; okumayı ve odaklanmayı destekleyen
+      Derin Odak Rezonansı (55Hz/110Hz A1 binaural alt-armonik + gece kütüphanesi dokusu + cam/not etkileşim tınıları) devreye girer. ---- */
 const SoundEngine = (() => {
-  let ctx = null, master = null, subEQ = null, midEQ = null, lpFilter = null, rev = null, wetGain = null, dryGain = null;
+  let ctx = null, master = null, musicGain = null, focusGain = null;
+  let subEQ = null, midEQ = null, lpFilter = null, rev = null, wetGain = null, dryGain = null;
+  let focusLp = null, droneOsc1 = null, droneOsc2 = null, droneOsc3 = null, airNode = null, focusStarted = false;
   let audioBuf = null, decodingPromise = null, srcNode = null, muted = false, scene = 'man', playing = false;
+
+  const LEAF_FREQS = [220.0, 246.94, 261.63, 293.66, 329.63]; // A3, B3, C4, D4, E4
 
   function ensureCtx() {
     if (ctx) return;
     const AC = window.AudioContext || window.webkitAudioContext;
     ctx = new AC();
     master = ctx.createGain(); master.gain.value = 0.95;
+    musicGain = ctx.createGain(); musicGain.gain.value = 0.95;
+    focusGain = ctx.createGain(); focusGain.gain.value = 0.0001;
+
     subEQ = ctx.createBiquadFilter(); subEQ.type = 'lowshelf'; subEQ.frequency.value = 60; subEQ.gain.value = 4.0;
     midEQ = ctx.createBiquadFilter(); midEQ.type = 'peaking'; midEQ.frequency.value = 2650; midEQ.Q.value = 1.0; midEQ.gain.value = -3.5;
     lpFilter = ctx.createBiquadFilter(); lpFilter.type = 'lowpass'; lpFilter.frequency.value = 1850; lpFilter.Q.value = 0.7;
 
     rev = ctx.createConvolver();
-    const sr = ctx.sampleRate, len = Math.floor(sr * 3.2), imp = ctx.createBuffer(2, len, sr);
+    const sr = ctx.sampleRate, len = Math.floor(sr * 3.4), imp = ctx.createBuffer(2, len, sr);
     for (let c = 0; c < 2; c++) {
       const d = imp.getChannelData(c);
-      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.6);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.7);
     }
     rev.buffer = imp;
 
     dryGain = ctx.createGain(); wetGain = ctx.createGain();
-    dryGain.gain.value = 0.85; wetGain.gain.value = 0.28;
+    dryGain.gain.value = 0.85; wetGain.gain.value = 0.30;
     subEQ.connect(midEQ); midEQ.connect(lpFilter);
     lpFilter.connect(dryGain); lpFilter.connect(rev); rev.connect(wetGain);
-    dryGain.connect(master); wetGain.connect(master); master.connect(ctx.destination);
+    dryGain.connect(musicGain); wetGain.connect(musicGain);
+    musicGain.connect(master);
+
+    // İç Sahne Derin Okuma & Odak Ses Alanı (Sözsüz / Melodisiz Kadife Akustik)
+    focusLp = ctx.createBiquadFilter(); focusLp.type = 'lowpass'; focusLp.frequency.value = 540; focusLp.Q.value = 0.6;
+    focusLp.connect(focusGain);
+    const focusWet = ctx.createGain(); focusWet.gain.value = 0.45;
+    focusLp.connect(rev); rev.connect(focusWet); focusWet.connect(focusGain);
+    focusGain.connect(master);
+
+    master.connect(ctx.destination);
+  }
+
+  function startFocusBed() {
+    if (focusStarted || !ctx) return;
+    focusStarted = true;
+    // 55 Hz & 55.6 Hz sıcak binaural odak temeli + 110 Hz kadife oktav
+    droneOsc1 = ctx.createOscillator(); droneOsc1.type = 'sine'; droneOsc1.frequency.value = 55.0;
+    droneOsc2 = ctx.createOscillator(); droneOsc2.type = 'sine'; droneOsc2.frequency.value = 55.6;
+    droneOsc3 = ctx.createOscillator(); droneOsc3.type = 'triangle'; droneOsc3.frequency.value = 110.0;
+    const g1 = ctx.createGain(); g1.gain.value = 0.055;
+    const g2 = ctx.createGain(); g2.gain.value = 0.045;
+    const g3 = ctx.createGain(); g3.gain.value = 0.018;
+    droneOsc1.connect(g1); droneOsc2.connect(g2); droneOsc3.connect(g3);
+    g1.connect(focusLp); g2.connect(focusLp); g3.connect(focusLp);
+    droneOsc1.start(); droneOsc2.start(); droneOsc3.start();
+
+    // Çok hafif gece kütüphanesi / sıcak oda havası (pembe/kahverengi filtreli doku)
+    const sr = ctx.sampleRate, nLen = sr * 4, nBuf = ctx.createBuffer(1, nLen, sr);
+    const nd = nBuf.getChannelData(0);
+    let lastOut = 0;
+    for (let i = 0; i < nLen; i++) {
+      const white = Math.random() * 2 - 1;
+      nd[i] = (lastOut + (0.02 * white)) / 1.02;
+      lastOut = nd[i];
+      nd[i] *= 0.14;
+    }
+    airNode = ctx.createBufferSource(); airNode.buffer = nBuf; airNode.loop = true;
+    const airBp = ctx.createBiquadFilter(); airBp.type = 'bandpass'; airBp.frequency.value = 280; airBp.Q.value = 0.7;
+    const airG = ctx.createGain(); airG.gain.value = 0.025;
+    airNode.connect(airBp); airBp.connect(airG); airG.connect(focusLp);
+    airNode.start();
   }
 
   function decodeBuffer() {
@@ -375,13 +714,54 @@ const SoundEngine = (() => {
     return decodingPromise;
   }
 
-  function applySceneFilter() {
+  function playGlassTone(freq, dur, peakGain, delaySec = 0) {
+    if (!ctx || muted) return;
+    const now = ctx.currentTime + delaySec;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, now);
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(peakGain, now + 0.08);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    osc.connect(g);
+    g.connect(focusLp);
+    osc.start(now);
+    osc.stop(now + dur + 0.05);
+  }
+
+  function applySceneCrossfade() {
     if (!ctx || muted) return;
     const now = ctx.currentTime;
-    const targetLp = scene === 'in' ? 14000 : (scene === 'note' ? 2800 : 1850);
-    lpFilter.frequency.cancelScheduledValues(now);
-    lpFilter.frequency.setValueAtTime(Math.max(120, lpFilter.frequency.value), now);
-    lpFilter.frequency.exponentialRampToValueAtTime(targetLp, now + 1.1);
+    startFocusBed();
+    if (scene === 'man') {
+      // Manifesto'da Amb Zone çalar
+      musicGain.gain.cancelScheduledValues(now);
+      musicGain.gain.setValueAtTime(Math.max(0.0001, musicGain.gain.value), now);
+      musicGain.gain.exponentialRampToValueAtTime(0.95, now + 1.2);
+      lpFilter.frequency.cancelScheduledValues(now);
+      lpFilter.frequency.setValueAtTime(Math.max(120, lpFilter.frequency.value), now);
+      lpFilter.frequency.exponentialRampToValueAtTime(2200, now + 1.2);
+
+      focusGain.gain.cancelScheduledValues(now);
+      focusGain.gain.setValueAtTime(Math.max(0.0001, focusGain.gain.value), now);
+      focusGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.0);
+    } else {
+      // İçeri girildiğinde ('in' veya 'note'): Amb Zone şarkısı yumuşakça susar, Odak Ses Alanı devreye girer
+      musicGain.gain.cancelScheduledValues(now);
+      musicGain.gain.setValueAtTime(Math.max(0.0001, musicGain.gain.value), now);
+      musicGain.gain.exponentialRampToValueAtTime(0.0001, now + 2.5);
+
+      const targetFocus = scene === 'note' ? 0.92 : 0.72;
+      const targetFocusLp = scene === 'note' ? 360 : 620;
+      focusGain.gain.cancelScheduledValues(now);
+      focusGain.gain.setValueAtTime(Math.max(0.0001, focusGain.gain.value), now);
+      focusGain.gain.exponentialRampToValueAtTime(targetFocus, now + 2.0);
+
+      focusLp.frequency.cancelScheduledValues(now);
+      focusLp.frequency.setValueAtTime(Math.max(120, focusLp.frequency.value), now);
+      focusLp.frequency.exponentialRampToValueAtTime(targetFocusLp, now + 1.2);
+    }
   }
 
   return {
@@ -389,6 +769,7 @@ const SoundEngine = (() => {
       ensureCtx();
       if (ctx.state === 'suspended') ctx.resume();
       if (muted) return;
+      startFocusBed();
       decodeBuffer().then(buf => {
         if (muted) return;
         if (ctx.state === 'suspended') ctx.resume();
@@ -401,22 +782,48 @@ const SoundEngine = (() => {
           srcNode.start(0);
           playing = true;
         }
-        applySceneFilter();
+        applySceneCrossfade();
       });
     },
     toggleMute() {
       muted = !muted;
+      ensureCtx();
+      const now = ctx.currentTime;
       if (muted) {
-        if (srcNode) { try { srcNode.stop(); } catch (e) {} srcNode.disconnect(); srcNode = null; }
-        playing = false;
+        master.gain.cancelScheduledValues(now);
+        master.gain.setValueAtTime(Math.max(0.0001, master.gain.value), now);
+        master.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
       } else {
+        if (ctx.state === 'suspended') ctx.resume();
+        master.gain.cancelScheduledValues(now);
+        master.gain.setValueAtTime(0.0001, now);
+        master.gain.exponentialRampToValueAtTime(0.95, now + 0.5);
         this.start();
       }
       return !muted;
     },
     setSceneState(st) {
       scene = st;
-      if (playing && !muted) applySceneFilter();
+      if (ctx && !muted) applySceneCrossfade();
+    },
+    onSeamBreath() {
+      // Cam heykelin kalbinden ışık yürürken çok hafif kristal rezonans
+      playGlassTone(220.0, 2.6, 0.014, 0);
+      playGlassTone(329.63, 2.2, 0.009, 0.12);
+    },
+    onLeafSwitch(idx) {
+      const f = LEAF_FREQS[idx % LEAF_FREQS.length];
+      playGlassTone(f * 0.5, 1.4, 0.022, 0);
+      playGlassTone(f, 1.8, 0.016, 0.06);
+    },
+    onDossierToggle(opening) {
+      if (opening) {
+        playGlassTone(164.81, 1.5, 0.022, 0);
+        playGlassTone(220.0, 2.1, 0.018, 0.09);
+      } else {
+        playGlassTone(220.0, 1.2, 0.016, 0);
+        playGlassTone(164.81, 1.6, 0.018, 0.08);
+      }
     }
   };
 })();
@@ -425,6 +832,12 @@ window.SoundEngine = SoundEngine;
 window.initUI = function () {
   const pv = document.getElementById('stage');
   const poster = pv.querySelector('.poster');
+  const posterCard = pv.querySelector('#poster-card');
+  const inqPillTxt = pv.querySelector('#inq-pill-txt');
+  const dosSrc = pv.querySelector('#dos-src');
+  const dosDate = pv.querySelector('#dos-date');
+  const dosSteps = pv.querySelector('#dos-steps');
+  const dosClose = pv.querySelector('#dos-close');
   const ind = pv.querySelector('#leaf-indicator');
   const btnNote = pv.querySelector('#btn-note');
   const btnMute = pv.querySelector('#btn-mute');
@@ -432,10 +845,16 @@ window.initUI = function () {
 
   const updateHudLabels = () => {
     const lf = LEAVES[curIdx];
+    const isNoted = pv.classList.contains('noted');
     if (ind) ind.textContent = curLang === 'en' ? lf.labelEn : lf.labelTr;
-    if (btnNote) btnNote.textContent = pv.classList.contains('noted')
-      ? (curLang === 'en' ? '↑ Quote' : '↑ Söz')
-      : (curLang === 'en' ? '↓ Note' : '↓ Not');
+    if (inqPillTxt) inqPillTxt.textContent = (curLang === 'en' ? lf.pillEn : lf.pillTr) + ' · ↓';
+    if (dosClose) dosClose.textContent = curLang === 'en' ? '↑ Back to Quote' : '↑ Söze Dön';
+    if (btnNote) {
+      btnNote.classList.toggle('active', isNoted);
+      btnNote.textContent = isNoted
+        ? (curLang === 'en' ? '↑ Back to Quote' : '↑ Söze Dön')
+        : (curLang === 'en' ? '✦ Provenance & Inquiry' : '✦ Köken & Sorgu');
+    }
   };
 
   const renderLeafText = (idx, lang) => {
@@ -445,8 +864,18 @@ window.initUI = function () {
     pv.querySelector('.p1').textContent = t.p[0];
     pv.querySelector('.p2').textContent = t.p[1];
     pv.querySelector('.p3').textContent = t.p[2];
-    pv.querySelector('.src').textContent = t.src;
-    pv.querySelector('.txt').textContent = t.r;
+    if (dosSrc) dosSrc.textContent = t.src;
+    if (dosDate) dosDate.textContent = lang === 'en' ? lf.dateEn : lf.dateTr;
+    if (dosSteps) {
+      dosSteps.innerHTML = t.steps.map(st => {
+        let inner = '<div class="dos-kicker">' + st.k + '</div>';
+        if (st.q) inner += '<p class="dos-q">' + st.q + '</p>';
+        if (st.b) inner += '<p class="dos-body">' + st.b + '</p>';
+        if (st.orig) inner += '<div class="dos-orig">' + st.orig + '</div>';
+        if (st.linkUrl) inner += '<a class="dos-link" href="' + st.linkUrl + '" target="_blank" rel="noopener">' + st.linkLabel + '</a>';
+        return '<div class="dos-step">' + inner + '</div>';
+      }).join('');
+    }
     pv.lang = lang;
     updateHudLabels();
   };
@@ -465,6 +894,7 @@ window.initUI = function () {
     pv.classList.remove('noted');
     pv.classList.add('switching');
     SoundEngine.setSceneState('in');
+    SoundEngine.onLeafSwitch(nextIdx);
     if (window.switchSculpture) window.switchSculpture(nextIdx);
     setTimeout(() => {
       curIdx = nextIdx;
@@ -496,17 +926,30 @@ window.initUI = function () {
   };
   pv.querySelector('.mani').addEventListener('click', enter);
 
-  const toggleNote = () => {
+  const toggleNote = (forceState) => {
     if (!pv.classList.contains('in')) return;
-    if (pv.classList.contains('noted')) {
+    const shouldOpen = typeof forceState === 'boolean' ? forceState : !pv.classList.contains('noted');
+    if (!shouldOpen) {
       pv.classList.remove('noted');
       SoundEngine.setSceneState('in');
+      SoundEngine.onDossierToggle(false);
     } else {
       pv.classList.add('noted');
       SoundEngine.setSceneState('note');
+      SoundEngine.onDossierToggle(true);
     }
     updateHudLabels();
   };
+
+  // Karta veya mühre tıklandığında Köken & Sorgulama Kaydı açılır
+  posterCard.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleNote(true);
+  });
+  dosClose.addEventListener('click', e => {
+    e.stopPropagation();
+    toggleNote(false);
+  });
 
   document.addEventListener('keydown', e => {
     if (pv.classList.contains('man') && (e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); enter(); return; }
@@ -514,10 +957,10 @@ window.initUI = function () {
     if (e.key === 'ArrowRight') { e.preventDefault(); goLeaf(1); }
     if (e.key === 'ArrowLeft')  { e.preventDefault(); goLeaf(-1); }
     if (e.key === 'ArrowDown' && !pv.classList.contains('noted')) {
-      e.preventDefault(); toggleNote();
+      e.preventDefault(); toggleNote(true);
     }
-    if (e.key === 'ArrowUp' && pv.classList.contains('noted')) {
-      e.preventDefault(); toggleNote();
+    if ((e.key === 'ArrowUp' || e.key === 'Escape') && pv.classList.contains('noted')) {
+      e.preventDefault(); toggleNote(false);
     }
   });
 
@@ -528,7 +971,7 @@ window.initUI = function () {
   btnMute.onclick = e => {
     e.stopPropagation();
     const on = SoundEngine.toggleMute();
-    btnMute.textContent = on ? (curLang === 'en' ? 'Sound: On' : 'Ses: Açık') : (curLang === 'en' ? 'Sound: Off' : 'Ses: Kapalı');
+    btnMute.textContent = on ? (curLang === 'en' ? 'Focus Audio: On' : 'Odak Sesi: Açık') : (curLang === 'en' ? 'Audio: Off' : 'Ses: Kapalı');
   };
 };
 </script>
@@ -736,8 +1179,17 @@ function makeScene(pv, initialItem) {
       if (fadeAlpha >= 0.999) { fadeAlpha = 1; fadeDir = 0; }
     }
 
-    if (pv.classList.contains('in') || !pv.querySelector('.intro')) { ct += dt; } else { ct = 0.5; }
+    const prevCt = ct;
+    const isReading = pv.classList.contains('noted');
+    const effDt = isReading ? dt * 0.28 : dt;
+    if (pv.classList.contains('in') || !pv.querySelector('.intro')) { ct += effDt; } else { ct = 0.5; }
+    if (prevCt < tc && ct >= tc && pv.classList.contains('in') && !isReading && window.SoundEngine && window.SoundEngine.onSeamBreath) {
+      window.SoundEngine.onSeamBreath();
+    }
     if (ct > CY) { ct = 0; reset(); }
+
+    const readDim = isReading ? 0.46 : 1.0;
+    const effAlpha = fadeAlpha * readDim;
 
     const rose = curItem.rose, heart = curItem.heart, rmax = curItem.rmax;
     const g = geo(), hx = g.x + heart.x * g.k, hy = g.y + heart.y * g.k, Rmax = rmax * g.k;
@@ -745,15 +1197,15 @@ function makeScene(pv, initialItem) {
     if (ct >= ts && ct < th) p = sine((ct - ts) / tsD);
     else if (ct >= th && ct < tb) p = 1;
     else if (ct >= tb && ct < tf) p = 1 - sine((ct - tb) / tbD);
-    halo(g, (1 + .3 * p) * fadeAlpha);
+    halo(g, (1 + .3 * p) * effAlpha);
 
     if (p < .002) {
-      ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = fadeAlpha; ctx.drawImage(rose.canvas, g.x, g.y, g.D, g.D);
+      ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = effAlpha; ctx.drawImage(rose.canvas, g.x, g.y, g.D, g.D);
     } else {
       const gr = ctx.createRadialGradient(hx, hy + g.D * .06, 0, hx, hy + g.D * .06, g.D * .38);
-      gr.addColorStop(0, 'rgba(255,238,255,' + (.55 * p * fadeAlpha) + ')'); gr.addColorStop(.45, 'rgba(205,140,255,' + (.25 * p * fadeAlpha) + ')'); gr.addColorStop(1, 'rgba(205,140,255,0)');
+      gr.addColorStop(0, 'rgba(255,238,255,' + (.55 * p * effAlpha) + ')'); gr.addColorStop(.45, 'rgba(205,140,255,' + (.25 * p * effAlpha) + ')'); gr.addColorStop(1, 'rgba(205,140,255,0)');
       ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 1; ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
-      ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = fadeAlpha;
+      ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = effAlpha;
       curItem.regions.forEach((r, i) => {
         const o = offs[i] || { dx: 0, dy: 0, rot: 0, ph: 0 }, fl = Math.sin(T * .9 + o.ph) * p * H * .003;
         ctx.save(); ctx.translate(g.x + r.cx * g.k + o.dx * H * p, g.y + r.cy * g.k + o.dy * H * p + fl); ctx.rotate(o.rot * p);
@@ -764,7 +1216,7 @@ function makeScene(pv, initialItem) {
     let reveal = 0, sa = 0;
     if (ct >= tc) { reveal = clamp((ct - tc) / tcD); sa = ct < ts ? 1 : ct < tf ? 1 - .75 * sine((ct - ts) / .9) * (1 - sine((ct - tb) / tbD)) : 1 - clamp((ct - tf) / 1.3); }
     if (sa > 0 && p < .35) {
-      const fade = (1 - clamp(p / .35)) * fadeAlpha, R = Rmax * (reveal * 1.15), fr = Rmax * .22;
+      const fade = (1 - clamp(p / .35)) * effAlpha, R = Rmax * (reveal * 1.15), fr = Rmax * .22;
       lx.setTransform(1, 0, 0, 1, 0, 0);
       lx.globalCompositeOperation = 'source-over'; lx.globalAlpha = 1; lx.clearRect(0, 0, W, H);
       lx.drawImage(curItem.seam, g.x, g.y, g.D, g.D);
