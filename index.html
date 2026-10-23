@@ -74,29 +74,40 @@
   .poster[data-size="sm"] .p2 { font-size: 3.35cqi; margin-right: 2.4cqi; margin-top: .45cqi; }
   .poster[data-size="sm"] .p3 { font-size: 4.55cqi; letter-spacing: -.028em; margin-right: 0; margin-top: .35cqi; line-height: 1.06; }
 
-  /* ---- Sahnede Kaynakça & Sorgulama Mührü ---- */
+  /* ---- Sahnede Kaynakça & Sorgulama Mührü (Vurgulu) ---- */
   .inq-pill {
-    margin-top: 2.4cqi; display: inline-flex; align-items: center; gap: .75cqi;
-    padding: .62cqi 1.35cqi .62cqi 1.05cqi; border-radius: 99px;
-    border: 1px solid rgba(231, 201, 255, .22);
-    background: rgba(24, 10, 48, .48); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    font-family: var(--sans); font-size: max(10px, .92cqi); letter-spacing: .2em; text-transform: uppercase;
-    color: rgba(244, 239, 253, .72); cursor: pointer;
+    margin-top: 2.5cqi; display: inline-flex; align-items: center; gap: .8cqi;
+    padding: .7cqi 1.55cqi .7cqi 1.18cqi; border-radius: 99px;
+    border: 1px solid rgba(231, 201, 255, .46);
+    background: linear-gradient(135deg, rgba(46, 18, 86, .62), rgba(22, 8, 44, .58));
+    box-shadow: 0 0 2.4cqi -.45cqi rgba(190, 110, 255, .42), inset 0 1px 0 rgba(255, 255, 255, .14);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    font-family: var(--sans); font-size: max(10.5px, .95cqi); letter-spacing: .21em; text-transform: uppercase;
+    color: #f4ebff; cursor: pointer;
     opacity: 0; transform: translate3d(0, .5cqi, 0); filter: blur(5px);
     transition: opacity .68s cubic-bezier(.22,1,.36,1) .42s, transform .68s cubic-bezier(.22,1,.36,1) .42s, filter .68s cubic-bezier(.22,1,.36,1) .42s, border-color .3s, color .3s, background .3s, box-shadow .4s;
   }
-  .pv.in:not(.switching) .inq-pill { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0px); }
-  .pv.switching .inq-pill { transition-duration: .2s; transition-delay: 0s !important; opacity: 0; filter: blur(5px); }
+  .pv.in:not(.switching) .inq-pill {
+    opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0px);
+    animation: pillGlow 3.6s ease-in-out infinite;
+  }
+  .pv.switching .inq-pill { transition-duration: .2s; transition-delay: 0s !important; opacity: 0; filter: blur(5px); animation: none; }
   .poster-wrap:hover .inq-pill, .inq-pill:hover {
-    color: #fff; border-color: rgba(231, 201, 255, .62);
-    background: rgba(190, 110, 255, .14); box-shadow: 0 0 2.6cqi -.4cqi rgba(190, 110, 255, .45);
+    color: #fff; border-color: rgba(238, 214, 255, .82);
+    background: linear-gradient(135deg, rgba(165, 85, 247, .28), rgba(46, 18, 86, .72));
+    box-shadow: 0 0 3.2cqi -.3cqi rgba(190, 110, 255, .65), inset 0 1px 0 rgba(255, 255, 255, .22);
+    transform: translate3d(0, -2px, 0);
+  }
+  @keyframes pillGlow {
+    0%, 100% { box-shadow: 0 0 2.2cqi -.5cqi rgba(190, 110, 255, .36), inset 0 1px 0 rgba(255, 255, 255, .12); }
+    50% { box-shadow: 0 0 3cqi -.25cqi rgba(208, 135, 255, .58), inset 0 1px 0 rgba(255, 255, 255, .2); }
   }
   .inq-dot {
-    width: .52cqi; height: .52cqi; min-width: 6px; min-height: 6px; border-radius: 50%;
-    background: #e7c9ff; box-shadow: 0 0 8px #e7c9ff;
-    animation: pulseDot 2.6s ease-in-out infinite;
+    width: .56cqi; height: .56cqi; min-width: 7px; min-height: 7px; border-radius: 50%;
+    background: #f0d9ff; box-shadow: 0 0 10px #e7c9ff, 0 0 18px rgba(190, 110, 255, .8);
+    animation: pulseDot 2.4s ease-in-out infinite;
   }
-  @keyframes pulseDot { 0%, 100% { opacity: .45; transform: scale(.88); } 50% { opacity: 1; transform: scale(1.18); } }
+  @keyframes pulseDot { 0%, 100% { opacity: .55; transform: scale(.88); } 50% { opacity: 1; transform: scale(1.22); } }
 
   .pv.noted .poster-wrap, .pv.comments-open .poster-wrap { opacity: 0; transform: translateY(-55%); filter: blur(7px); pointer-events: none; }
 
@@ -287,27 +298,33 @@
     color: rgba(244, 239, 253, .42); text-align: center; padding: 1.6cqi 0;
   }
 
-  /* ---- Zarif Sahne İçi Kontroller ---- */
+  /* ---- Zarif Sağ Alt Kontroller (Sadece Yorumlar & Küçük Ses Düğmesi) ---- */
   .hud-bar {
-    position: absolute; left: 4.5cqi; right: 4.5cqi; bottom: 3.2cqi; z-index: 12;
-    display: flex; align-items: center; justify-content: space-between;
+    position: absolute; right: 4.5cqi; bottom: 3.2cqi; z-index: 12;
+    display: flex; align-items: center; justify-content: flex-end; gap: .65cqi;
     opacity: 0; pointer-events: none; transform: translate3d(0, .35cqi, 0);
     transition: opacity .75s cubic-bezier(.22,1,.36,1) .35s, transform .75s cubic-bezier(.22,1,.36,1) .35s;
   }
   .pv.in .hud-bar { opacity: 1; pointer-events: auto; transform: translate3d(0, 0, 0); }
-  .hud-grp { display: flex; align-items: center; gap: .6cqi; flex-wrap: wrap; }
   .hud-btn {
     font-family: var(--sans); font-size: max(10px, .85cqi); letter-spacing: .19em; text-transform: uppercase;
-    color: rgba(244,239,253,.56); background: rgba(255,255,255,.025);
-    border: 1px solid rgba(244,239,253,.13); border-radius: 99px;
-    padding: .52cqi 1.18cqi; cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    color: rgba(244,239,253,.66); background: rgba(255,255,255,.03);
+    border: 1px solid rgba(244,239,253,.16); border-radius: 99px;
+    padding: .54cqi 1.25cqi; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     transition: color .3s, border-color .3s, background .3s, box-shadow .4s;
   }
-  .hud-btn:hover, .hud-btn.active { color: #fff; border-color: rgba(231,201,255,.52); background: rgba(190,110,255,.11); box-shadow: 0 0 2cqi -.3cqi rgba(190,110,255,.38); }
-  .hud-lbl {
-    font-family: var(--sans); font-size: max(10px, .85cqi); letter-spacing: .21em; text-transform: uppercase;
-    color: rgba(244,239,253,.42); padding: 0 .45cqi;
+  .hud-btn:hover, .hud-btn.active { color: #fff; border-color: rgba(231,201,255,.55); background: rgba(190,110,255,.12); box-shadow: 0 0 2cqi -.3cqi rgba(190,110,255,.38); }
+  .hud-mute {
+    width: max(32px, 2.35cqi); height: max(32px, 2.35cqi);
+    display: inline-grid; place-items: center; padding: 0; border-radius: 50%;
+    color: rgba(244,239,253,.62); background: rgba(255,255,255,.03);
+    border: 1px solid rgba(244,239,253,.15); cursor: pointer;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    transition: color .3s, border-color .3s, background .3s, box-shadow .4s, opacity .3s;
   }
+  .hud-mute:hover { color: #fff; border-color: rgba(231,201,255,.55); background: rgba(190,110,255,.12); box-shadow: 0 0 1.8cqi -.3cqi rgba(190,110,255,.38); }
+  .hud-mute svg { width: max(14px, 1.05cqi); height: max(14px, 1.05cqi); stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  .hud-mute.muted { color: rgba(244,239,253,.32); border-color: rgba(244,239,253,.09); }
 
   /* ---- Giriş ---- */
   .intro { position: absolute; inset: 0; z-index: 15; display: grid; place-items: center; text-align: center;
@@ -420,18 +437,14 @@
   </aside>
 
   <div class="hud-bar">
-    <div class="hud-grp">
-      <button type="button" class="hud-btn" id="btn-prev" title="Önceki Yaprak (←)">←</button>
-      <span class="hud-lbl" id="leaf-indicator">I / V · Cam Gül</span>
-      <button type="button" class="hud-btn" id="btn-next" title="Sonraki Yaprak (→)">→</button>
-      <button type="button" class="hud-btn" id="btn-note" title="Köken & Sorgulama Kaydı (↓ / ↑)">✦ Köken &amp; Sorgu</button>
-      <button type="button" class="hud-btn" id="btn-comments" title="Yorumlar / İz Bırak">💬 Yorumlar</button>
-    </div>
-    <div class="hud-grp">
-      <button type="button" class="hud-btn" id="btn-track" title="İç Sahne Okuma Atmosferini Değiştir">Atmosfer: Snowfall (Chill)</button>
-      <button type="button" class="hud-btn" id="btn-lang">TR / EN</button>
-      <button type="button" class="hud-btn" id="btn-mute">Ses: Açık</button>
-    </div>
+    <button type="button" class="hud-btn" id="btn-comments" title="Yorumlar / İz Bırak">💬 Yorumlar</button>
+    <button type="button" class="hud-mute" id="btn-mute" title="Sesi Aç / Kapat" aria-label="Sesi Aç / Kapat">
+      <svg viewBox="0 0 24 24" id="ico-mute">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+      </svg>
+    </button>
   </div>
 
   <div class="intro">
@@ -1113,11 +1126,9 @@ window.initUI = function () {
   const dosDate = pv.querySelector('#dos-date');
   const dosSteps = pv.querySelector('#dos-steps');
   const dosClose = pv.querySelector('#dos-close');
-  const ind = pv.querySelector('#leaf-indicator');
-  const btnNote = pv.querySelector('#btn-note');
   const btnComments = pv.querySelector('#btn-comments');
-  const btnTrack = pv.querySelector('#btn-track');
   const btnMute = pv.querySelector('#btn-mute');
+  const icoMute = pv.querySelector('#ico-mute');
 
   // Yorum Paneli Elemanları
   const cTitle = pv.querySelector('#c-title');
@@ -1182,27 +1193,13 @@ window.initUI = function () {
 
   const updateHudLabels = () => {
     const lf = LEAVES[curIdx];
-    const isNoted = pv.classList.contains('noted');
     const isComments = pv.classList.contains('comments-open');
-    const mode = SoundEngine.getChillMode();
-    if (ind) ind.textContent = curLang === 'en' ? lf.labelEn : lf.labelTr;
     if (inqPillTxt) inqPillTxt.textContent = (curLang === 'en' ? lf.pillEn : lf.pillTr) + ' · ↓';
     if (dosClose) dosClose.textContent = curLang === 'en' ? '↑ Back to Quote' : '↑ Söze Dön';
-    if (btnNote) {
-      btnNote.classList.toggle('active', isNoted && !isComments);
-      btnNote.textContent = (isNoted && !isComments)
-        ? (curLang === 'en' ? '↑ Back to Quote' : '↑ Söze Dön')
-        : (curLang === 'en' ? '✦ Provenance & Inquiry' : '✦ Köken & Sorgu');
-    }
     if (btnComments) {
       btnComments.classList.toggle('active', isComments);
       const cntStr = commentCount > 0 ? ' (' + commentCount + ')' : '';
       btnComments.textContent = (curLang === 'en' ? '💬 Reflections' : '💬 Yorumlar') + cntStr;
-    }
-    if (btnTrack) {
-      btnTrack.textContent = mode === 'snow'
-        ? (curLang === 'en' ? 'Ambience: Snowfall (Chill)' : 'Atmosfer: Snowfall (Chill)')
-        : (curLang === 'en' ? 'Ambience: Deep Mystery' : 'Atmosfer: Esrarengiz Pad');
     }
     if (cTitle) cTitle.innerHTML = curLang === 'en' ? 'Leave a Trace · <em>Reflections</em>' : 'İz Bırak · <em>Yorumlar</em>';
     if (cSub) cSub.textContent = curLang === 'en' ? 'Pick a username and share your reflection directly' : 'Bir kullanıcı adı seçip düşünceni doğrudan bırakabilirsin';
@@ -1376,20 +1373,16 @@ window.initUI = function () {
     }
   });
 
-  pv.querySelector('#btn-prev').onclick = e => { e.stopPropagation(); goLeaf(-1); };
-  pv.querySelector('#btn-next').onclick = e => { e.stopPropagation(); goLeaf(1); };
-  pv.querySelector('#btn-note').onclick = e => { e.stopPropagation(); toggleNote(); };
   btnComments.onclick = e => { e.stopPropagation(); toggleComments(); };
-  btnTrack.onclick = e => {
-    e.stopPropagation();
-    SoundEngine.switchChillTrack();
-    updateHudLabels();
-  };
-  pv.querySelector('#btn-lang').onclick = e => { e.stopPropagation(); setLang(curLang === 'tr' ? 'en' : 'tr'); };
   btnMute.onclick = e => {
     e.stopPropagation();
     const on = SoundEngine.toggleMute();
-    btnMute.textContent = on ? (curLang === 'en' ? 'Sound: On' : 'Ses: Açık') : (curLang === 'en' ? 'Sound: Off' : 'Ses: Kapalı');
+    btnMute.classList.toggle('muted', !on);
+    if (icoMute) {
+      icoMute.innerHTML = on
+        ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>'
+        : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+    }
   };
 };
 </script>
