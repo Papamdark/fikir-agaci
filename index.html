@@ -465,7 +465,6 @@
         <div class="dos-date" id="dos-date"></div>
       </div>
       <div class="dos-actions">
-        <button type="button" class="dos-close" id="dos-share"></button>
         <button type="button" class="dos-close" id="dos-close"></button>
       </div>
     </div>
@@ -521,10 +520,6 @@
   </nav>
 
   <div class="hud-bar">
-    <button type="button" class="hud-btn" id="btn-share">
-      <svg viewBox="0 0 24 24"><path d="M12 15V3.5"/><path d="M7.5 8L12 3.5 16.5 8"/><path d="M5 12.5v6A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5v-6"/></svg>
-      <span class="lbl-share" id="btn-share-lbl"></span>
-    </button>
     <button type="button" class="hud-btn" id="btn-comments">
       <svg viewBox="0 0 24 24"><path d="M20 12.2c0 4-3.6 7.3-8 7.3-1.2 0-2.3-.2-3.3-.6L4 20l1.3-3.6C4.5 15.2 4 13.8 4 12.2 4 8.1 7.6 4.9 12 4.9s8 3.2 8 7.3z"/></svg>
       <span id="btn-comments-lbl"></span>
@@ -1550,8 +1545,8 @@ function makeTree(pv, api) {
   });
 
   const poster = $('.poster'), posterCard = $('#poster-card'), inqPillTxt = $('#inq-pill-txt');
-  const dosSrc = $('#dos-src'), dosDate = $('#dos-date'), dosSteps = $('#dos-steps'), dosClose = $('#dos-close'), dosShare = $('#dos-share');
-  const btnComments = $('#btn-comments'), btnCommentsLbl = $('#btn-comments-lbl'), btnShare = $('#btn-share'), btnShareLbl = $('#btn-share-lbl');
+  const dosSrc = $('#dos-src'), dosDate = $('#dos-date'), dosSteps = $('#dos-steps'), dosClose = $('#dos-close');
+  const btnComments = $('#btn-comments'), btnCommentsLbl = $('#btn-comments-lbl');
   const btnMute = $('#btn-mute'), icoMute = $('#ico-mute'), btnTree = $('#btn-tree'), btnTreeLbl = $('#btn-tree-lbl');
   const railDots = $('#rail-dots'), railCount = $('#rail-count'), toastEl = $('#toast');
   const cTitle = $('#c-title'), cSub = $('#c-sub'), cClose = $('#c-close'), cForm = $('#c-form'), cUser = $('#c-user'), cText = $('#c-text'), cSend = $('#c-send'), cStatus = $('#c-status'), cList = $('#c-list');
@@ -1624,11 +1619,8 @@ function makeTree(pv, api) {
     const lf = LEAVES[curIdx], isComments = pv.classList.contains('comments-open');
     inqPillTxt.textContent = L(lf.pillTr, lf.pillEn) + ' · ↓';
     dosClose.textContent = L('↑ Söze Dön', '↑ Back to Quote');
-    dosShare.textContent = L('Paylaş ↗', 'Share ↗');
     btnComments.classList.toggle('active', isComments);
     btnCommentsLbl.textContent = L('Yorumlar', 'Reflections') + (commentCount > 0 ? ' (' + commentCount + ')' : '');
-    btnShareLbl.textContent = L('Paylaş', 'Share');
-    btnShare.setAttribute('aria-label', L('Bu yaprağı paylaş', 'Share this leaf'));
     btnTreeLbl.textContent = L('Ağaç', 'Tree');
     btnTree.title = L('Ağacın bütününü gör (↑)', 'See the whole tree (↑)');
     btnMute.title = L('Sesi aç / kapat', 'Sound on / off'); btnMute.setAttribute('aria-label', btnMute.title);
@@ -1735,22 +1727,11 @@ function makeTree(pv, api) {
   const openTree = () => { if (!pv.classList.contains('in')) return; pv.classList.remove('noted', 'comments-open'); btnTree.classList.add('active'); Tree.open(); };
   const closeTree = () => { btnTree.classList.remove('active'); Tree.close(); SoundEngine.setSceneState('in'); };
 
-  async function shareLeaf() {
-    const lf = LEAVES[curIdx], t = lf[curLang];
-    const url = location.origin + location.pathname + '#yaprak-' + lf.id;
-    const text = '“' + t.p.join(' ') + '” — ' + t.src;
-    if (navigator.share && COARSE) { try { await navigator.share({ title: L('Fikir Ağacı', 'The Idea Tree'), text, url }); } catch (e) {} return; }
-    try { await navigator.clipboard.writeText(text + '\n' + url); toast(L('Yaprağın bağlantısı kopyalandı', 'Link to this leaf copied')); }
-    catch (e) { toast(url); }
-  }
-
   posterCard.addEventListener('click', e => { e.stopPropagation(); if (pv._swiped) return; toggleNote(true); });
   posterCard.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); toggleNote(true); } });
   dosClose.addEventListener('click', e => { e.stopPropagation(); toggleNote(false); });
-  dosShare.addEventListener('click', e => { e.stopPropagation(); shareLeaf(); });
   cClose.addEventListener('click', e => { e.stopPropagation(); toggleComments(false); });
   btnComments.addEventListener('click', e => { e.stopPropagation(); toggleComments(); });
-  btnShare.addEventListener('click', e => { e.stopPropagation(); shareLeaf(); });
   btnTree.addEventListener('click', e => { e.stopPropagation(); Tree.isOpen() ? closeTree() : openTree(); });
   btnTree.addEventListener('pointerdown', e => e.stopPropagation());
 
