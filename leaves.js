@@ -103,8 +103,8 @@ window.FA_LEAVES = [
       p: ["Bir sorunu,", "daha oluşmadan", "çözmek."],
       src: "Mizen Boushi (未然防止) · Huangdi Neijing (治未病) · Dao De Jing 64",
       steps: [
-        { k: "01 · ÜÇ AŞAMALI SORGULAMA ZİNCİRİ",
-          q: "“İlk başta ‘Kaizen felsefesi bir sorunu oluşmadan çözmektir’ diye bir söz duydum. Araştırdıkça bunun Kaizen olmadığını fark ettim ve Japon mühendisliğinin de ötesine, sözün asıl felsefi köküne inmeye karar verdim.”" },
+        { k: "01 · NEREDE BULUNDU & NASIL YAŞANDI?",
+          q: "“Kaizen felsefesini yıllardır duyuyordum, kendi hayatımda da uyguluyordum; mesela motosiklet kullanırken hep kafamda rota oluştururum, gideceğim yere en hızlı şekilde değil en güvenli ve risksiz şekilde nasıl ulaşacağımı hesaplardım. O yüzden sürekli ara sokaklara vs. girer yolumu uzatırdım; maksat kaza olmadan kazayı önlemekti, çünkü mantığıma göre ne kadar fazla aksiyon varsa trafikte risk o kadar fazla artıyor.”" },
         { k: "02 · KÖKEN KAZISI (MÜHENDİSLİKTEN ANTİK FELSEFEYE)",
           b: "İlk katmanda sözün <em>Kaizen</em> (sürekli iyileştirme) değil, Toyota mühendisi Tatsuhiko Yoshimura’nın (2002) sistemleştirdiği <em>Mizen Boushi</em> (未然防止 — sorunu meydana gelmeden önlemek) olduğunu gördüm. Endüstriyel katmanı kaldırıp felsefi köke indiğimde ise MÖ 2–4. yüzyıl <em>Huangdi Neijing</em> ve <em>Laozi — Dao De Jing (64. Bab)</em> metinlerine ulaştım:",
           orig: "聖人不治已病，治未病 (Huangdi Neijing: «Bilge, oluşmuş hastalığı değil, henüz oluşmamış hastalığı tedavi eder; hastalık çıktıktan sonra ilaç vermek susadıktan sonra kuyu kazmaya benzer.») · 為之於未有，治之於未亂 (Laozi 64: «Henüz var olmadan ilgilen; henüz karışıklık çıkmadan düzenle.»)" },
@@ -116,8 +116,8 @@ window.FA_LEAVES = [
       p: ["Deal with", "a problem before", "it arises."],
       src: "Mizen Boushi (未然防止) · Huangdi Neijing (治未病) · Dao De Jing 64",
       steps: [
-        { k: "01 · THREE-STAGE INQUIRY CHAIN",
-          q: "“I first heard the phrase as ‘Kaizen philosophy means solving a problem before it occurs.’ As I looked into it, I realized that wasn't Kaizen at all, and decided to dig past Japanese engineering all the way down to its philosophical root.”" },
+        { k: "01 · HOW IT WAS FOUND & LIVED",
+          q: "“I’d been hearing about Kaizen philosophy for years and was already practicing it in my own life—for instance, whenever I rode a motorcycle I always mapped out a route in my head, calculating not how to get somewhere the fastest, but how to get there in the safest, most risk-free way. So I’d constantly duck into side streets and take the longer way around; the whole point was to prevent the crash before a crash could even happen, because to my mind, the more action there is in traffic, the more the risk climbs.”" },
         { k: "02 · SOURCE EXCAVATION (FROM ENGINEERING TO ANCIENT PHILOSOPHY)",
           b: "At the first layer, I found that the principle is not <em>Kaizen</em> (continuous improvement) but Toyota engineer Tatsuhiko Yoshimura’s 2002 discipline <em>Mizen Boushi</em> (未然防止 — preventing a defect before it occurs). Stripping away the industrial layer led me to its ancient philosophical core in the <em>Huangdi Neijing</em> and <em>Laozi’s Dao De Jing (Ch. 64)</em>:",
           orig: "聖人不治已病，治未病 (Huangdi Neijing: “The sage treats not the illness that has already formed, but the illness not yet formed [治未病]; giving medicine after illness strikes is like digging a well after becoming thirsty.”) · 為之於未有，治之於未亂 (Laozi 64: “Act upon it before it exists; govern it before disorder arises.”)" },
