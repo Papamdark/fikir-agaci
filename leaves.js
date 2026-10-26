@@ -30,7 +30,7 @@ window.FA_LEAVES = [
       src: "Sadi Şirazî Atfı — Gülistan, VIII. Bab (Hikmet 80)",
       steps: [
         { k: "01 · NEREDE BULUNDU & NASIL SORGULANDI?",
-          q: "“‘Yanlış üslup doğru sözün katilidir’ diye bir yorum gördüm Instagram’da, bayıldım; bunun kökenlerini ve nerede geçtiğini merak ettim, derin bir araştırma yapmanı istiyorum.”" },
+          q: "“Instagram’da bir gönderinin altında yorum olarak gördüm, çok hoşuma gitti ve ben de orijinini aramaya karar verdim.”" },
         { k: "02 · KÖKEN KAZISI & BİRİNCİL KAYNAK",
           b: "Söz internette ve çeşitli kaynaklarda <em>Sadi Şirazî</em>’ye atfedilse de birincil Farsça yazmalarda birebir bu cümleyle geçmez; modern Türkçede kristalleşmiş bir vecizedir. Ancak Sadi’nin 1258 tarihli <em>Gülistan</em> eserinin 8. Babında (<em>Âdâb-ı Sohbet</em>, Hikmet 80) bu düşüncenin gerçek atası yer alır:",
           orig: "حکایت بر مزاج مستمع گوی / اگر خواهی که دارد با تو میلی — «Sözünü dinleyenin mizacına göre söyle; onun sana kulak vermesini istiyorsan.»" },
@@ -43,7 +43,7 @@ window.FA_LEAVES = [
       src: "Attributed to Saadi Shirazi — Gulistan, Ch. VIII (Maxim 80)",
       steps: [
         { k: "01 · HOW IT WAS FOUND & QUESTIONED",
-          q: "“I saw a comment on Instagram saying ‘Wrong delivery is the killer of a true word’ and loved it—I want to know its real roots and where it actually comes from.”" },
+          q: "“I saw it as a comment under an Instagram post, loved it, and decided to search for its origin.”" },
         { k: "02 · SOURCE EXCAVATION & PRIMARY TEXT",
           b: "Although widely attributed online to <em>Saadi Shirazi</em>, the exact sentence is a modern aphorism rather than a verbatim quote. Yet its direct intellectual ancestor lives in Chapter VIII (<em>On the Rules of Conduct</em>, Maxim 80) of Saadi’s 13th-century <em>Gulistan</em>:",
           orig: "حکایت بر مزاج مستمع گوی / اگر خواهی که دارد با تو میلی — “Temper your speech to the temperament of the listener, if you wish them to incline toward you.”" },
