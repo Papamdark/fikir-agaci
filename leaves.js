@@ -131,35 +131,35 @@ window.FA_LEAVES = [
     img: "assets/glass/04-cicek.jpg",
     glassTr: "Cam Çiçek", glassEn: "Glass Flower",
     dateIso: "2026-10-13T12:00",
-    dateTr: "13 Ekim 2026 · GoodNotes Günlüğü", dateEn: "October 13, 2026 · GoodNotes Journal",
-    pillTr: "Köken & Günlük Kaydı · Adventure Time (S3B25)",
-    pillEn: "Provenance & Journal Entry · Adventure Time (S3E25)",
+    dateTr: "13 Ekim 2026", dateEn: "October 13, 2026",
+    pillTr: "Köken & Sorgulama · Adventure Time (S3B25)",
+    pillEn: "Provenance & Inquiry · Adventure Time (S3E25)",
     tint: [214, 92, 255],
     size: "md",
     tr: {
       p: ["You're a beautiful flower", "and I love to", "watch you grow."],
       src: "Adventure Time — Joshua’nın Jake’e Sözü (3. Sezon, 25. Bölüm)",
       steps: [
-        { k: "01 · NEREDE BULUNDU & EL YAZISI GÜNLÜK KAYDI",
-          q: "“Ne zaman böyle cümleler duysam kendimden geçiyorum, bayılıyorum resmen. Cebime atıyorum, kullanmayı beklemek için.” — 13 Ekim 2026, GoodNotes Günlüğüm" },
+        { k: "01 · NEREDE BULUNDU & NASIL KAYDA GEÇTİ?",
+          q: "“Böyle güzel cümleler duymayı çok seviyorum; şu an kullanacak bir ortam ve lüzum yok lakin yeri ve zamanı geldiğinde kullanmaya can atıyorum.”" },
         { k: "02 · SAHNE BAĞLAMI & BİRİNCİL KAYNAK",
           b: "<em>Adventure Time</em> 3. Sezon 25. Bölüm (<em>Dad’s Dungeon</em>): Finn ve Jake’in babaları Joshua’nın zindan boyunca onları sert sınavlardan geçirdikten sonra, son hologram mesajında beklenmedik bir şefkatle bıraktığı kapanış cümlesi.",
           orig: "«You're a beautiful flower, and I love to watch you grow.» — Joshua (Dad's Dungeon)" },
         { k: "03 · KÖK KAYDI",
-          b: "Dili değiştirilmeden, duyduğum ilk andaki çarpıcılığıyla el yazısı günlüğüme ve Fikir Ağacı’ma olduğu gibi bıraktığım cümle." }
+          b: "Dili değiştirilmeden, duyduğum ilk andaki çarpıcılığıyla Fikir Ağacı’ma olduğu gibi bıraktığım cümle." }
       ]
     },
     en: {
       p: ["You're a beautiful flower", "and I love to", "watch you grow."],
       src: "Adventure Time — Joshua to Jake (Season 3, Episode 25)",
       steps: [
-        { k: "01 · HOW IT WAS FOUND & HANDWRITTEN JOURNAL ENTRY",
-          q: "“Whenever I hear sentences like this I lose myself, I absolutely love them. I put it in my pocket, waiting for the right moment to use it.” — October 13, 2026, My GoodNotes Journal" },
+        { k: "01 · HOW IT WAS FOUND & RECORDED",
+          q: "“I love hearing beautiful sentences like this; right now there’s no setting or occasion for it, yet I can’t wait to use it when the right place and time come.”" },
         { k: "02 · SCENE CONTEXT & PRIMARY SOURCE",
           b: "From <em>Adventure Time</em> Season 3, Episode 25 (<em>Dad’s Dungeon</em>): after putting Finn and Jake through grueling trials across the dungeon, their father Joshua ends his final holographic message with this sudden, disarming tenderness.",
           orig: "«You're a beautiful flower, and I love to watch you grow.» — Joshua (Dad's Dungeon)" },
         { k: "03 · ROOT RECORD",
-          b: "Kept untranslated in the exact English phrasing in which it struck me and went straight into my handwritten journal." }
+          b: "Kept untranslated in the exact English phrasing in which it first struck me." }
       ]
     }
   },
