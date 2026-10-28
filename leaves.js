@@ -250,3 +250,58 @@ window.FA_MANIFESTO = {
        "Beni ben yapan, unutmak istemediğim ve anılmak istediğim her şeyi herkesin görebileceği bir yerde toplamak istedim: Obsidian notlarımdan kitap alıntılarına, bir film izlerken beni etkileyen o tek şeye kadar her şey burada.",
        "Bu dürtü, bir tanık arayan <em>aynalanma ihtiyacım</em> ile kendimi kayda geçiren <em>gözlemleyen egom</em> buluşunca harekete geçti."]
 };
+
+window.FA_WRITINGS = [
+  {
+    id: "zirh-ve-kimlik",
+    date: "21 AĞUSTOS 2026",
+    flair: "Sadece içimi döküyorum",
+    trackKey: "beach",
+    titleHtml: `Kendini yüceltmek hayatta kalmanı sağlayabilir <em>ama sonrasında hayatını mahvedebilir.</em>`,
+    preview: `Dışarıdan sürekli “Sen değersizsin.” mesajı geliyorsa, içerideki ses de buna karşı “Hayır, ben değerliyim.” diye daha yüksek sesle konuşmaya başlıyor...`,
+    media: "assets/writings/eredin-mask.webp",
+    ambient: "assets/writings/eredin-face.webp",
+    bgDeep: "#14060c",
+    accent: "#ff9d66",
+    border: "rgba(255, 138, 76, 0.46)",
+    glow: "rgba(255, 110, 48, 0.55)",
+    soft: "rgba(255, 114, 53, 0.24)",
+    particleMode: "embers",
+    bodyHtml: `
+      <p>İnsan egosunun aldığı her darbeyi kötü bir şey olarak görmüyorum. Hatta bazen tam tersine, egonun kendisini savunmaya almasının gerekli olduğunu düşünüyorum. Sürekli küçümsendiğinizi, dışlandığınızı veya değersiz hissettirildiğinizi düşünün. Bir süre sonra zihniniz buna karşı doğal olarak bir savunma geliştirmeye başlıyor.</p>
+
+      <div class="art-quote">Dışarıdan sürekli <strong>“Sen değersizsin.”</strong> mesajı geliyorsa, içerideki ses de buna karşı <strong>“Hayır, ben değerliyim.”</strong> diye daha yüksek sesle konuşmaya başlıyor.</div>
+
+      <p>Normal şartlarda belki hiç ihtiyaç duymayacağınız kadar kendinizi övmeye, başarılarınızı öne çıkarmaya, diğer insanların sizin hakkınızdaki düşüncelerini küçümsemeye başlayabiliyorsunuz. İlk bakışta kibir gibi görünen bazı davranışların altında aslında yaralanmış bir benliği koruma çabası bulunabiliyor. Psikolojide bunu <strong>özsaygının korunması (self-esteem maintenance)</strong>, <strong>telafi (compensation)</strong> ve bunun daha ileri bir biçimi olan <strong>aşırı telafi (overcompensation)</strong> gibi kavramlarla açıklamak mümkün. Yani zihnin yaptığı şey tamamen anlamsız değil. Benlik algısına sürekli saldırı geliyorsa sistem bir çeşit karşı ağırlık oluşturuyor.</p>
+
+      <p>Amma velakin bu tehdit artık varolmadığın da varlığını korumaya devam ettiğin de bizim aleyhimize bir durum olmaya başlıyor çünkü sizi bir dönem ayakta tutan <strong>“Kimseye ihtiyacım yok, kimsenin ne düşündüğü umurumda değil, ben zaten yeterince iyiyim.”</strong> düşünceleri zamanla savunma olmaktan çıkıp kimliğinizin bir parçasına dönüşebiliyor. Başlangıçta sizi başkalarının saldırılarından koruyan şey, bu sefer insanların size yaklaşmasını engellemeye başlıyor.</p>
+
+      <p>Bunu çok iyi anlatan ve bana da ilham olan yıllar önce izlediğim <a href="https://www.youtube.com/watch?v=n3Xv_g3g-mA" target="_blank" rel="noopener" class="inline-link">çok güzel bir video var</a>, merak etmeyin uzun ve kompleks değil, sıkılmadan tüketebilirsiniz.</p>
+
+      <p>Bu konudan çok yere bağlantı oluşturabilirim, başka sublarda insanları stalkladığım da, aşırı narsistden tut, aşırı self-devaluation yapana kadar örnekler mevcut, bir işe yarayacağını düşündüğüm de belki o noktaya da BARMAK basarız.</p>
+    `
+  },
+  {
+    id: "bekleme-odasi",
+    date: "11 AĞUSTOS 2026",
+    flair: "Yalnızlık Hakkında",
+    trackKey: "olumedogru",
+    titleHtml: `Yalnızlığı bir <em>bekleme odası</em> gibi yaşamak.`,
+    preview: `“Belki de yalnızlığı bekleme odası gibi algılıyorsun: Birileri hayatıma girince asıl hayat başlayacak.” Eğer yalnızken hayatımı kurmayı ertelersem...`,
+    media: "assets/writings/nighthawks.png",
+    ambient: "assets/writings/nighthawks.png",
+    bgDeep: "#061014",
+    accent: "#f3cf7a",
+    border: "rgba(243, 207, 122, 0.44)",
+    glow: "rgba(234, 179, 8, 0.46)",
+    soft: "rgba(243, 207, 122, 0.20)",
+    particleMode: "nighthawks",
+    bodyHtml: `
+      <p>Geçenlerde yalnızlık üzerine düşünürken aklıma şöyle bir cümle geldi:</p>
+      <div class="art-quote"><strong>“Belki de yalnızlığı bekleme odası gibi algılıyorsun: Birileri hayatıma girince asıl hayat başlayacak.”</strong></div>
+      <p>Bu cümle benim kafamda bir şeyleri yerine oturttu. Çünkü yalnızlığın kendisinden ne kadar rahatsız olduğumdan artık emin değilim. Daha çok yalnızken hayatımı askıya alıyor gibiyim. Ders çalışacağım, bir şeyler öğreneceğim, yazacağım, dışarı çıkacağım, kendim için bir şey yapacağım ama sanki bunların hepsinden önce birinin gelmesi gerekiyor.</p>
+      <p>Bazen tek başımayken saatlerce hiçbir şey yapmadan birileriyle konuşma ihtiyacı hissediyorum. İlginç olan şu ki biriyle konuştuğumda da o kişiye sürekli ihtiyacım olmuyor. Biraz sohbet etmek, birinin orada olduğunu bilmek yetiyor ve sonra gayet rahat kendi yaptığım şeye dönebiliyorum.</p>
+      <p>Ama burada garip bir paradoks var. Eğer yalnızken hayatımı kurmayı ertelersem, birilerinin dahil olmak isteyeceği bir hayatı da kuramıyorum. Başka insanlar bu hayatı başlatan kişiler değil de zaten devam eden bir hayata sonradan dahil olan kişiler olabilir. Belki mesele yalnızlığı sevmeyi öğrenmek bile değildir; sadece <strong>yalnızken de hayatın devam ettiğini kabullenmek</strong> olabilir.</p>
+    `
+  }
+];
