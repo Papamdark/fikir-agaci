@@ -254,11 +254,7 @@ window.FA_MANIFESTO = {
 window.FA_WRITINGS = [
   {
     id: "zirh-ve-kimlik",
-    date: "21 AĞUSTOS 2026",
-    flair: "Sadece içimi döküyorum",
     trackKey: "beach",
-    titleHtml: `Kendini yüceltmek hayatta kalmanı sağlayabilir <em>ama sonrasında hayatını mahvedebilir.</em>`,
-    preview: `Dışarıdan sürekli “Sen değersizsin.” mesajı geliyorsa, içerideki ses de buna karşı “Hayır, ben değerliyim.” diye daha yüksek sesle konuşmaya başlıyor...`,
     media: "assets/writings/eredin-mask.webp",
     ambient: "assets/writings/eredin-face.webp",
     bgDeep: "#14060c",
@@ -267,27 +263,48 @@ window.FA_WRITINGS = [
     glow: "rgba(255, 110, 48, 0.55)",
     soft: "rgba(255, 114, 53, 0.24)",
     particleMode: "embers",
-    bodyHtml: `
-      <p>İnsan egosunun aldığı her darbeyi kötü bir şey olarak görmüyorum. Hatta bazen tam tersine, egonun kendisini savunmaya almasının gerekli olduğunu düşünüyorum. Sürekli küçümsendiğinizi, dışlandığınızı veya değersiz hissettirildiğinizi düşünün. Bir süre sonra zihniniz buna karşı doğal olarak bir savunma geliştirmeye başlıyor.</p>
+    tr: {
+      date: "21 AĞUSTOS 2026",
+      flair: "Sadece içimi döküyorum",
+      titleHtml: `Kendini yüceltmek hayatta kalmanı sağlayabilir <em>ama sonrasında hayatını mahvedebilir.</em>`,
+      preview: `Dışarıdan sürekli “Sen değersizsin.” mesajı geliyorsa, içerideki ses de buna karşı “Hayır, ben değerliyim.” diye daha yüksek sesle konuşmaya başlıyor...`,
+      bodyHtml: `
+        <p>İnsan egosunun aldığı her darbeyi kötü bir şey olarak görmüyorum. Hatta bazen tam tersine, egonun kendisini savunmaya almasının gerekli olduğunu düşünüyorum. Sürekli küçümsendiğinizi, dışlandığınızı veya değersiz hissettirildiğinizi düşünün. Bir süre sonra zihniniz buna karşı doğal olarak bir savunma geliştirmeye başlıyor.</p>
 
-      <div class="art-quote">Dışarıdan sürekli <strong>“Sen değersizsin.”</strong> mesajı geliyorsa, içerideki ses de buna karşı <strong>“Hayır, ben değerliyim.”</strong> diye daha yüksek sesle konuşmaya başlıyor.</div>
+        <div class="art-quote">Dışarıdan sürekli <strong>“Sen değersizsin.”</strong> mesajı geliyorsa, içerideki ses de buna karşı <strong>“Hayır, ben değerliyim.”</strong> diye daha yüksek sesle konuşmaya başlıyor.</div>
 
-      <p>Normal şartlarda belki hiç ihtiyaç duymayacağınız kadar kendinizi övmeye, başarılarınızı öne çıkarmaya, diğer insanların sizin hakkınızdaki düşüncelerini küçümsemeye başlayabiliyorsunuz. İlk bakışta kibir gibi görünen bazı davranışların altında aslında yaralanmış bir benliği koruma çabası bulunabiliyor. Psikolojide bunu <strong>özsaygının korunması (self-esteem maintenance)</strong>, <strong>telafi (compensation)</strong> ve bunun daha ileri bir biçimi olan <strong>aşırı telafi (overcompensation)</strong> gibi kavramlarla açıklamak mümkün. Yani zihnin yaptığı şey tamamen anlamsız değil. Benlik algısına sürekli saldırı geliyorsa sistem bir çeşit karşı ağırlık oluşturuyor.</p>
+        <p>Normal şartlarda belki hiç ihtiyaç duymayacağınız kadar kendinizi övmeye, başarılarınızı öne çıkarmaya, diğer insanların sizin hakkınızdaki düşüncelerini küçümsemeye başlayabiliyorsunuz. İlk bakışta kibir gibi görünen bazı davranışların altında aslında yaralanmış bir benliği koruma çabası bulunabiliyor. Psikolojide bunu <strong>özsaygının korunması (self-esteem maintenance)</strong>, <strong>telafi (compensation)</strong> ve bunun daha ileri bir biçimi olan <strong>aşırı telafi (overcompensation)</strong> gibi kavramlarla açıklamak mümkün. Yani zihnin yaptığı şey tamamen anlamsız değil. Benlik algısına sürekli saldırı geliyorsa sistem bir çeşit karşı ağırlık oluşturuyor.</p>
 
-      <p>Amma velakin bu tehdit artık varolmadığın da varlığını korumaya devam ettiğin de bizim aleyhimize bir durum olmaya başlıyor çünkü sizi bir dönem ayakta tutan <strong>“Kimseye ihtiyacım yok, kimsenin ne düşündüğü umurumda değil, ben zaten yeterince iyiyim.”</strong> düşünceleri zamanla savunma olmaktan çıkıp kimliğinizin bir parçasına dönüşebiliyor. Başlangıçta sizi başkalarının saldırılarından koruyan şey, bu sefer insanların size yaklaşmasını engellemeye başlıyor.</p>
+        <p>Amma velakin bu tehdit artık varolmadığın da varlığını korumaya devam ettiğin de bizim aleyhimize bir durum olmaya başlıyor çünkü sizi bir dönem ayakta tutan <strong>“Kimseye ihtiyacım yok, kimsenin ne düşündüğü umurumda değil, ben zaten yeterince iyiyim.”</strong> düşünceleri zamanla savunma olmaktan çıkıp kimliğinizin bir parçasına dönüşebiliyor. Başlangıçta sizi başkalarının saldırılarından koruyan şey, bu sefer insanların size yaklaşmasını engellemeye başlıyor.</p>
 
-      <p>Bunu çok iyi anlatan ve bana da ilham olan yıllar önce izlediğim <a href="https://www.youtube.com/watch?v=n3Xv_g3g-mA" target="_blank" rel="noopener" class="inline-link">çok güzel bir video var</a>, merak etmeyin uzun ve kompleks değil, sıkılmadan tüketebilirsiniz.</p>
+        <p>Bunu çok iyi anlatan ve bana da ilham olan yıllar önce izlediğim <a href="https://www.youtube.com/watch?v=n3Xv_g3g-mA" target="_blank" rel="noopener" class="inline-link">çok güzel bir video var</a>, merak etmeyin uzun ve kompleks değil, sıkılmadan tüketebilirsiniz.</p>
 
-      <p>Bu konudan çok yere bağlantı oluşturabilirim, başka sublarda insanları stalkladığım da, aşırı narsistden tut, aşırı self-devaluation yapana kadar örnekler mevcut, bir işe yarayacağını düşündüğüm de belki o noktaya da BARMAK basarız.</p>
-    `
+        <p>Bu konudan çok yere bağlantı oluşturabilirim, başka sublarda insanları stalkladığım da, aşırı narsistden tut, aşırı self-devaluation yapana kadar örnekler mevcut, bir işe yarayacağını düşündüğüm de belki o noktaya da BARMAK basarız.</p>
+      `
+    },
+    en: {
+      date: "AUGUST 21, 2026",
+      flair: "Just getting it off my chest",
+      titleHtml: `Putting yourself on a pedestal might help you survive, <em>but it can ruin your life afterward.</em>`,
+      preview: `When the outside world keeps telling you “You’re worthless,” the voice inside starts speaking up even louder against it: “No, I matter.”...`,
+      bodyHtml: `
+        <p>I don’t see every blow to the human ego as a bad thing. In fact, sometimes it’s the exact opposite—I think the ego actually needs to put its guard up. Imagine constantly being looked down on, left out, or made to feel like you’re worth nothing. After a while, your mind naturally starts building a defense against it.</p>
+
+        <div class="art-quote">When the outside world keeps sending the message <strong>“You’re worthless,”</strong> the voice inside starts speaking up even louder against it: <strong>“No, I matter.”</strong></div>
+
+        <p>You can start praising yourself, putting your achievements front and center, and looking down on what other people think of you way more than you’d ever need to under normal circumstances. Beneath behaviors that look like arrogance at first glance, there’s often just an attempt to protect a wounded sense of self. In psychology, you can explain this through concepts like <strong>self-esteem maintenance</strong>, <strong>compensation</strong>, and its more extreme form, <strong>overcompensation</strong>. So what the mind is doing isn’t pointless at all. When your sense of self is constantly under attack, the system builds a counterweight.</p>
+
+        <p>The catch is, once that threat is no longer there—when you still keep the armor on anyway—it starts working against us. Because the thoughts that kept you on your feet for a while, like <strong>“I don’t need anyone, I don’t care what anybody thinks, I’m already good enough on my own,”</strong> stop being a defense mechanism over time and turn into a part of your identity. What originally protected you from other people’s attacks now starts keeping anyone from getting close to you.</p>
+
+        <p>There’s a <a href="https://www.youtube.com/watch?v=n3Xv_g3g-mA" target="_blank" rel="noopener" class="inline-link">great video</a> I watched years ago that explains this really well and inspired me too—don’t worry, it’s neither long nor complicated, you can watch it without getting bored.</p>
+
+        <p>I could tie this into a lot of other places. Whenever I’m lurking around other subs, I see examples ranging from extreme narcissists all the way to extreme self-devaluation. If I ever feel like it’ll actually do some good, maybe we’ll POKE a finger into that too.</p>
+      `
+    }
   },
   {
     id: "bekleme-odasi",
-    date: "11 AĞUSTOS 2026",
-    flair: "Yalnızlık Hakkında",
     trackKey: "olumedogru",
-    titleHtml: `Yalnızlığı bir <em>bekleme odası</em> gibi yaşamak.`,
-    preview: `“Belki de yalnızlığı bekleme odası gibi algılıyorsun: Birileri hayatıma girince asıl hayat başlayacak.” Eğer yalnızken hayatımı kurmayı ertelersem...`,
     media: "assets/writings/nighthawks.png",
     ambient: "assets/writings/nighthawks.png",
     bgDeep: "#061014",
@@ -296,12 +313,31 @@ window.FA_WRITINGS = [
     glow: "rgba(234, 179, 8, 0.46)",
     soft: "rgba(243, 207, 122, 0.20)",
     particleMode: "nighthawks",
-    bodyHtml: `
-      <p>Geçenlerde yalnızlık üzerine düşünürken aklıma şöyle bir cümle geldi:</p>
-      <div class="art-quote"><strong>“Belki de yalnızlığı bekleme odası gibi algılıyorsun: Birileri hayatıma girince asıl hayat başlayacak.”</strong></div>
-      <p>Bu cümle benim kafamda bir şeyleri yerine oturttu. Çünkü yalnızlığın kendisinden ne kadar rahatsız olduğumdan artık emin değilim. Daha çok yalnızken hayatımı askıya alıyor gibiyim. Ders çalışacağım, bir şeyler öğreneceğim, yazacağım, dışarı çıkacağım, kendim için bir şey yapacağım ama sanki bunların hepsinden önce birinin gelmesi gerekiyor.</p>
-      <p>Bazen tek başımayken saatlerce hiçbir şey yapmadan birileriyle konuşma ihtiyacı hissediyorum. İlginç olan şu ki biriyle konuştuğumda da o kişiye sürekli ihtiyacım olmuyor. Biraz sohbet etmek, birinin orada olduğunu bilmek yetiyor ve sonra gayet rahat kendi yaptığım şeye dönebiliyorum.</p>
-      <p>Ama burada garip bir paradoks var. Eğer yalnızken hayatımı kurmayı ertelersem, birilerinin dahil olmak isteyeceği bir hayatı da kuramıyorum. Başka insanlar bu hayatı başlatan kişiler değil de zaten devam eden bir hayata sonradan dahil olan kişiler olabilir. Belki mesele yalnızlığı sevmeyi öğrenmek bile değildir; sadece <strong>yalnızken de hayatın devam ettiğini kabullenmek</strong> olabilir.</p>
-    `
+    tr: {
+      date: "11 AĞUSTOS 2026",
+      flair: "Yalnızlık Hakkında",
+      titleHtml: `Yalnızlığı bir <em>bekleme odası</em> gibi yaşamak.`,
+      preview: `“Belki de yalnızlığı bekleme odası gibi algılıyorsun: Birileri hayatıma girince asıl hayat başlayacak.” Eğer yalnızken hayatımı kurmayı ertelersem...`,
+      bodyHtml: `
+        <p>Geçenlerde yalnızlık üzerine düşünürken aklıma şöyle bir cümle geldi:</p>
+        <div class="art-quote"><strong>“Belki de yalnızlığı bekleme odası gibi algılıyorsun: Birileri hayatıma girince asıl hayat başlayacak.”</strong></div>
+        <p>Bu cümle benim kafamda bir şeyleri yerine oturttu. Çünkü yalnızlığın kendisinden ne kadar rahatsız olduğumdan artık emin değilim. Daha çok yalnızken hayatımı askıya alıyor gibiyim. Ders çalışacağım, bir şeyler öğreneceğim, yazacağım, dışarı çıkacağım, kendim için bir şey yapacağım ama sanki bunların hepsinden önce birinin gelmesi gerekiyor.</p>
+        <p>Bazen tek başımayken saatlerce hiçbir şey yapmadan birileriyle konuşma ihtiyacı hissediyorum. İlginç olan şu ki biriyle konuştuğumda da o kişiye sürekli ihtiyacım olmuyor. Biraz sohbet etmek, birinin orada olduğunu bilmek yetiyor ve sonra gayet rahat kendi yaptığım şeye dönebiliyorum.</p>
+        <p>Ama burada garip bir paradoks var. Eğer yalnızken hayatımı kurmayı ertelersem, birilerinin dahil olmak isteyeceği bir hayatı da kuramıyorum. Başka insanlar bu hayatı başlatan kişiler değil de zaten devam eden bir hayata sonradan dahil olan kişiler olabilir. Belki mesele yalnızlığı sevmeyi öğrenmek bile değildir; sadece <strong>yalnızken de hayatın devam ettiğini kabullenmek</strong> olabilir.</p>
+      `
+    },
+    en: {
+      date: "AUGUST 11, 2026",
+      flair: "On Loneliness",
+      titleHtml: `Living loneliness like a <em>waiting room</em>.`,
+      preview: `“Maybe you treat loneliness like a waiting room: real life will start once someone walks into it.” If I put off building my life while I’m alone...`,
+      bodyHtml: `
+        <p>The other day, while I was thinking about loneliness, a sentence crossed my mind:</p>
+        <div class="art-quote"><strong>“Maybe you treat loneliness like a waiting room: real life will start once someone walks into it.”</strong></div>
+        <p>That sentence made something click in my head. Because I’m not even sure anymore how much loneliness itself actually bothers me. It’s more like I put my life on hold when I’m alone. I’m going to study, learn something, write, go outside, do something for myself—yet it feels as if someone has to show up before any of that can happen.</p>
+        <p>Sometimes when I’m by myself, I spend hours doing nothing at all, just feeling the need to talk to someone. What’s interesting is that once I do talk to someone, I don’t even need them around constantly. Just chatting for a bit, just knowing someone is there is enough—and then I can comfortably go right back to doing my own thing.</p>
+        <p>But there’s a strange paradox here. If I put off building my life while I’m alone, I also fail to build a life that anyone would want to step into. Other people might not be the ones who start your life, but the ones who join a life that’s already moving. Maybe the point isn’t even learning to love solitude; maybe it’s just <strong>accepting that life is already going on while you’re alone.</strong></p>
+      `
+    }
   }
 ];

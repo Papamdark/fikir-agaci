@@ -52,8 +52,8 @@
     content: ""; position: absolute; inset: 0; z-index: 30; pointer-events: none; opacity: .055; mix-blend-mode: screen;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  .pv canvas.fx { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; transition: filter .75s cubic-bezier(.22,1,.36,1); }
-  .pv.noted canvas.fx, .pv.comments-open canvas.fx { filter: blur(3px) saturate(.88); }
+  .pv canvas.fx { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .75s cubic-bezier(.22,1,.36,1); }
+  .pv.noted canvas.fx, .pv.comments-open canvas.fx { opacity: .36; transform: scale(.985); }
   .abs { position: absolute; z-index: 10; pointer-events: none; }
 
   /* ---- Okuma Odak Perdesi ---- */
@@ -369,13 +369,14 @@
     background: var(--w-soft);
     box-shadow: 0 0 2.2cqi -.3cqi var(--w-glow);
   }
-  .pv.writings-open canvas.fx,
+  .pv.writings-open canvas.fx {
+    opacity: 0 !important; visibility: hidden !important; pointer-events: none !important;
+  }
   .pv.writings-open .focus-veil,
   .pv.writings-open .poster-wrap,
   .pv.writings-open .dossier,
   .pv.writings-open .c-drawer {
     opacity: 0 !important; pointer-events: none !important;
-    filter: blur(12px);
   }
   .pv.writings-open .rail-dots,
   .pv.writings-open .rail-count,
@@ -850,7 +851,7 @@
   <div class="mani"><div class="mani-in"><p class="mtxt"></p><div class="mnext"><span class="kc">→</span></div></div></div>
 </template>
 
-<script src="leaves.js"></script>
+<script src="leaves.js?v=2"></script>
 <script>
 "use strict";
 const LEAVES = window.FA_LEAVES || [];
@@ -2008,17 +2009,44 @@ function makeTree(pv, api) {
   `).join('');
   const bgSlides = Array.from(slidesContainer.querySelectorAll('.bg-slide'));
 
-  idxList.innerHTML = WRITINGS.map((w, i) => `
+  idxList.innerHTML = WRITINGS.map((w, i) => {
+    const wt = w[curLang] || w.tr || w;
+    return `
     <button type="button" class="idx-row ${i === 0 ? 'focused' : ''}" data-idx="${i}">
       <div class="row-meta">
-        <span class="row-date">${w.date}</span>
-        <span class="row-flair">${w.flair}</span>
+        <span class="row-date">${wt.date}</span>
+        <span class="row-flair">${wt.flair}</span>
       </div>
-      <div class="row-heading">${w.titleHtml}</div>
-      <div class="row-sub">${w.preview}</div>
+      <div class="row-heading">${wt.titleHtml}</div>
+      <div class="row-sub">${wt.preview}</div>
     </button>
-  `).join('');
+  `;
+  }).join('');
   const writingRows = Array.from(idxList.querySelectorAll('.idx-row'));
+
+  function renderWritingsText() {
+    writingRows.forEach((row, i) => {
+      const w = WRITINGS[i];
+      if (!w) return;
+      const wt = w[curLang] || w.tr || w;
+      const dEl = row.querySelector('.row-date');
+      const fEl = row.querySelector('.row-flair');
+      const hEl = row.querySelector('.row-heading');
+      const sEl = row.querySelector('.row-sub');
+      if (dEl) dEl.textContent = wt.date;
+      if (fEl) fEl.textContent = wt.flair;
+      if (hEl) hEl.innerHTML = wt.titleHtml;
+      if (sEl) sEl.textContent = wt.preview;
+    });
+    const aw = WRITINGS[activeWritingIdx];
+    if (aw) {
+      const awt = aw[curLang] || aw.tr || aw;
+      artDate.textContent = awt.date;
+      artFlair.textContent = awt.flair;
+      artTitle.innerHTML = awt.titleHtml;
+      artBody.innerHTML = awt.bodyHtml;
+    }
+  }
 
   function applyWritingAtmosphere(i, switchMusic = true) {
     const w = WRITINGS[i];
@@ -2050,11 +2078,12 @@ function makeTree(pv, api) {
     focusWritingRow(i, false);
     const w = WRITINGS[i];
     if (!w) return;
+    const wt = w[curLang] || w.tr || w;
     SoundEngine.onWritingTouch(660);
-    artDate.textContent = w.date;
-    artFlair.textContent = w.flair;
-    artTitle.innerHTML = w.titleHtml;
-    artBody.innerHTML = w.bodyHtml;
+    artDate.textContent = wt.date;
+    artFlair.textContent = wt.flair;
+    artTitle.innerHTML = wt.titleHtml;
+    artBody.innerHTML = wt.bodyHtml;
     artScroll.scrollTop = 0;
     pv.classList.add('article-reading');
     if (pv.classList.contains('in')) {
@@ -2173,7 +2202,7 @@ function makeTree(pv, api) {
     btnTree.title = L('Ağacın bütününü gör (↑)', 'See the whole tree (↑)');
     btnWritingsLbl.textContent = L('Yazılar', 'Writings');
     btnWritings.title = L('Yazılarım', 'My Writings');
-    idxTitleEm.textContent = 'Yazılarım';
+    idxTitleEm.textContent = L('Yazılarım', 'My Writings');
     btnBackList.textContent = L('← BAŞLIKLARA DÖN', '← BACK TO TITLES');
     btnMute.title = L('Sesi aç / kapat', 'Sound on / off'); btnMute.setAttribute('aria-label', btnMute.title);
     posterCard.title = L('Köken ve sorgulama kaydını görmek için dokun', 'Tap to see provenance & inquiry');
@@ -2210,12 +2239,16 @@ function makeTree(pv, api) {
 
   function setLang(l) {
     curLang = l;
+    try { localStorage.setItem('fa_lang', l); } catch (e) {}
     document.documentElement.lang = l;
     renderLeafText();
+    renderWritingsText();
     $('.mtxt').innerHTML = MANI[l].map(s => '<span class="s">' + s + ' </span>').join('');
     Tree.setLang(l);
   }
-  setLang('tr');
+  let initLang = 'tr';
+  try { if (localStorage.getItem('fa_lang') === 'en') initLang = 'en'; } catch (e) {}
+  setLang(initLang);
   CommentEngine.init(renderCommentsList);
 
   if (COARSE) {
